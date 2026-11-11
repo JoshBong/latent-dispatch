@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Secrets
+.env
+*.key
+
+# Models, caches, raw outputs
+*.pt
+*.safetensors
+*.bin
+hf_cache/
+results/raw/
+wandb/
+
+# OS
+.DS_Store
