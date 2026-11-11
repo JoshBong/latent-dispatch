@@ -49,17 +49,18 @@ Placements: **P-colo** = all gold paragraphs on one worker. **P-split** = gold p
 ## Main design: crossings set by placement on the same question
 
 Use N = 2 workers, and set the number of crossings by where the gold paragraphs go:
-- A 3-hop MuSiQue question can be placed AAA (0 crossings), AAB (1) or ABA (2).
+- A 3-hop MuSiQue question can be placed BBB (0 crossings), AAB (1) or ABA (2).
 - A 4-hop question can go up to ABAB (3).
+- The 0-crossing control is BB-type: all gold in the second block, which is encoded separately and RoPE-shifted. AA-type placements put all gold in the first block, which K0 encodes exactly like B1 (a causal first block never sees later blocks anyway). Only the distractor block differs, so they serve as a reference, not as the control.
 
-The question, N and the distractors stay fixed, so crossings is the only thing that changes. Distractors pad both workers to the same paragraph and token count.
+The question, N and the distractors stay fixed, so crossings is the only thing that changes. Distractors pad both workers to the same paragraph count. Token counts are not balanced: on MuSiQue, one worker's block can be 900 tokens and the other's 1,300. Every row logs `worker_tokens`, so analyses can control for it.
 
 The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Shard A holds people facts, shard B holds city facts, and both include same-relation distractors. The chain is A→B or A→B→A.
 
 ## Hypotheses
 
 **Part 0: the data has to need composition.**
-- Per question, run three probes: closed-book, each gold paragraph alone, and all gold paragraphs.
+- Per question, run three probes: closed-book; each gold paragraph with the other gold removed (distractors kept); and all paragraphs.
 - A question requires composition if closed-book is wrong and every single-paragraph probe is wrong.
 - Report every result on the full set and on that subset.
 - Don't filter on B1 being right; that inflates every gap.
@@ -68,7 +69,7 @@ The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Sh
 - Test: B1 vs B1-mask vs K0, by crossings.
   - B1 − B1-mask = missing cross-paragraph attention.
   - B1-mask − K0 = encoding each block at local positions and shifting the keys afterward.
-- Prediction: B1 − K0 ≈ 0 at 0 crossings, then grows with crossings.
+- Prediction: B1 − K0 ≈ 0 at 0 crossings (BB-type), then grows with crossings.
 - Mechanism: recompute a fraction of each block with full attention, bridge-entity tokens vs random tokens.
 - Sanity gates before any result:
   - K0 with N = 1 reproduces B1's logits.
@@ -119,9 +120,17 @@ The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Sh
 
 ## Datasets
 
-- **Toy dial**: synthetic, 0/1/2 crossings.
-- **MuSiQue-Ans dev**: 2-, 3- and 4-hop questions.
-- **HotpotQA distractor**: only the subset that fails the single-paragraph probe. Comparison questions are scored against the majority-class rate.
+Benchmark files are built once, deterministically, and checked against `benchmark/SHA256SUMS` (committed). The files themselves are gitignored; rebuild them with the commands under Running.
+
+| File | Dataset | Questions | Placements | Seeds | Instances |
+|---|---|---|---|---|---|
+| `toy.jsonl` | `toy_d2`: toy with 2 distractor shards | 500 per hop (hop0–2) | AB, BA, AA, BB | 3 | 18,000 |
+| `toy_d0.jsonl` | `toy_d0`: the pilots' toy, no distractors | 500 per hop | AB, BA | 3 | 9,000 |
+| `musique.jsonl` | MuSiQue-Ans dev, linear chains only | 1,252 2-hop, 568 3-hop, 246 4-hop | 2-hop AA/BB/AB/BA; 3-hop AAA/BBB/AAB/ABA; 4-hop AAAA/BBBB/AABB/ABBA/ABAB | 3 | 25,530 |
+| `hotpotqa.jsonl` | HotpotQA distractor dev, 10-paragraph items | 5,899 bridge, 1,446 comparison | AA, BB, AB | 1 | 22,035 |
+
+- MuSiQue's non-linear types (3hop2, 4hop2, 4hop3) are skipped because their hops branch, so there's no single chain to count crossings on.
+- HotpotQA doesn't mark which gold paragraph is hop 1, so chain order is seeded-random. Use it only after Part 0 has found the questions that need both paragraphs. Comparison questions are scored against the majority-class rate.
 
 ## Rules for every run
 
@@ -134,7 +143,7 @@ The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Sh
   - McNemar per pair, paired bootstrap CIs, Holm correction across the family.
   - "Grows with crossings" is tested as an interaction.
   - "No effect" claims use TOST at ±2 EM.
-- The prediction and decision rule go in a run's config before the run.
+- The prediction and decision rule go in the first cell of the experiment's notebook and get committed before the run.
 
 ## Milestone (Mon Nov 16)
 
@@ -162,28 +171,64 @@ These came from Qwen2.5-3B/7B at n = 50–200 and are pilots only.
 ## Layout
 
 ```
-src/latent_dispatch/   cache ops, channels, scorer
-configs/               one config per run, including its prediction
-experiments/           one entry point per hypothesis
-tests/                 unit tests against real model output
-results/               summaries in git; raw generations stay out (see .gitignore)
-docs/                  AI-assistance log, notes
+latent_dispatch/   shared code, plain functions, imported by every notebook
+  arms.py          every arm as one function: b0 b1 b1_mask k0 k1 t1 scan
+  prompts.py       the one prompt layout every arm uses (S / blocks / tail)
+  model.py         Qwen3 wrapper: explicit-position forwards, latent steps, greedy decode with a thinking budget
+  kv.py            copy / slice / concat / RoPE key shift              (ported from the fork, tested)
+  data.py          build / load / filter benchmark questions; placement; MuSiQue + HotpotQA loaders
+  toy.py           synthetic toy generator
+  results.py       run an arm over questions -> results/<model>/<name>.jsonl; load_results -> scored table
+  analysis.py      accuracy tables, paired gaps with CIs, TOST, crossing trend
+  score.py         answer extraction + normalized EM/F1 (one scorer for every arm)
+  stats.py         McNemar, paired bootstrap, interaction, TOST, Holm
+notebooks/         one per hypothesis: prediction -> questions + arms -> run -> tables and plots -> findings
+benchmark/         SHA256SUMS (committed); question files (gitignored, rebuilt locally)
+results/           <model>-<dtype>/<arm name>.jsonl, one row per question (gitignored)
+tests/             fast: tiny random Qwen3 (includes the H1 gates); slow: real Qwen3-0.6B + the real datasets
 ```
+
+Each notebook reads top to bottom as the experiment. The first cell is the prediction and decision rule, frozen before the run. Then the questions and the arms, a run cell, the tables, and a findings cell to fill in. Notebooks never define prompt, KV or scoring code; they import it, so every experiment uses the same arms.
+
+Built so far: Part 0, H1, H2 (K1 only), H3 (T1 only), H4, H5 (orchestrator scan only), H7 (select-one + notes audit). These are the experiments the pilots already ran. Each notebook's first cell lists what is still missing for that hypothesis.
 
 ## Setup
 
-TBD. Known constraints:
-- Qwen3 needs transformers ≥ 4.51.
-- On 5.14 the cache-expand op copies instead of returning a view, and the old fork's test fails.
-- So pin a version once the ported tests pass.
+```
+uv venv --python 3.12 .venv
+uv pip install --python .venv/bin/python -e ".[dev]"
+```
+
+transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is tested against this exact version. Notebooks use the `.venv` kernel (Jupyter Lab: `.venv/bin/jupyter lab`; VS Code: pick `.venv` as the kernel).
+
+## Running
+
+1. **Tests.** Both must pass before any run:
+   ```
+   pytest                # fast: tiny random Qwen3, includes the H1 gates
+   pytest -m slow        # real Qwen3-0.6B weights (every arm end to end) + the real datasets
+   ```
+2. **Benchmarks.** Built once, then checked against everyone else's:
+   ```
+   python -m latent_dispatch.data toy toy_d0 musique hotpotqa
+   cd benchmark && shasum -a 256 -c SHA256SUMS
+   ```
+3. **Smoke.** Open the notebook and run it with `SMOKE = True`: 2 questions per cell, and the raw outputs get printed. Read them before step 4.
+4. **Full run.** Set `SMOKE = False` and run all. For long runs, run it headless so the Mac stays awake and the results land in a copy of the notebook:
+   ```
+   caffeinate -i .venv/bin/papermill notebooks/h1_encoding.ipynb notebooks/runs/h1_encoding.ipynb -p SMOKE False
+   ```
+   Runs resume: questions already saved are skipped, so stopping and restarting loses nothing.
+
+How results are shared and kept clean:
+- Each arm name (`k0`, `k1_m8`, `t1_256`, …) is one file in `results/<model>-<dtype>/`. Notebooks that ask for the same name share its rows, so H3 doesn't rerun H1's K0.
+- Each row stores the arm's options and the git commit. Asking for a name with different options stops with an error instead of mixing.
+- If you change code in `latent_dispatch/` that changes what an arm generates, delete that arm's results file, or give the new version a new name.
+- Scoring changes need no rerun: `load_results` re-scores every row from its raw text.
 
 ## Borrowed code
 
 Code ported from [JoshBong/LatentMAS](https://github.com/JoshBong/LatentMAS) (a fork of [Gen-Verse/LatentMAS](https://github.com/Gen-Verse/LatentMAS), Apache-2.0) keeps a link and license note at the top of each file, as the course requires. Code taken from any other source, such as CacheBack or RecursiveMAS, gets the same.
-
-## AI assistance
-
-The course requires exact acknowledgment of coding assistance (how and what) in the report appendix, and GenAI is not allowed for writing the report itself. Log every use in [docs/AI_ASSISTANCE.md](docs/AI_ASSISTANCE.md) as it happens.
 
 ## References
 
