@@ -24,3 +24,8 @@ wandb/
 
 # OS
 .DS_Store
+
+# Benchmark question files are rebuilt locally and checked against benchmark/SHA256SUMS
+benchmark/*.jsonl
+# One JSONL per arm run; too big for git
+results/*/
