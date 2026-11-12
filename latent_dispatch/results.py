@@ -17,6 +17,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from . import data
 from .data import ROOT
 from .score import score
 
@@ -109,4 +110,23 @@ def load_results(questions: list[dict], arms: dict, model_name: str, dtype: str)
             pred, em, f1 = score(r["text"], q["answers"])
             rows.append({**r, "arm": name, "fn": r["arm"], "pred": pred, "em": float(em), "f1": f1,
                          **{k: q[k] for k in META}, "answers": q["answers"], "bridges": q["bridges"]})
+    return pd.DataFrame(rows) if rows else pd.DataFrame(columns=["id", "arm", "text", "pred", "em", "f1", *META])
+
+
+def load_all(model_name: str, dtype: str) -> pd.DataFrame:
+    """Every saved row for one model (every arm file in its results folder), re-scored, with question metadata.
+    For audits across notebooks (analysis.audit). Unlike load_results it doesn't check options: it's for checking
+    that outputs are usable, not for result tables."""
+    folder = results_path(model_name, dtype, "x").parent
+    by_id = {q["id"]: q for name in ("toy", "toy_d0", "musique", "hotpotqa")
+             if (data.BENCHMARK / f"{name}.jsonl").exists() for q in data.load(name)}
+    rows = []
+    for path in sorted(folder.glob("*.jsonl")):
+        for r in _read(path).values():
+            q = by_id.get(r["id"])
+            if q is None:
+                continue
+            pred, em, f1 = score(r["text"], q["answers"])
+            rows.append({**r, "arm": path.stem, "fn": r["arm"], "pred": pred, "em": float(em), "f1": f1,
+                         **{k: q[k] for k in META}, "answers": q["answers"]})
     return pd.DataFrame(rows) if rows else pd.DataFrame(columns=["id", "arm", "text", "pred", "em", "f1", *META])

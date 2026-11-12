@@ -1,7 +1,7 @@
 [project]
 name = "latent-dispatch"
 version = "0.2.0"
-requires-python = ">=3.11,<3.13"
+requires-python = ">=3.11"
 dependencies = [
   "torch>=2.4",
   # pinned: Qwen3 needs >=4.51; the KV code is tested against this exact version
@@ -27,5 +27,5 @@ packages = ["latent_dispatch"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-markers = ["slow: loads real Qwen3-0.6B weights or the real datasets (run with -m slow)"]
+markers = ["slow: loads real model weights (MODEL=..., default Qwen3-0.6B) or the real datasets (run with -m slow)"]
 addopts = "-m 'not slow'"

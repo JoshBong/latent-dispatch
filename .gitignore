@@ -29,3 +29,9 @@ wandb/
 benchmark/*.jsonl
 # One JSONL per arm run; too big for git
 results/*/
+
+# papermill copies of executed notebooks (outputs included)
+notebooks/runs/
+
+# repo snapshot uploaded to Colab (colab.ipynb)
+*.bundle

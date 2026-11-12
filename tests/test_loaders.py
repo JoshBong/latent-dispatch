@@ -26,3 +26,14 @@ def test_hotpotqa_placements():
     qs = data.hotpotqa_questions(0, ["AB", "BB"], limit_per_type=5)
     _check(qs)
     assert {q["qtype"] for q in qs} == {"bridge", "comparison"}
+
+
+def test_seeds_change_only_the_layout():
+    """Under another seed a question keeps its paragraphs and its chain order (which paragraph is hop 1)."""
+    for build in (data.musique_questions, data.hotpotqa_questions):
+        a, b = build(0, limit_per_type=5), build(1, limit_per_type=5)
+        for qa, qb in zip(a, b):
+            assert qa["source_id"] == qb["source_id"] and qa["placement"] == qb["placement"]
+            assert sorted(p for w in qa["workers"] for p in w) == sorted(p for w in qb["workers"] for p in w)
+            hops = [[q["workers"][g["worker"]][g["index"]] for g in q["gold"]] for q in (qa, qb)]
+            assert hops[0] == hops[1]

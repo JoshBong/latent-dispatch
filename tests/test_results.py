@@ -45,6 +45,25 @@ def test_paired_and_trend_tables():
     assert analysis.equivalent(df, "b1", "k0", placement="BB").equivalent.all()
 
 
+def test_seeds_of_one_question_count_as_one_unit():
+    """The same 40 source questions under 3 seeds with identical outcomes carry no more evidence than 1 seed: the
+    CI and p-value must not shrink."""
+    import pandas as pd
+
+    def table(seeds):
+        rows = []
+        for i in range(40):
+            for seed in seeds:
+                meta = dict(id=f"{i}:AB:s{seed}", dataset="d", qtype="hop1", placement="AB", crossings=1, hops=2,
+                            seed=seed, source_id=str(i))
+                rows += [{**meta, "arm": "b1", "em": 1.0}, {**meta, "arm": "k0", "em": float(i % 4 == 0)}]
+        return analysis.paired(pd.DataFrame(rows), "b1", "k0", by=("crossings",)).loc[1]
+
+    one, three = table([0]), table([0, 1, 2])
+    assert three.n == 120 and three.sources == 40
+    assert (one["diff"], one.lo, one.hi, one.p) == (three["diff"], three.lo, three.hi, three.p)
+
+
 def test_load_refuses_rows_made_with_other_options(tiny, tmp_path, monkeypatch):
     monkeypatch.setattr(results, "RESULTS", tmp_path)
     q = make_question([["x"]])
@@ -61,3 +80,19 @@ def test_bad_option_values_raise(tiny, two_workers):
     for bad in ({"thinking": "on"}, {"positions": "global"}, {"merge": "sequential"}):
         with pytest.raises(ValueError):
             arms.k0(tiny, two_workers, **bad)
+
+
+def test_audit_and_load_all(tiny, two_workers, tmp_path, monkeypatch):
+    """Every row records cut; the audit turns that into per-arm rates, across every arm file of a model."""
+    from latent_dispatch import data
+    monkeypatch.setattr(results, "RESULTS", tmp_path / "results")
+    monkeypatch.setattr(data, "BENCHMARK", tmp_path)
+    q = {**two_workers, "dataset": "toy_d0"}
+    data.write([q], tmp_path / "toy_d0.jsonl")
+    results.run(tiny, [q], "k0", arms.k0, max_answer_tokens=2)            # random weights: always cut at 2
+    results.run(tiny, [q], "scan_1", arms.scan, rounds=1, note_tokens=2, max_answer_tokens=2)
+    df = results.load_all(tiny.name, tiny.dtype_name)
+    assert set(df.arm) == {"k0", "scan_1"}
+    t = analysis.audit(df)
+    assert t.loc["k0", "n"] == 1 and t.loc["k0", "boxed %"] in (0.0, 100.0)
+    assert {"cut %", "notes cut %", "think cut %", "EM"} <= set(t.columns)

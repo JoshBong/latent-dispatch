@@ -95,7 +95,7 @@ def questions(hop: int, n: int, seed: int, patterns: list[str], n_distract: int 
         for pat in patterns:
             if len(pat) != 2:
                 raise ValueError("toy patterns place the two shards: AB, BA, AA or BB")
-            rng = random.Random(f"{seed}:{source_id}:{pat}:{n_distract}")
+            rng = random.Random(f"{seed}:{source_id}:{n_distract}")    # per question, not per pattern (data.place)
             workers, gold = place(it["shards"], it["distract"], pat, n_workers, rng)
             if it["answer_shard"] is not None:          # hop0: only the shard holding the answer is gold
                 gold = [g for g in gold if g["hop"] == it["answer_shard"]]

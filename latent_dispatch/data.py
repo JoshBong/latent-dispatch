@@ -47,12 +47,14 @@ def load(name: str, **where) -> list[dict]:
 
 
 def per_cell(qs: list[dict], n: int | None) -> list[dict]:
-    """The first n questions of every (dataset, qtype, placement) cell. n=None keeps everything."""
+    """The first n questions of every (dataset, qtype, placement, seed) cell. n=None keeps everything.
+    MuSiQue and HotpotQA list their source questions in the same order under every seed, so the same n source
+    questions come back under each seed (the same question in 3 layouts). Toy seeds are different questions."""
     if n is None:
         return qs
     seen, out = defaultdict(int), []
     for q in qs:
-        cell = (q["dataset"], q["qtype"], q["placement"])
+        cell = (q["dataset"], q["qtype"], q["placement"], q["seed"])
         if seen[cell] < n:
             seen[cell] += 1
             out.append(q)
@@ -67,27 +69,32 @@ def crossings(pattern: str) -> int:
 
 def place(gold: list[str], rest: list[str], pattern: str, n_workers: int, rng: random.Random):
     """Put gold paragraphs (in chain order) on the workers the pattern names, pad every worker with distractors to
-    the same paragraph count (not token count), shuffle within each worker. -> (workers, gold refs)."""
-    if len(pattern) != len(gold):
-        raise ValueError(f"pattern {pattern!r} has {len(pattern)} letters for {len(gold)} gold paragraphs")
+    the same paragraph count (not token count; ±1 when the total is odd), in random order within each worker.
+    -> (workers, gold refs).
+
+    Seed `rng` per question and seed, NOT per pattern: the random draws here don't depend on the pattern, so every
+    placement of one question deals the distractors in the same order and lists paragraphs in the same relative
+    order. Two placements then differ only in where the gold sits (and the distractor it displaces)."""
+    if len(pattern) != len(gold) or not all("A" <= c <= "Z" for c in pattern):
+        raise ValueError(f"pattern {pattern!r} needs one worker letter (A-Z) per gold paragraph ({len(gold)})")
     n = max(n_workers, 1 + max(ord(c) - ord("A") for c in pattern))
     total = len(gold) + len(rest)
     sizes = [total // n + (1 if i < total % n else 0) for i in range(n)]
-    slots = [[] for _ in range(n)]
-    for hop, (letter, text) in enumerate(zip(pattern, gold)):
-        slots[ord(letter) - ord("A")].append((hop, text))
-    for i, s in enumerate(slots):
-        if len(s) > sizes[i]:
-            raise ValueError(f"pattern {pattern!r}: worker {i} holds {len(s)} gold but its quota is {sizes[i]}")
-    rest = list(rest)
-    rng.shuffle(rest)
-    for i, s in enumerate(slots):
-        while len(s) < sizes[i]:
-            s.append((None, rest.pop()))
-        rng.shuffle(s)
-    workers = [[text for _, text in s] for s in slots]
-    refs = sorted(({"hop": hop, "worker": w, "index": j} for w, s in enumerate(slots)
-                   for j, (hop, _) in enumerate(s) if hop is not None), key=lambda r: r["hop"])
+    paragraphs = list(gold) + list(rest)                  # a worker holds indices into this list
+    deal = list(range(len(gold), total))
+    rng.shuffle(deal)                                     # the order distractors are dealt to workers
+    sort_key = [rng.random() for _ in range(total)]       # the order paragraphs are listed within a worker
+    held = [[hop for hop, letter in enumerate(pattern) if ord(letter) - ord("A") == w] for w in range(n)]
+    for w, items in enumerate(held):
+        if len(items) > sizes[w]:
+            raise ValueError(f"pattern {pattern!r}: worker {w} holds {len(items)} gold but its quota is {sizes[w]}")
+    for w, items in enumerate(held):
+        while len(items) < sizes[w]:
+            items.append(deal.pop())
+        items.sort(key=lambda i: sort_key[i])
+    workers = [[paragraphs[i] for i in items] for items in held]
+    refs = sorted(({"hop": i, "worker": w, "index": j} for w, items in enumerate(held)
+                   for j, i in enumerate(items) if i < len(gold)), key=lambda r: r["hop"])
     return workers, refs
 
 
@@ -135,7 +142,7 @@ def musique_questions(seed, patterns=MUSIQUE_PATTERNS, n_workers=2, split="valid
             continue
         hops = MUSIQUE_LINEAR[it["qtype"]]
         for pat in patterns.get(hops, []):
-            workers, gold = place(it["gold"], it["rest"], pat, n_workers, random.Random(f"{seed}:{it['id']}:{pat}"))
+            workers, gold = place(it["gold"], it["rest"], pat, n_workers, random.Random(f"{seed}:{it['id']}"))
             out.append(_question(it, "musique", pat, seed, workers, gold, hops,
                                  bridges=it["bridges"], decomposition=it["decomposition"]))
     return out
@@ -162,7 +169,8 @@ def hotpotqa_items(split="validation") -> list[dict]:
 
 
 def hotpotqa_questions(seed, patterns=HOTPOTQA_PATTERNS, n_workers=2, split="validation", limit_per_type=None):
-    """HotpotQA doesn't say which gold paragraph is hop 1, so chain order is seeded-random (Paper A hotpot_gen.py)."""
+    """HotpotQA doesn't say which gold paragraph is hop 1, so chain order is random (Paper A hotpot_gen.py). It is
+    drawn once per question, the same under every seed, so a seed changes only the layout (as on MuSiQue)."""
     out, seen = [], defaultdict(int)
     for it in hotpotqa_items(split):
         if it["qtype"] not in ("bridge", "comparison"):
@@ -171,9 +179,9 @@ def hotpotqa_questions(seed, patterns=HOTPOTQA_PATTERNS, n_workers=2, split="val
         if limit_per_type and seen[it["qtype"]] > limit_per_type:
             continue
         gold = list(it["gold"])
-        random.Random(f"{seed}:{it['id']}:order").shuffle(gold)
+        random.Random(f"order:{it['id']}").shuffle(gold)
         for pat in patterns:
-            workers, refs = place(gold, it["rest"], pat, n_workers, random.Random(f"{seed}:{it['id']}:{pat}"))
+            workers, refs = place(gold, it["rest"], pat, n_workers, random.Random(f"{seed}:{it['id']}"))
             out.append(_question(it, "hotpotqa", pat, seed, workers, refs, 2))
     return out
 
@@ -191,7 +199,7 @@ def build(name: str) -> list[dict]:
     if name == "musique":
         return [q for seed in (0, 1, 2) for q in musique_questions(seed)]
     if name == "hotpotqa":
-        return hotpotqa_questions(0)
+        return [q for seed in (0, 1, 2) for q in hotpotqa_questions(seed)]
     raise ValueError(f"unknown benchmark {name!r}")
 
 

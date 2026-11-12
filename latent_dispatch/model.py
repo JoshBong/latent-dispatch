@@ -1,4 +1,5 @@
-"""Model wrapper: explicit-position forwards over a KV cache, LatentMAS-style latent steps, greedy decoding.
+"""Model wrapper: which models we run, explicit-position forwards over a KV cache, LatentMAS-style latent steps,
+greedy decoding.
 
 Every forward passes position ids AND cache positions explicitly. Cache positions say where the new KV entries go
 in the cache (and drive the causal mask); position ids say which RoPE phase they get. Keeping them separate is what
@@ -12,11 +13,54 @@ https://github.com/JoshBong/LatentMAS/blob/main/models.py
 from dataclasses import dataclass
 
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, DynamicCache
+from transformers import AutoModelForCausalLM, AutoTokenizer, DynamicCache, PretrainedConfig
 
-from . import kv
+from . import kv, prompts
 
 DTYPES = {"bfloat16": torch.bfloat16, "float16": torch.float16, "float32": torch.float32}
+
+# The model matrix: HF repo -> chat format (prompts.FORMATS). Main family = Qwen3 at three sizes; second family =
+# Llama 3; Mistral-Nemo / phi-4 = optional third. These are the backbones the 2026 latent-MAS papers report on.
+# To add a model: its architecture must pass check_architecture, its family needs a ChatFormat, and
+# tests/test_formats.py + `MODEL=<repo> pytest -m slow` must pass.
+MODELS = {
+    "Qwen/Qwen3-0.6B": "qwen3",        # tests only
+    "Qwen/Qwen3-1.7B": "qwen3",
+    "Qwen/Qwen3-4B": "qwen3",
+    "Qwen/Qwen3-8B": "qwen3",
+    "Qwen/Qwen3-14B": "qwen3",
+    "meta-llama/Llama-3.2-3B-Instruct": "llama3",     # gated: accept the license on huggingface.co first
+    "meta-llama/Llama-3.1-8B-Instruct": "llama3",
+    "mistralai/Mistral-Nemo-Instruct-2407": "mistral",
+    "microsoft/phi-4": "phi4",
+}
+ARCHITECTURES = {"qwen3", "llama", "mistral", "phi3"}     # model_types whose layers and RoPE the KV code is tested on
+
+
+def check_architecture(cfg: dict) -> None:
+    """Raise unless every layer keeps a per-token KV cache with plain RoPE: the only setup where worker caches can
+    be stitched (concatenated) and shifted to new positions. `cfg` is the model's config.json as a dict."""
+    cfg = {**cfg, **(cfg.get("text_config") or {})}      # multimodal wrappers (e.g. Qwen3.5) nest the LM config
+    problems = []
+    if cfg.get("model_type") not in ARCHITECTURES:
+        problems.append(f"model_type {cfg.get('model_type')!r} is not one the KV code is tested on {sorted(ARCHITECTURES)}")
+    kinds = cfg.get("layer_types") or []
+    other = [k for k in kinds if k != "full_attention"]
+    if other:
+        problems.append(f"{len(other)} of {len(kinds)} layers are {sorted(set(other))}; only full-attention layers keep "
+                        "a per-token KV cache (a linear-attention layer's state can't be concatenated or shifted)")
+    if cfg.get("sliding_window") and cfg.get("use_sliding_window", True):
+        problems.append(f"sliding-window attention ({cfg['sliding_window']} tokens): later blocks can't see earlier ones")
+    rope = cfg.get("rope_scaling") or {}
+    kind = rope.get("rope_type") or rope.get("type")
+    if kind in ("dynamic", "longrope", "su") or (cfg.get("model_type") == "phi3" and rope):   # Phi-3 maps su/yarn to longrope
+        problems.append(f"{kind} RoPE: frequencies depend on sequence length, so a cached key can't be shifted exactly")
+    if cfg.get("partial_rotary_factor", 1.0) not in (None, 1, 1.0):
+        problems.append("partial rotary embedding: kv.shift rotates the whole head")
+    if cfg.get("no_rope_layers") and not all(cfg["no_rope_layers"]):
+        problems.append("some layers have no RoPE: kv.shift would rotate their keys anyway")
+    if problems:
+        raise ValueError("can't run the KV arms on this model: " + "; ".join(problems))
 
 
 @dataclass
@@ -25,6 +69,8 @@ class Gen:
     tokens: int          # every generated token, thinking included
     think_tokens: int
     answer_tokens: int
+    cut: bool = False         # stopped by a token cap (max_new or hard_cap), not by the model's own end token
+    think_cut: bool = False   # thinking ran to think_budget and "</think>" was forced
 
 
 def _auto_device() -> str:
@@ -35,34 +81,78 @@ def _auto_device() -> str:
     return "cpu"
 
 
+def load_tokenizer(name: str, fmt: str):
+    # transformers warns that Mistral tokenizers ship a broken pre-tokenizer regex unless this is set. For
+    # Mistral-Nemo it changes nothing (its ids match mistral_common's); it's set so newer Mistral models are right too.
+    return AutoTokenizer.from_pretrained(name, **({"fix_mistral_regex": True} if fmt == "mistral" else {}))
+
+
+def special_id(tokenizer, token: str) -> int:
+    """The id of a special token, refusing anything that isn't a single token this tokenizer knows."""
+    ids = tokenizer(token, add_special_tokens=False).input_ids
+    if len(ids) != 1 or tokenizer.convert_ids_to_tokens(ids[0]) != token:
+        raise ValueError(f"{token!r} is not a single token for this tokenizer (got {ids}): wrong chat format?")
+    return ids[0]
+
+
+def check_format(tokenizer, fmt: prompts.ChatFormat) -> None:
+    """Raise unless this tokenizer has every special token the chat format writes (a wrong format would otherwise
+    turn markup like "<|im_sep|>" into plain text and the model would read a malformed prompt)."""
+    for token in fmt.stop + (("<think>", "</think>") if fmt.thinking else ()):
+        special_id(tokenizer, token)
+    markup = prompts.chat_open(fmt, "") + fmt.user_end + fmt.reopen_user
+    left = tokenizer.decode(tokenizer(markup, add_special_tokens=False).input_ids, skip_special_tokens=True)
+    if any(piece in left for piece in ("<|", "|>", "[INST]", "[/INST]", "<s>", "</s>")):
+        raise ValueError(f"the {fmt.name} chat format is plain text for this tokenizer: {left!r}")
+
+
 class Model:
-    def __init__(self, hf, tokenizer, name: str = "custom"):
+    def __init__(self, hf, tokenizer, name: str = "custom", fmt: str = "qwen3"):
+        check_architecture(hf.config.to_dict())
         self.hf = hf.eval()
         self.tok = tokenizer
         self.name = name
+        self.fmt = prompts.FORMATS[fmt]
+        check_format(tokenizer, self.fmt)
         self.device = next(hf.parameters()).device
         self.dtype_name = str(next(hf.parameters()).dtype).removeprefix("torch.")
         self.inv_freq = kv.rope_inv_freq(hf)
-        conv = tokenizer.convert_tokens_to_ids
-        self.eos_ids = {i for i in (conv("<|im_end|>"), conv("<|endoftext|>"), tokenizer.eos_token_id) if i is not None}
-        self.think_end_id = conv("</think>")
+        cfg = hf.config
+        head_dim = getattr(cfg, "head_dim", None) or cfg.hidden_size // cfg.num_attention_heads
+        if 2 * self.inv_freq.numel() != head_dim:
+            raise ValueError(f"RoPE covers {2 * self.inv_freq.numel()} of {head_dim} head dims: kv.shift assumes all")
+        self.eos_ids = {special_id(tokenizer, t) for t in self.fmt.stop}
+        self.think_end_id = special_id(tokenizer, "</think>") if self.fmt.thinking else None
         self._realign = None   # (W_a, target_norm), built lazily
 
     @classmethod
-    def load(cls, name: str, device: str | None = None, dtype: str | torch.dtype = "bfloat16") -> "Model":
-        """dtype is part of the results folder name, so bf16 and fp32 runs never mix."""
+    def load(cls, name: str, device: str | None = None, dtype: str | torch.dtype = "bfloat16",
+             fmt: str | None = None) -> "Model":
+        """A model from the matrix (MODELS), or any HF repo with fmt= given. The architecture is checked from
+        config.json before any weights download. dtype is part of the results folder name, so bf16 and fp32 runs
+        never mix."""
+        fmt = fmt or MODELS.get(name)
+        if fmt is None:
+            raise ValueError(f"{name} is not in model.MODELS; add it there (see the comment above MODELS) or pass fmt=")
+        if fmt not in prompts.FORMATS:
+            raise ValueError(f"unknown chat format {fmt!r}; known: {sorted(prompts.FORMATS)}")
+        if name in MODELS and fmt != MODELS[name]:
+            raise ValueError(f"{name} uses the {MODELS[name]} chat format, not {fmt}")
+        check_architecture(PretrainedConfig.get_config_dict(name)[0])
+        tok = load_tokenizer(name, fmt)
+        check_format(tok, prompts.FORMATS[fmt])             # all before the weights download
         device = device or _auto_device()
         dtype = DTYPES[dtype] if isinstance(dtype, str) else dtype
-        tok = AutoTokenizer.from_pretrained(name)
         hf = AutoModelForCausalLM.from_pretrained(name, dtype=dtype, low_cpu_mem_usage=True).to(device)
-        return cls(hf, tok, name)
+        return cls(hf, tok, name, fmt)
 
     # ---------------------------------------------------------------- tokens
     def ids(self, text: str) -> list[int]:
         return self.tok(text, add_special_tokens=False).input_ids
 
     def decode(self, ids: list[int]) -> str:
-        return self.tok.decode(ids, skip_special_tokens=True)
+        # Llama 3's tokenizer would otherwise rewrite the text ("Washington , D.C." -> "Washington, D.C.")
+        return self.tok.decode(ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)
 
     # --------------------------------------------------------------- forward
     @torch.no_grad()
@@ -135,11 +225,12 @@ class Model:
         gen: list[int] = []
         think = answer = 0
         thinking = think_budget is not None
-        force_close = self.ids("\n</think>\n\n")
+        cut = think_cut = False
+        force_close = self.ids(prompts.THINK_CLOSE)
         while len(gen) < hard_cap:
             nxt = int(out.logits[0, -1].argmax())
             if thinking and think >= think_budget and nxt != self.think_end_id:
-                feed, thinking = force_close, False
+                feed, thinking, think_cut = force_close, False, True
             elif nxt in self.eos_ids:
                 break
             elif thinking:
@@ -150,10 +241,13 @@ class Model:
                     think += 1
             else:
                 if answer >= max_new:
+                    cut = True
                     break
                 feed = [nxt]
                 answer += 1
             gen += feed
             out = self.forward(feed, out.past_key_values, pos)
             pos += len(feed)
-        return Gen(self.decode(gen), len(gen), think, answer)
+        else:
+            cut = True                                    # hit hard_cap
+        return Gen(self.decode(gen), len(gen), think, answer, cut, think_cut)

@@ -35,7 +35,7 @@ Payloads sit on two axes. They have to be kept apart: in our pilots, lossy text 
 | B1-mask | B1 with a block-diagonal attention mask (paragraph blocks can't attend to each other) and true positions. |
 | K0 | Each worker's paragraph KV with no latent steps, stitched at disjoint positions (keys RoPE-shifted). |
 | K1 | K0 plus m latent thinking steps per worker. |
-| K2 | K1 with LatentMAS's W_a realignment. Qwen3-4B has tied embeddings, so W_a ≈ I and K2 ≈ K1; run only as a check. |
+| K2 | K1 with LatentMAS's W_a realignment. Models with tied embeddings (Qwen3-4B and smaller, Llama-3.2-3B) have W_a ≈ I, so K2 ≈ K1 there; run it only as a check. Qwen3-8B/14B, Llama-3.1-8B, Mistral-Nemo and phi-4 don't tie them, so K2 is a real arm on those. |
 | K3 | Only the m latent-thought positions. |
 | K4 | Top-B positions per worker, chosen by the question's attention (CacheBack-style). Sent as KV, or re-prefilled as tokens. |
 | T1 | The worker's text report, capped at B tokens. |
@@ -53,7 +53,7 @@ Use N = 2 workers, and set the number of crossings by where the gold paragraphs 
 - A 4-hop question can go up to ABAB (3).
 - The 0-crossing control is BB-type: all gold in the second block, which is encoded separately and RoPE-shifted. AA-type placements put all gold in the first block, which K0 encodes exactly like B1 (a causal first block never sees later blocks anyway). Only the distractor block differs, so they serve as a reference, not as the control.
 
-The question, N and the distractors stay fixed, so crossings is the only thing that changes. Distractors pad both workers to the same paragraph count. Token counts are not balanced: on MuSiQue, one worker's block can be 900 tokens and the other's 1,300. Every row logs `worker_tokens`, so analyses can control for it.
+The question, N and the distractors stay fixed, so crossings is the only thing that changes. Distractors pad both workers to the same paragraph count (off by one when the total is odd, as on 9 MuSiQue questions). Token counts are not balanced: on MuSiQue, one worker's block can be 900 tokens and the other's 1,300. Every row logs `worker_tokens`, so analyses can control for it.
 
 The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Shard A holds people facts, shard B holds city facts, and both include same-relation distractors. The chain is A→B or A→B→A.
 
@@ -61,7 +61,7 @@ The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Sh
 
 **Part 0: the data has to need composition.**
 - Per question, run three probes: closed-book; each gold paragraph with the other gold removed (distractors kept); and all paragraphs.
-- A question requires composition if closed-book is wrong and every single-paragraph probe is wrong.
+- A question requires composition if closed-book is wrong and every single-paragraph probe is wrong, under every data seed it ran on.
 - Report every result on the full set and on that subset.
 - Don't filter on B1 being right; that inflates every gap.
 
@@ -127,20 +127,42 @@ Benchmark files are built once, deterministically, and checked against `benchmar
 | `toy.jsonl` | `toy_d2`: toy with 2 distractor shards | 500 per hop (hop0–2) | AB, BA, AA, BB | 3 | 18,000 |
 | `toy_d0.jsonl` | `toy_d0`: the pilots' toy, no distractors | 500 per hop | AB, BA | 3 | 9,000 |
 | `musique.jsonl` | MuSiQue-Ans dev, linear chains only | 1,252 2-hop, 568 3-hop, 246 4-hop | 2-hop AA/BB/AB/BA; 3-hop AAA/BBB/AAB/ABA; 4-hop AAAA/BBBB/AABB/ABBA/ABAB | 3 | 25,530 |
-| `hotpotqa.jsonl` | HotpotQA distractor dev, 10-paragraph items | 5,899 bridge, 1,446 comparison | AA, BB, AB | 1 | 22,035 |
+| `hotpotqa.jsonl` | HotpotQA distractor dev, 10-paragraph items | 5,899 bridge, 1,446 comparison | AA, BB, AB | 3 | 66,105 |
 
+- A seed is a data seed: which distractors go to which worker, and the paragraph order inside each worker. On MuSiQue and HotpotQA the 3 seeds are the same source question in 3 layouts; on the toy they are different generated questions.
+- Within one seed, every placement of a question uses the same random draw, so AB and BB differ only in where the gold sits (and the one distractor it displaces), not in a fresh shuffle.
 - MuSiQue's non-linear types (3hop2, 4hop2, 4hop3) are skipped because their hops branch, so there's no single chain to count crossings on.
-- HotpotQA doesn't mark which gold paragraph is hop 1, so chain order is seeded-random. Use it only after Part 0 has found the questions that need both paragraphs. Comparison questions are scored against the majority-class rate.
+- HotpotQA doesn't mark which gold paragraph is hop 1, so chain order is random, drawn once per question (the same under every seed). Use it only after Part 0 has found the questions that need both paragraphs. Comparison questions are scored against the majority-class rate.
+
+## Models
+
+Every arm needs the worker caches to be stitched (concatenated) and shifted to new positions. That only works when every layer keeps a per-token KV cache with plain RoPE, so the matrix is limited to full-attention models. `model.check_architecture` refuses anything else before downloading weights.
+
+| Role | Models | Notes |
+|---|---|---|
+| Main family | Qwen3-4B, Qwen3-8B, Qwen3-14B | The backbone in LatentMAS and almost every 2026 latent-MAS paper. Milestone runs on 4B. |
+| Second family | Llama-3.1-8B-Instruct (Llama-3.2-3B-Instruct for cheap checks) | The second family in KITE, MaSRead and Cache Merging, so our numbers compare with theirs. Gated: accept the license on huggingface.co. |
+| Optional third | Mistral-Nemo-Instruct-2407 (12B), phi-4 (14B) | Used by Cheng, Das & Ramnath (2608.04893). |
+
+- **Forced thinking (H4's forced arms) runs on Qwen3 only.** The other families have no thinking mode, and `thinking="forced"` raises on them.
+- **K1 on Mistral is slightly off-template.** Mistral's template moves the system prompt to the last user turn. K1 keeps it in S so that every worker shares the prefix. B1, K0, T1 and scan match the template exactly on every family (`tests/test_formats.py`).
+- **Check K1 on Llama before relying on it.** LatentMAS latent steps made Llama-3.2-3B degenerate in 2608.04893 (hidden states shrink about 83x at the rescaling step). The slow test `test_k1_latent_steps_do_not_wreck_the_output` catches this.
+- **Qwen3.5 and newer Qwen are out.** Qwen3.5-4B has 24 Gated DeltaNet (linear-attention) layers and 8 attention layers. A DeltaNet layer keeps a fixed-size state instead of a per-token cache, so two workers' states can't be concatenated or shifted. HyLaMAS (2610.37779) runs Qwen3.5 only by handing the full state from one agent to the next, which is a chain, not parallel workers. Write this up as a limitation.
+- Memory in bf16: 4B ≈ 8 GB, 8B ≈ 16 GB, 12–14B ≈ 24–28 GB (A100 40 GB; too big for an L4).
+- Adding a model: put it in `model.MODELS` with its chat format (`prompts.FORMATS`), then run `pytest tests/test_formats.py tests/test_architecture.py` and `MODEL=<repo> pytest -m slow tests/test_real_model.py` on a GPU.
 
 ## Rules for every run
 
-- Qwen3-4B, bf16, greedy decoding.
+- Models from the matrix above, bf16, greedy decoding.
 - One scorer for every arm: normalized EM/F1, with number words normalized ("five" = "5").
 - The answer format and thinking mode are forced by prefill, the same way in every arm.
+- Token budgets come in two kinds, and neither is picked at random:
+  - **Caps that must never bind**: the answer (256 tokens), scan scratch notes (1024), the 8192 hard stop. Every row records `cut`, and `analysis.audit` reports per arm how often a cap stopped the output. It should be ~0; if the smoke shows cuts, raise the cap and rerun that arm.
+  - **Budgets that are the variable**: T1's report budget (H3), the thinking budget (H4), latent steps m (H2). These are swept over a grid fixed before the run and reported as a curve, never tuned on the results.
 - B1's paragraph order matches K0's stitched order.
-- Every arm runs on the same questions, with 3 placement seeds.
+- Every arm runs on the same questions, with 3 data seeds (`SEEDS` in each notebook's settings cell).
 - Statistics:
-  - McNemar per pair, paired bootstrap CIs, Holm correction across the family.
+  - The unit is the source question. Its rows (3 seeds; several placements at one crossing level) are averaged first, because they aren't independent. Then: paired bootstrap CIs over source questions, an exact sign-flip test (equal to exact McNemar when each question has one row), Holm correction across the family.
   - "Grows with crossings" is tested as an interaction.
   - "No effect" claims use TOST at ±2 EM.
 - The prediction and decision rule go in the first cell of the experiment's notebook and get committed before the run.
@@ -173,19 +195,20 @@ These came from Qwen2.5-3B/7B at n = 50–200 and are pilots only.
 ```
 latent_dispatch/   shared code, plain functions, imported by every notebook
   arms.py          every arm as one function: b0 b1 b1_mask k0 k1 t1 scan
-  prompts.py       the one prompt layout every arm uses (S / blocks / tail)
-  model.py         Qwen3 wrapper: explicit-position forwards, latent steps, greedy decode with a thinking budget
+  prompts.py       the one prompt layout every arm uses (S / blocks / tail), with each family's chat markup
+  model.py         the model matrix + architecture check; explicit-position forwards, latent steps, greedy decode
   kv.py            copy / slice / concat / RoPE key shift              (ported from the fork, tested)
   data.py          build / load / filter benchmark questions; placement; MuSiQue + HotpotQA loaders
   toy.py           synthetic toy generator
   results.py       run an arm over questions -> results/<model>/<name>.jsonl; load_results -> scored table
   analysis.py      accuracy tables, paired gaps with CIs, TOST, crossing trend
   score.py         answer extraction + normalized EM/F1 (one scorer for every arm)
-  stats.py         McNemar, paired bootstrap, interaction, TOST, Holm
+  stats.py         sign-flip test, McNemar, paired bootstrap, interaction, TOST, Holm
 notebooks/         one per hypothesis: prediction -> questions + arms -> run -> tables and plots -> findings
 benchmark/         SHA256SUMS (committed); question files (gitignored, rebuilt locally)
 results/           <model>-<dtype>/<arm name>.jsonl, one row per question (gitignored)
-tests/             fast: tiny random Qwen3 (includes the H1 gates); slow: real Qwen3-0.6B + the real datasets
+tests/             fast: tiny random models of each family (H1 gates) + each family's real chat template;
+                   slow: real weights end to end (MODEL=...) + the real datasets
 ```
 
 Each notebook reads top to bottom as the experiment. The first cell is the prediction and decision rule, frozen before the run. Then the questions and the arms, a run cell, the tables, and a findings cell to fill in. Notebooks never define prompt, KV or scoring code; they import it, so every experiment uses the same arms.
@@ -203,10 +226,15 @@ transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is teste
 
 ## Running
 
+**On Colab, from VS Code or Cursor:** open `colab.ipynb` with the Colab extension's kernel (an L4 server) and run all. It clones the repo onto the Colab machine, installs it, builds and checks the benchmarks, runs the tests (including the real-weights check for `MODEL`), runs every chosen notebook as a smoke with an audit that stops on unusable outputs, then the full run, and packs `results/` for you to copy back (via the extension's server mounting). Results stay on the Colab machine, not Drive, so keep the session alive until you've copied them. Settings: `MODEL`, `SEEDS`, `N_PER_CELL` (e.g. 100 for a quick preliminary), `NOTEBOOKS`, `SKIP` (arm names to leave out). One model per run; check its audit and tables before the next model.
+
+The same steps by hand:
+
 1. **Tests.** Both must pass before any run:
    ```
-   pytest                # fast: tiny random Qwen3, includes the H1 gates
+   pytest                # fast: tiny random models of each family (H1 gates) + chat templates (downloads tokenizers)
    pytest -m slow        # real Qwen3-0.6B weights (every arm end to end) + the real datasets
+   MODEL=Qwen/Qwen3-4B DTYPE=bfloat16 pytest -m slow tests/test_real_model.py   # each model, before its first run (GPU; DEVICE=cpu by default without CUDA)
    ```
 2. **Benchmarks.** Built once, then checked against everyone else's:
    ```
@@ -214,11 +242,13 @@ transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is teste
    cd benchmark && shasum -a 256 -c SHA256SUMS
    ```
 3. **Smoke.** Open the notebook and run it with `SMOKE = True`: 2 questions per cell, and the raw outputs get printed. Read them before step 4.
-4. **Full run.** Set `SMOKE = False` and run all. For long runs, run it headless so the Mac stays awake and the results land in a copy of the notebook:
+4. **Full run.** Set `SMOKE = False` and run all. Pick the model with `MODEL` and the data seeds with `SEEDS`. For long runs, run it headless so the results land in a copy of the notebook:
    ```
-   caffeinate -i .venv/bin/papermill notebooks/h1_encoding.ipynb notebooks/runs/h1_encoding.ipynb -p SMOKE False
+   mkdir -p notebooks/runs
+   papermill notebooks/h1_encoding.ipynb notebooks/runs/h1_encoding.ipynb -p SMOKE False -p MODEL Qwen/Qwen3-8B -y "SEEDS: [0]"
    ```
-   Runs resume: questions already saved are skipped, so stopping and restarting loses nothing.
+   Lists go through `-y` (YAML); `-p SEEDS "[0]"` would pass a string and select nothing. Three seeds cost 3x one seed: Part 0 and H3–H7 grow from about 4–11k to 13–33k questions each, so for the milestone `SEEDS: [0]` is the cheap option.
+   Runs resume: questions already saved are skipped, so stopping and restarting loses nothing. On Colab, keep the repo (or at least `results/`) on Google Drive: a disconnected runtime wipes its disk, and with it every saved row.
 
 How results are shared and kept clean:
 - Each arm name (`k0`, `k1_m8`, `t1_256`, …) is one file in `results/<model>-<dtype>/`. Notebooks that ask for the same name share its rows, so H3 doesn't rerun H1's K0.

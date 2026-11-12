@@ -43,3 +43,19 @@ def test_eos_stops_without_thinking(tiny):
     _scripted(m, [100, m.tok.convert_tokens_to_ids("<|im_end|>")])
     g = m.greedy([1], max_new=10)
     assert g.tokens == 1 and g.think_tokens == 0
+
+
+def test_cut_flags(tiny):
+    """cut = a token cap stopped the answer, not the model's own end token; think_cut = the budget closed thinking."""
+    m = copy.deepcopy(tiny)
+    eos = m.tok.convert_tokens_to_ids("<|im_end|>")
+    _scripted(m, [200] * 50)
+    assert m.greedy([1], max_new=5).cut
+    _scripted(m, [200, 200, eos])
+    assert not m.greedy([1], max_new=5).cut
+    n_force = len(m.ids("\n</think>\n\n"))
+    _scripted(m, [100] * 4 + [200] * n_force + [200, eos])
+    g = m.greedy([1], think_budget=3, max_new=10)
+    assert g.think_cut and not g.cut
+    _scripted(m, [100, m.think_end_id, 200, eos])
+    assert not m.greedy([1], think_budget=10, max_new=10).think_cut

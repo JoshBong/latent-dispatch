@@ -1,10 +1,24 @@
-"""Fixtures: a tiny random Qwen3 (real architecture: qk-norm, GQA, tied embeddings) with the real Qwen3 tokenizer,
-so the KV and prompt code run against the same shapes and template as Qwen3-4B, on CPU, in seconds."""
+"""Fixtures: tiny random models with each family's real architecture (Qwen3: qk-norm, GQA, tied embeddings; Llama 3:
+its scaled RoPE; Mistral; Phi-3/phi-4: fused qkv), all with the real Qwen3 tokenizer and chat format, so the KV and
+prompt code run against the same shapes as the real models, on CPU, in seconds. Chat formats are tested separately
+against each family's real tokenizer (test_formats.py)."""
 import pytest
 import torch
-from transformers import AutoTokenizer, Qwen3Config, Qwen3ForCausalLM
+from transformers import (AutoTokenizer, LlamaConfig, LlamaForCausalLM, MistralConfig, MistralForCausalLM,
+                          Phi3Config, Phi3ForCausalLM, Qwen3Config, Qwen3ForCausalLM)
 
 from latent_dispatch.model import Model
+
+SMALL = dict(hidden_size=64, intermediate_size=128, num_hidden_layers=3, num_attention_heads=4, num_key_value_heads=2,
+             max_position_embeddings=4096, initializer_range=0.2)
+FAMILIES = {
+    "qwen3": (Qwen3ForCausalLM, Qwen3Config, dict(head_dim=16, tie_word_embeddings=True, rope_theta=1_000_000.0)),
+    "llama3": (LlamaForCausalLM, LlamaConfig, dict(rope_theta=500_000.0, rope_scaling={
+        "rope_type": "llama3", "factor": 8.0, "low_freq_factor": 1.0, "high_freq_factor": 4.0,
+        "original_max_position_embeddings": 512})),
+    "mistral": (MistralForCausalLM, MistralConfig, dict(head_dim=16, sliding_window=None, rope_theta=1_000_000.0)),
+    "phi3": (Phi3ForCausalLM, Phi3Config, dict(rope_theta=250_000.0, pad_token_id=0)),
+}
 
 
 @pytest.fixture(scope="session")
@@ -12,13 +26,22 @@ def tokenizer():
     return AutoTokenizer.from_pretrained("Qwen/Qwen3-0.6B")
 
 
+def tiny_model(family: str, tokenizer, fmt: str = "qwen3") -> Model:
+    torch.manual_seed(0)
+    cls, config, extra = FAMILIES[family]
+    hf = cls(config(vocab_size=len(tokenizer), **SMALL, **extra)).eval()
+    return Model(hf, tokenizer, f"tiny-{family}", fmt=fmt)
+
+
 @pytest.fixture(scope="session")
 def tiny(tokenizer):
-    torch.manual_seed(0)
-    cfg = Qwen3Config(vocab_size=len(tokenizer), hidden_size=64, intermediate_size=128, num_hidden_layers=3,
-                      num_attention_heads=4, num_key_value_heads=2, head_dim=16, max_position_embeddings=4096,
-                      tie_word_embeddings=True, rope_theta=1_000_000.0, initializer_range=0.2)
-    return Model(Qwen3ForCausalLM(cfg).eval(), tokenizer, "tiny-qwen3")
+    return tiny_model("qwen3", tokenizer)
+
+
+@pytest.fixture(scope="session", params=list(FAMILIES))
+def tiny_family(request, tokenizer):
+    """The same test on a tiny model of every family's architecture."""
+    return tiny_model(request.param, tokenizer)
 
 
 def make_question(workers, gold=((0, 0, 0),), id="t:0"):

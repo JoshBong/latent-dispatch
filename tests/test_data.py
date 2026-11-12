@@ -20,6 +20,29 @@ def test_place_balances_and_records_gold():
     assert all(workers[r["worker"]][r["index"]] == gold[r["hop"]] for r in refs)
     with pytest.raises(ValueError):
         data.place(["g0", "g1"], [], "AA", 2, random.Random(0))       # 2 gold on a worker whose quota is 1
+    with pytest.raises(ValueError):
+        data.place(["g0", "g1"], [], "BB", 2, random.Random(0))       # the same on a later worker
+    for bad in ("ab", "A1", "A"):                                      # lowercase, digit, wrong length
+        with pytest.raises(ValueError, match="worker letter"):
+            data.place(["g0", "g1"], ["d0", "d1"], bad, 2, random.Random(0))
+
+
+def test_placements_of_one_question_share_one_draw():
+    """Every placement of a question deals the same distractors in the same order, so placements differ only in
+    where the gold sits: any two paragraphs on the same worker in both placements keep their relative order."""
+    gold, rest = ["g0", "g1", "g2"], [f"d{i}" for i in range(17)]
+    layouts = {pat: data.place(gold, rest, pat, 2, random.Random("0:q1"))[0] for pat in ("AAA", "BBB", "AAB", "ABA")}
+    rank = {pat: {p: (w, j) for w, ps in enumerate(ws) for j, p in enumerate(ps)} for pat, ws in layouts.items()}
+    pairs = 0
+    for x in gold + rest:
+        for y in gold + rest:
+            same = [r for r in rank.values() if r[x][0] == r[y][0]]
+            if x < y and len(same) >= 2:
+                assert len({r[x][1] < r[y][1] for r in same}) == 1, (x, y)
+                pairs += 1
+    assert pairs > 100
+    moved = set(layouts["AAA"][0]) ^ set(layouts["BBB"][0])     # 3 gold moved, so 3 distractors moved back
+    assert len(moved) == 6 and set(gold) <= moved
 
 
 def test_toy_distractor_pools_are_disjoint():
@@ -50,6 +73,8 @@ def test_per_cell_and_filters(tmp_path, monkeypatch):
     monkeypatch.setattr(data, "BENCHMARK", tmp_path)
     data.write(qs, tmp_path / "t.jsonl")
     assert len(data.load("t", placement="BB")) == 5 and len(data.per_cell(data.load("t"), 2)) == 4
+    two_seeds = qs + toy.questions(1, 5, 1, ["AB", "BB"], n_distract=2)
+    assert len(data.per_cell(two_seeds, 2)) == 8                      # n per (dataset, qtype, placement, seed)
     with pytest.raises(SystemExit):
         data.write(qs, tmp_path / "t.jsonl")                           # built once, never overwritten
 

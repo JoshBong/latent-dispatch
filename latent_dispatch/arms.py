@@ -6,9 +6,10 @@ Each *_context function returns (cache, pos, worker_tokens): the orchestrator's 
 next token, and the payload size per worker. The tests compare these contexts directly.
 
 Options every arm takes (passed through to `answer`):
-    thinking = "off" | "forced"    forced prefills "<think>\\n" so the model must reason first
-    think_budget = 1024            thinking tokens allowed before "</think>" is forced
-    max_answer_tokens = 64
+    thinking = "off" | "forced"    forced prefills "<think>\\n" so the model must reason first (Qwen3 only)
+    think_budget = 1024            thinking tokens allowed before "</think>" is forced (H4's variable)
+    max_answer_tokens = 256        a cap that should never bind: every row records `cut`, and the audit reports how
+                                   often it did (analysis.audit). Raise it if the smoke shows cuts.
 
 The latent-step code (k1) follows JoshBong/LatentMAS models.py (fork of Gen-Verse/LatentMAS, Apache-2.0):
 https://github.com/JoshBong/LatentMAS/blob/main/models.py. The scan and text-report arms port Paper A's
@@ -17,21 +18,22 @@ scan_judge.py and text_report_run.py.
 from . import kv, prompts
 
 
-def answer(model, cache, pos, thinking="off", think_budget=1024, max_answer_tokens=64, pre=""):
+def answer(model, cache, pos, thinking="off", think_budget=1024, max_answer_tokens=256, pre=""):
     """Feed the answer tail (format line + assistant header + thinking prefix) on top of `cache` and decode."""
     if thinking not in ("off", "forced"):
         raise ValueError(f"thinking must be 'off' or 'forced', not {thinking!r}")
-    tail = model.ids(prompts.tail(thinking, pre))
+    tail = model.ids(prompts.tail(model.fmt, thinking, pre))
     g = model.greedy(tail, cache, pos, max_new=max_answer_tokens,
                      think_budget=think_budget if thinking == "forced" else None)
-    return {"text": g.text, "think_tokens": g.think_tokens, "gen_tokens": g.tokens}
+    return {"text": g.text, "think_tokens": g.think_tokens, "gen_tokens": g.tokens, "cut": g.cut,
+            "think_cut": g.think_cut}
 
 
 # ---------------------------------------------------------------------------------------------------- B0, B1
 
 def b0(model, q, **answer_options):
     """Closed book: the question, no paragraphs."""
-    ids = model.ids(prompts.prefix(q["question"]))
+    ids = model.ids(prompts.prefix(model.fmt, q["question"]))
     cache, _ = model.prefill(ids)
     return answer(model, cache, len(ids), **answer_options)
 
@@ -46,7 +48,7 @@ def visible_paragraphs(q, keep_gold_hops=None):
 
 def b1_context(model, q, keep_gold_hops=None):
     blocks = [model.ids(prompts.block(w)) for w in visible_paragraphs(q, keep_gold_hops) if w]
-    ids = model.ids(prompts.prefix(q["question"])) + [t for b in blocks for t in b]
+    ids = model.ids(prompts.prefix(model.fmt, q["question"])) + [t for b in blocks for t in b]
     cache, _ = model.prefill(ids)
     return cache, len(ids), [len(b) for b in blocks]
 
@@ -82,7 +84,7 @@ def k0_context(model, q, positions="local", merge="seq", visible=None, encode=en
         raise ValueError(f"positions must be 'local'/'true' and merge 'seq'/'shared', not {positions!r}/{merge!r}")
     if positions == "true" and merge == "shared":
         raise ValueError("merge='shared' only makes sense with positions='local'")
-    s_ids = model.ids(prompts.prefix(q["question"]))
+    s_ids = model.ids(prompts.prefix(model.fmt, q["question"]))
     s_cache, _ = model.prefill(s_ids)
     n_s = len(s_ids)
     blocks, sizes, offset = [], [], 0
@@ -117,10 +119,10 @@ def k1_context(model, q, m, realign=False, visible=None):
     """K0, but each worker's block is: its paragraphs, an instruction, its own assistant turn holding m latent
     thoughts (LatentMAS), and the close of that turn. With m = 0 the wrapper is still there, so the H2 contrast is
     K1(m) vs K1(0), not vs bare K0. realign=True applies LatentMAS's W_a (that's K2; on Qwen3-4B W_a ≈ I)."""
-    close = model.ids(prompts.WORKER_CLOSE)
+    close = model.ids(prompts.worker_close(model.fmt))
 
     def encode(model, paragraphs, cache, start):
-        head = model.ids(prompts.block(paragraphs) + prompts.WORKER_OPEN)
+        head = model.ids(prompts.block(paragraphs) + prompts.worker_open(model.fmt))
         cache, h = model.prefill(head, cache, start)
         cache, _ = model.latent_steps(cache, h, m, start + len(head), realign)
         cache, _ = model.prefill(close, cache, start + len(head) + m)
@@ -141,11 +143,11 @@ def t1(model, q, report_tokens=1024, **answer_options):
     reads the reports as text, in the same layout."""
     reports, sizes, truncated = [], [], []
     for w in q["workers"]:
-        g = model.greedy(model.ids(prompts.report_prompt(q["question"], w)), max_new=report_tokens)
+        g = model.greedy(model.ids(prompts.report_prompt(model.fmt, q["question"], w)), max_new=report_tokens)
         reports.append(g.text.strip())
         sizes.append(g.tokens)
-        truncated.append(g.answer_tokens >= report_tokens)
-    ids = model.ids(prompts.prefix(q["question"]))
+        truncated.append(g.cut)
+    ids = model.ids(prompts.prefix(model.fmt, q["question"]))
     ids += [t for j, r in enumerate(reports) for t in model.ids(prompts.report_block(j, r))]
     cache, _ = model.prefill(ids)
     return {**answer(model, cache, len(ids), **answer_options), "worker_tokens": sizes, "reports": reports,
@@ -161,29 +163,34 @@ def _note(text, note_style, note_chars):
     return text[:note_chars] if note_chars > 0 else text
 
 
-def scan(model, q, rounds=1, note_style="line", note_tokens=None, note_chars=900, **answer_options):
+def scan(model, q, rounds=1, note_style="line", note_tokens=None, note_chars=0, **answer_options):
     """The orchestrator reads the saved worker caches one at a time and carries text notes forward; it answers on
     the last block. Each worker block is encoded once, right after S, and reused on every pass. Each step sees
     [S | one worker block] + the notes so far, so information crosses workers only through the notes.
-    rounds = R reads the blocks R times in stitching order. note_style "line" (one line, 48 tokens) or
-    "scratch" (a four-line scratchpad, 160 tokens, capped at note_chars characters; 0 = no cap)."""
+    rounds = R reads the blocks R times in stitching order.
+    note_style "line": one line (48 tokens, first line, at most 300 characters). Being one line is what this channel
+    is, so a longer note is not a cut. "scratch": a four-line scratchpad with room to finish (1024 tokens, no
+    character cap unless note_chars > 0). `notes_cut` records every note that hit its token cap before finishing."""
     if rounds < 1 or note_style not in ("line", "scratch"):
         raise ValueError(f"need rounds >= 1 and note_style 'line' or 'scratch', not {rounds!r}/{note_style!r}")
-    budget = note_tokens or (48 if note_style == "line" else 160)
-    s_ids = model.ids(prompts.prefix(q["question"]))
+    budget = note_tokens or (48 if note_style == "line" else 1024)
+    s_ids = model.ids(prompts.prefix(model.fmt, q["question"]))
     s_cache, _ = model.prefill(s_ids)
     n_s = len(s_ids)
     blocks = []
     for w in q["workers"]:
         cache, n = encode_paragraphs(model, w, kv.copy(s_cache), n_s)
         blocks.append((kv.suffix(cache, n_s), n))
-    notes = []
+    notes, notes_cut = [], []
     order = list(range(len(blocks))) * rounds
     for step, w in enumerate(order):
         ctx = kv.concat([s_cache, blocks[w][0]])
         pos = n_s + blocks[w][1]
         if step == len(order) - 1:
             out = answer(model, ctx, pos, pre=prompts.notes_block(notes) + "\n\n", **answer_options)
-            return {**out, "worker_tokens": [n for _, n in blocks], "notes": notes, "passes": len(order)}
-        g = model.greedy(model.ids(prompts.note_tail(notes, note_style)), ctx, pos, max_new=budget)
+            return {**out, "worker_tokens": [n for _, n in blocks], "notes": notes, "notes_cut": notes_cut,
+                    "passes": len(order)}
+        g = model.greedy(model.ids(prompts.note_tail(model.fmt, notes, note_style)), ctx, pos, max_new=budget)
         notes.append(_note(g.text, note_style, note_chars))
+        # a line note is cut only if the cap hit before its first line ended
+        notes_cut.append(g.cut and (note_style == "scratch" or "\n" not in g.text.strip()))

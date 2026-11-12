@@ -34,9 +34,11 @@ def test_copy_is_independent(tiny):
     assert kv.layers(cache)[0][0].abs().max() < 50
 
 
-def test_shift_equals_encoding_at_the_shifted_position(tiny):
+def test_shift_equals_encoding_at_the_shifted_position(tiny_family):
     """Same chunk, no prefix, encoded at p vs p+d: attention depends only on relative positions, so shifting the
-    keys of the first by d must give the second exactly (holds with Qwen3's qk-norm, which sits before RoPE)."""
+    keys of the first by d must give the second exactly. Run on every family: Qwen3's qk-norm sits before RoPE,
+    Llama 3 scales its RoPE frequencies, Phi-3 fuses q/k/v."""
+    tiny = tiny_family
     ids = _ids(6)
     at_p, _ = tiny.prefill(ids, start_pos=5)
     at_pd, _ = tiny.prefill(ids, start_pos=12)
