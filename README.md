@@ -3,6 +3,8 @@
 CS 5787 Deep Learning (Cornell Tech, Fall 2026) final project.
 Josh Huang, Elliott Kalt, Ajit Mallavarapu.
 
+Research journal (what is running, what was decided, dead ends, open questions): [`JOURNAL.md`](JOURNAL.md). People and agents reviewing or extending this repo: read its newest entry first.
+
 ## The question
 
 An orchestrator model splits a multi-hop question's paragraphs across N parallel workers (copies of the same model). Each worker reads only its share and sends something back: its KV cache, a compressed latent payload, or text. The orchestrator answers.
@@ -209,6 +211,8 @@ benchmark/         SHA256SUMS (committed); question files (gitignored, rebuilt l
 results/           <model>-<dtype>/<arm name>.jsonl, one row per question (gitignored)
 tests/             fast: tiny random models of each family (H1 gates) + each family's real chat template;
                    slow: real weights end to end (MODEL=...) + the real datasets
+archive/           finished runs, one tarball each (rows + executed notebooks); unpack at the repo root
+JOURNAL.md         research journal: what is running, decisions, dead ends, open questions
 ```
 
 Each notebook reads top to bottom as the experiment. The first cell is the prediction and decision rule, frozen before the run. Then the questions and the arms, a run cell, the tables, and a findings cell to fill in. Notebooks never define prompt, KV or scoring code; they import it, so every experiment uses the same arms.
