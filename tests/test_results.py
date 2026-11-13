@@ -1,4 +1,6 @@
+import io
 import json
+import tarfile
 
 import pytest
 
@@ -96,3 +98,98 @@ def test_audit_and_load_all(tiny, two_workers, tmp_path, monkeypatch):
     t = analysis.audit(df)
     assert t.loc["k0", "n"] == 1 and t.loc["k0", "boxed %"] in (0.0, 100.0)
     assert {"cut %", "notes cut %", "think cut %", "EM"} <= set(t.columns)
+
+
+def test_load_all_marks_the_smoke_questions(tiny, two_workers, tmp_path, monkeypatch):
+    """The first 2 questions of a cell are the ones a smoke run answers; the gate judges only those."""
+    from latent_dispatch import data
+    monkeypatch.setattr(results, "RESULTS", tmp_path / "results")
+    monkeypatch.setattr(data, "BENCHMARK", tmp_path)
+    qs = [{**two_workers, "dataset": "toy_d0", "id": f"t:{i}"} for i in range(3)]
+    data.write(qs, tmp_path / "toy_d0.jsonl")
+    results.run(tiny, qs, "k0", arms.k0, max_answer_tokens=2)
+    df = results.load_all(tiny.name, tiny.dtype_name)
+    assert df.set_index("id").smoke.to_dict() == {"t:0": True, "t:1": True, "t:2": False}
+
+
+def test_gate_flags_broken_output_only():
+    import pandas as pd
+
+    def rows(arm, n, text="\\boxed{a}", cut=False):
+        return [{"arm": arm, "text": text, "cut": cut}] * n
+
+    df = pd.DataFrame(rows("b1", 9) + rows("b1", 1, cut=True)                          # one capped answer is fine
+                      + rows("k0", 10, text="no box")                                   # nothing boxed
+                      + rows("k1_m8", 7) + rows("k1_m8", 3, cut=True)                   # 30% ran to the cap
+                      + rows("b1_only_hop1", 10, text="ramble", cut=True)              # unanswerable by design
+                      + rows("b1_forced", 10, text="<think>\\boxed{a}</think> none"))  # boxed only inside thinking
+    t = analysis.gate(df)
+    assert t.broken.to_dict() == {"b1": False, "k0": True, "k1_m8": True, "b1_only_hop1": False, "b1_forced": True}
+    assert t.loc["b1", ["n", "unboxed", "capped"]].tolist() == [10, 0, 1] and t.loc["b1_only_hop1", "exempt"]
+    assert not analysis.gate(df, cut_max=101).loc["k1_m8", "broken"]
+    assert analysis.gate(df.iloc[:0]).empty
+
+
+# ------------------------------------------------------------------------------------- start from an earlier run
+
+def _tar(path, files):
+    """A tarball holding {name: text}."""
+    with tarfile.open(path, "w:gz") as tar:
+        for name, text in files.items():
+            info = tarfile.TarInfo(name)
+            info.size = len(text.encode())
+            tar.addfile(info, io.BytesIO(text.encode()))
+    return path
+
+
+def _row(i=0, **changes):
+    return json.dumps({"id": f"q{i}", "arm": "k0", "options": {}, "model": "org/M", "dtype": "bfloat16",
+                       "commit": "abc1234", "text": "\\boxed{a}", "cut": False, **changes}) + "\n"
+
+
+def test_load_archive_unpacks_and_keeps_files_already_there(tmp_path, monkeypatch):
+    monkeypatch.setattr(results, "_same_inputs", lambda commit, where: None)       # the git check is tested below
+    tar = _tar(tmp_path / "run.tar.gz", {"results/M-bfloat16/k0.jsonl": _row(0) + _row(1),
+                                         "results/M-bfloat16/b1.jsonl": _row(0, arm="b1"),
+                                         "notebooks/runs/M-h1.ipynb": "{}"})
+    root = tmp_path / "machine"
+    (root / "results/M-bfloat16").mkdir(parents=True)
+    (root / "results/M-bfloat16/b1.jsonl").write_text("rows added on this machine\n")
+    results.load_archive(tar, root)
+    assert len((root / "results/M-bfloat16/k0.jsonl").read_text().splitlines()) == 2
+    assert (root / "notebooks/runs/M-h1.ipynb").exists()
+    assert (root / "results/M-bfloat16/b1.jsonl").read_text() == "rows added on this machine\n"     # not overwritten
+
+
+@pytest.mark.parametrize("name, text", [
+    ("results/M-bfloat16/k0.jsonl", _row(0) + _row(1, arm="b1")),                 # two arms in one file
+    ("results/M-bfloat16/k0.jsonl", _row(0) + _row(1, options={"m": 8})),         # two sets of options
+    ("results/M-bfloat16/k0.jsonl", _row(0) + '{"id": "cut off mid-wri'),         # a cut-off line
+    ("results/M-bfloat16/k0.jsonl", json.dumps({"id": "q0", "arm": "k0"}) + "\n"),  # fields missing
+    ("results/Other-bfloat16/k0.jsonl", _row(0)),                                 # filed under another model
+    ("latent_dispatch/arms.py", "print('not results')"),                          # outside results/
+    ("results/../../escape.jsonl", _row(0)),
+], ids=["two arms", "two options", "cut-off line", "missing fields", "wrong model", "outside results", "dot-dot"])
+def test_load_archive_refuses_what_run_would_not_write(tmp_path, monkeypatch, name, text):
+    monkeypatch.setattr(results, "_same_inputs", lambda commit, where: None)
+    tar = _tar(tmp_path / "run.tar.gz", {"results/M-bfloat16/b1.jsonl": _row(0, arm="b1"), name: text})
+    with pytest.raises(ValueError):
+        results.load_archive(tar, tmp_path / "machine")
+    assert not (tmp_path / "machine").exists()                                    # nothing was unpacked
+
+
+def test_loaded_rows_must_come_from_this_checkouts_benchmark_and_prompts():
+    head = results._commit().removesuffix("-dirty")
+    if head == "unknown":
+        pytest.skip("not a git checkout")
+    results._same_inputs(head, "x")                               # the same commit: the same inputs
+    for commit in ("a1a3e04", head + "-dirty", "unknown"):        # a1a3e04 had other benchmark checksums
+        with pytest.raises(ValueError):
+            results._same_inputs(commit, "x")
+
+
+@pytest.mark.parametrize("path", sorted((results.ROOT / "archive").glob("*.tar.gz")), ids=lambda p: p.name)
+def test_archived_runs_are_in_the_format_run_writes(path, tmp_path, monkeypatch):
+    monkeypatch.setattr(results, "_same_inputs", lambda commit, where: None)       # format only: inputs may move on
+    results.load_archive(path, tmp_path)
+    assert list((tmp_path / "results").glob("*/*.jsonl"))

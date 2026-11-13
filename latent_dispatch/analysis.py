@@ -130,6 +130,36 @@ def audit(df: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows).set_index("arm") if rows else pd.DataFrame()
 
 
+UNANSWERABLE = ("b0", "b1_only_", "k0_only_")     # arms built so the answer can't be found: rambling is expected
+
+
+def output_flags(df: pd.DataFrame) -> tuple[pd.Series, pd.Series]:
+    """Per row: unboxed (no \\boxed{} in the answer; after forced thinking only the text that follows it counts) and
+    capped (the answer ran to max_answer_tokens; a row that doesn't say counts as capped)."""
+    answer = df.text.str.rsplit("</think>", n=1).str[-1]
+    unboxed = ~answer.str.contains("\\boxed{", regex=False)
+    capped = (df["cut"].isna() | df["cut"].eq(True)) if "cut" in df else pd.Series(True, index=df.index)
+    return unboxed, capped
+
+
+def gate(df: pd.DataFrame, boxed_min: float = 50.0, cut_max: float = 20.0) -> pd.DataFrame:
+    """Which arms give broken output? One row per arm: n, unboxed, capped, exempt, broken.
+
+    Broken = at least 2 bad answers, and fewer than boxed_min % boxed or more than cut_max % capped. A wrong prompt
+    or stop token gives about 0% boxed or 100% capped; milder numbers are warnings for a person to read.
+    UNANSWERABLE arms are exempt. Pass the smoke questions only (the `smoke` rows of results.load_all, first seed):
+    then the verdict is the same on a first run, a rerun, and a run that starts from loaded results."""
+    unboxed, capped = output_flags(df)
+    rows = []
+    for arm, g in df.groupby("arm", sort=False):
+        u, c = unboxed[g.index], capped[g.index]
+        exempt = arm.startswith(UNANSWERABLE)
+        broken = not exempt and (u | c).sum() >= 2 and (100 * u.mean() > 100 - boxed_min or 100 * c.mean() > cut_max)
+        rows.append({"arm": arm, "n": len(g), "unboxed": int(u.sum()), "capped": int(c.sum()), "exempt": exempt,
+                     "broken": bool(broken)})
+    return pd.DataFrame(rows, columns=["arm", "n", "unboxed", "capped", "exempt", "broken"]).set_index("arm")
+
+
 def _filter(w: pd.DataFrame, only: dict) -> pd.DataFrame:
     for field, allowed in only.items():
         allowed = allowed if isinstance(allowed, (list, tuple, set)) else [allowed]

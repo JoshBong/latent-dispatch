@@ -4,6 +4,13 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-13, later: the runner loads earlier runs and takes its code from GitHub
+
+- `colab.ipynb` no longer carries the code inside itself. It clones this repo at `COMMIT` and prints the commit it runs. New code runs as soon as it is on GitHub, and nothing has to be repacked.
+- `LOAD = ["Qwen3-4B-bfloat16-2026-11-13"]` starts a run from that tarball in `archive/`, so the questions it answered aren't run again. The tarball is checked first: the row format, and that its rows were made with the same benchmark files and prompts as the code about to run.
+- The runner issues listed in the 11-12 entry are fixed. The gate judges only the smoke questions, so its verdict is the same on a first run, a rerun, and a run that starts from loaded results. A left-out arm's smoke answers are moved out of the tables' way. A notebook that fails in its smoke no longer stops the others. The commit is printed, and a failed notebook shows its real error. `GATE_CUT = 101` is no longer needed.
+- Checked: fast tests for the loader, the same-inputs check and the gate. On the 11-13 rows the smoke questions are identified exactly (the same count per arm as that run's smoke audit) and no arm is judged broken. The runner's cells were dry-run on a laptop with the notebooks stubbed out. Not checked: a full run on Colab with this runner, so watch the first one through its smoke.
+
 ## 2026-11-13: first results (Qwen3-4B, preliminary)
 
 The 11-12 run finished: 14.5 hours on an L4, 13,700 rows, every row on commit `621c3fa`, no arm left out, no notebook failed. The rows and the executed notebooks are in `archive/Qwen3-4B-bfloat16-2026-11-13.tar.gz`. Run `tar xzf archive/Qwen3-4B-bfloat16-2026-11-13.tar.gz` at the repo root: it fills `results/Qwen3-4B-bfloat16/` and `notebooks/runs/` (both ignored by git), where the notebooks' load cells expect them.
