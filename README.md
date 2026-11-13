@@ -212,6 +212,7 @@ results/           <model>-<dtype>/<arm name>.jsonl, one row per question (gitig
 tests/             fast: tiny random models of each family (H1 gates) + each family's real chat template;
                    slow: real weights end to end (MODEL=...) + the real datasets
 archive/           finished runs, one tarball each (rows + executed notebooks); unpack at the repo root
+colab.ipynb        the whole pipeline on one Colab GPU; carries its own copy of the code (see Running)
 JOURNAL.md         research journal: what is running, decisions, dead ends, open questions
 ```
 
@@ -230,7 +231,9 @@ transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is teste
 
 ## Running
 
-**On Colab, from VS Code or Cursor:** open `colab.ipynb` with the Colab extension's kernel (an L4 server) and run all. It clones the repo onto the Colab machine, installs it, builds and checks the benchmarks, runs the tests (including the real-weights check for `MODEL`), runs every chosen notebook as a smoke with an audit that stops on unusable outputs, then the full run, and packs `results/` for you to copy back (via the extension's server mounting). Results stay on the Colab machine, not Drive, so keep the session alive until you've copied them. Settings: `MODEL`, `SEEDS`, `N_PER_CELL` (e.g. 100 for a quick preliminary), `NOTEBOOKS`, `SKIP` (arm names to leave out). One model per run; check its audit and tables before the next model.
+**On Colab:** open `colab.ipynb` in Colab (its first cell has the link; uploading the file works too), pick an L4 GPU and run all. The VS Code Colab extension's kernel works too, but ours kept disconnecting on Nov 12. The notebook carries its own copy of the code (one commit, as a base64 git bundle in the `BUNDLE_B64` cell), so Colab needs no GitHub access. **It runs that commit, not your checkout**, and every results row records the commit it came from. To repack after changing code: commit, point a branch named `colab-run` at that commit, run `git bundle create latent-dispatch.bundle colab-run`, put that file's base64 into `BUNDLE_B64`, and update the commit named in that cell's comment.
+
+The notebook installs the code, builds and checks the benchmarks, and runs the tests, including the real-weights check for `MODEL` (`RUN_TESTS = False` skips them on a rerun of the same code). It then runs every chosen notebook as a smoke. An arm whose smoke output is broken is left out of the full run. The run stops there if B1 is broken or if a notebook fails during its smoke. In the full run a notebook that fails doesn't stop the next one, and `results/` is packed into a tarball after every notebook. Results stay on the Colab machine, not Drive, so download the tarball before the runtime ends. Settings: `MODEL`, `SEEDS`, `N_PER_CELL` (e.g. 100 for a quick preliminary), `NOTEBOOKS`, `SKIP` (arm names to leave out). One model per run; check its audit and tables before the next model.
 
 The same steps by hand:
 
