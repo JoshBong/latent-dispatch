@@ -196,7 +196,8 @@ These came from Qwen2.5-3B/7B at n = 50–200 and are pilots only.
 
 ```
 latent_dispatch/   shared code, plain functions, imported by every notebook
-  arms.py          every arm as one function: b0 b1 b1_mask k0 k1 t1 scan
+  arms.py          every arm as one function: b0 b1 b1_mask masked_recompute k0 k1 t1 scan
+  masking.py       exact B1 tokens and controlled visibility from B to A during recomputation
   prompts.py       the one prompt layout every arm uses (S / blocks / tail), with each family's chat markup
   model.py         the model matrix + architecture check; explicit-position forwards, latent steps, greedy decode
   kv.py            copy / slice / concat / RoPE key shift              (ported from the fork, tested)
@@ -213,12 +214,13 @@ tests/             fast: tiny random models of each family (H1 gates) + each fam
                    slow: real weights end to end (MODEL=...) + the real datasets
 archive/           finished runs, one tarball each (rows + executed notebooks); the Colab runner's LOAD starts from them
 colab.ipynb        the whole pipeline on one Colab GPU (see Running)
+colab_masking.ipynb preset for the archived experiment plus the five attention-mask conditions
 JOURNAL.md         research journal: what is running, decisions, dead ends, open questions
 ```
 
 Each notebook reads top to bottom as the experiment. The first cell is the prediction and decision rule, frozen before the run. Then the questions and the arms, a run cell, the tables, and a findings cell to fill in. Notebooks never define prompt, KV or scoring code; they import it, so every experiment uses the same arms.
 
-Built so far: Part 0, H1, H2 (K1 only), H3 (T1 only), H4, H5 (orchestrator scan only), H7 (select-one + notes audit). These are the experiments the pilots already ran. Each notebook's first cell lists what is still missing for that hypothesis.
+Built so far: Part 0, H1, H1 A-side masking, H2 (K1 only), H3 (T1 only), H4, H5 (orchestrator scan only), H7 (select-one + notes audit). The masking follow-up is prepared but has no experimental results yet. Each notebook's first cell lists what is still missing for that hypothesis.
 
 ## Setup
 
@@ -230,6 +232,8 @@ uv pip install --python .venv/bin/python -e ".[dev]"
 transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is tested against this exact version. Notebooks use the `.venv` kernel (Jupyter Lab: `.venv/bin/jupyter lab`; VS Code: pick `.venv` as the kernel).
 
 ## Running
+
+**Masking follow-up:** open [colab_masking.ipynb in Colab](https://colab.research.google.com/github/ajit-mallav/latent-dispatch/blob/masking-experiment/colab_masking.ipynb), choose an L4 or A100, and run all. It uses the common runner, loads the 11-13 archive, and adds `h1_masking` to Josh's original Part 0/H1/H2 run. Defaults match the archived Qwen3-4B/bf16 run (seed 0, 100 per cell); the first cell also supports the full benchmark with three seeds. See [MASKING_RUN.md](MASKING_RUN.md) for the exact scope, controls, and outputs. This setup has not launched a new experiment.
 
 **On Colab:** open `colab.ipynb` in Colab (its first cell has the link; uploading the file works too), pick an L4 GPU and run all. The VS Code Colab extension's kernel works too, but ours kept disconnecting on Nov 12. The notebook clones this repo onto the Colab machine at `COMMIT` (`main` by default; give a commit hash to pin a run) and prints the commit it runs. Every results row records it. `LOAD` names finished runs in `archive/` to start from. Each tarball is checked and then unpacked, so only the questions it didn't answer are run. The check covers the row format, and that the rows were made with the same benchmark files and prompts as the code about to run.
 

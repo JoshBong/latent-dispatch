@@ -16,7 +16,7 @@ from collections import Counter
 import pytest
 import torch
 
-from latent_dispatch import arms, kv, toy
+from latent_dispatch import arms, kv, masking, prompts, toy
 from latent_dispatch.model import Model
 from latent_dispatch.score import score
 
@@ -82,6 +82,27 @@ def test_shift_matches_native_encoding_on_real_weights(real):
     native = kv.layers(at_pd)[0][0].float()
     rel = ((shifted - native).norm() / native.norm()).item()
     assert rel < (6e-3 if real.dtype_name == "bfloat16" else 1e-4), rel
+
+
+@pytest.mark.parametrize("condition", ["blocked", "full"])
+def test_mask_recompute_endpoints_on_real_weights(real, condition):
+    q = toy.questions(1, 1, 0, ["AB"], n_distract=2)[0]
+    cache, pos, _, _ = masking.context(real, q, condition)
+    reference = (arms.b1_context(real, q) if condition == "full"
+                 else arms.k0_context(real, q, positions="true"))
+    tail = real.ids(prompts.tail(real.fmt, "off"))
+    actual = real.forward(tail, cache, pos).logits.float()
+    expected = real.forward(tail, reference[0], reference[1]).logits.float()
+    rel = ((actual - expected).norm() / expected.norm()).item()
+    assert rel < (1e-2 if real.dtype_name in ("bfloat16", "float16") else 1e-4), rel
+
+
+def test_mask_recompute_partial_controls_on_real_weights(real):
+    q = toy.questions(1, 1, 0, ["AB"], n_distract=2)[0]
+    for condition in ("gold", "distractor", "except_gold"):
+        out = arms.masked_recompute(real, q, condition, max_answer_tokens=1)
+        assert out["mask"]["condition"] == condition
+        assert out["gold_logprob"] < 0
 
 
 # ---- not soup
