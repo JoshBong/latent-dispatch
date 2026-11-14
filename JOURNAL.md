@@ -44,9 +44,17 @@ T1 (only four cells ran):
 | MuSiQue 2-hop AB | 32 | 18 | 18 | 20 |
 | MuSiQue 2-hop BB | 22 | 30 | 34 | 46 |
 
-T1 − K0: toy +5 (−5, 15), MuSiQue +7 (−4, 19). Independent text reports fail at a split chain the same way independent caches do: no worker sees the bridge, so whether the handoff is text or KV doesn't matter here. MuSiQue BB, where T1 beats B1 by 24, has not been looked into.
+T1 − K0: toy +5 (−5, 15), MuSiQue +7 (−4, 19).
 
-What it changes: the comparison that matters is independent vs sequential, not latent vs text. The repair result is the case for routed re-query: a second pass carrying a few tokens of notes recovers what independent encoding loses at 2-hop.
+- **T1 fails at the orchestrator, not in the reports.** On toy_d2 hop1 AB the gold answer is in the workers' reports for 50 of 50 questions, yet T1 gets 19 right. The orchestrator has both facts as text and still doesn't chain them. That is the same failure as K0, a missed second lookup at answer time. The reports also state what they can't answer ("The document does not provide information about the mayor of Kastrel"), which may push the orchestrator to answer "not stated". That is a guess and would need a controlled test (reports with those sentences removed).
+- MuSiQue BB, where T1 beats B1 by 24, has not been looked into. Possibly the worker filters the distractors when it writes its report.
+
+Caveats on the repair result:
+
+- **Note budget.** One round writes one note and two rounds write three, so the two-round gain mixes more reads with more space for intermediate facts. Some longer-hop notes also hit the 48-token note cap. Equal total note budgets across 1 and 2 rounds would separate the two.
+- **One vs two rounds on MuSiQue 2-hop is not resolved:** 26 vs 31 pooled over AB+BA. "Rounds have to keep up with crossings" rests on the toy only.
+
+What it changes: the comparison that matters is independent vs sequential, not latent vs text. Whether the handoff is caches or text, the orchestrator fails to make the second lookup when the facts arrive separately. A second sequential pass with a few tokens of notes recovers most of the loss at 2-hop. That is the case for routed re-query.
 
 Checked: rows read with `results.load_all`, scored by the repo's `score`, intervals from 2,000 bootstrap resamples over source questions. Not checked: other seeds, other models, F1, hand labels of the notes.
 
