@@ -4,6 +4,36 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-14, later: H1 on Qwen3-1.7B (scale trend, first point)
+
+H1 (B1, B1-mask, K0) on Qwen3-1.7B, 100 source questions per cell, seed 0, thinking off, EM. It took 7.2 hours on a T4. The rows are in `archive/Qwen3-1.7B-bfloat16-2026-11-14.tar.gz`: 9,300 rows, all on `04e09e1`, no duplicates, no answers cut off, and almost all boxed (0–0.2% unboxed).
+
+B1 / B1-mask / K0, next to the 4B numbers from the 11-13 entry:
+
+| | 1.7B | 4B |
+|---|---|---|
+| toy_d2 hop1 AB | 90 / 6 / 7 | 100 / 37 / 27 |
+| toy_d2 hop1 BA | 52 / 4 / 5 | 100 / 29 / 18 |
+| toy_d2 hop1 AA | 74 / 50 / 40 | 100 / 93 / 93 |
+| toy_d2 hop2, AB and BA | 23–33 / 13–18 / 19–20 | 98–100 / 22–24 / 18–19 |
+| MuSiQue 2-hop, 4 placements (B1) | 5–14 | 24–35 |
+| MuSiQue 3-hop (B1) | 23–25 | 41–44 |
+| MuSiQue 4-hop (B1) | 2–7 | 18–22 |
+
+Paired differences, 95% bootstrap interval over sources:
+
+| | 1.7B | 4B |
+|---|---|---|
+| B1 − K0, toy_d2 hop0–2 at AB+BA | +25 (21, 30) | +57 (52, 61) |
+| B1 − K0, toy_d2 hop0–2 at AA+BB | +8.7 (5.5, 12) | +3.8 (2, 6) |
+| B1 − B1-mask, MuSiQue 2-hop AB+BA | +3.5 (0, 7.5) | +11 (5, 17.5) |
+
+- **1.7B can barely chain even with everything in one context:** 23–37 on three-fact toy chains and 5–14 on MuSiQue 2-hop. So the gap is smaller mostly because B1 has less to lose.
+- **Where 1.7B can chain, separate encoding removes it:** toy hop1 AB goes from 90 to 7. It is the same failure as at 4B.
+- **B1 is not a clean ceiling at this size.** On toy hop1 it scores 90 at AB, 52 at BA, 74 at AA and 63 at BB. K0 also loses about 9 points with all gold on one worker. A trend across sizes should be reported as the gap relative to what B1 can do, not as raw points.
+
+Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions. Next: Qwen3-8B H1 at 50 per cell on an A100. Qwen3-8B in bf16 (about 16 GB) does not fit a T4.
+
 ## 2026-11-14: text reports and sequential repair (Qwen3-4B, preliminary)
 
 The 11-13 overnight run used the new runner, starting from the 11-13 tarball. It ran two arms that had not been run before, at 50 source questions per cell, seed 0, thinking off, EM:
