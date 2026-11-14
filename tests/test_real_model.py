@@ -81,7 +81,9 @@ def test_shift_matches_native_encoding_on_real_weights(real):
     shifted = kv.layers(kv.shift(at_p, 1200, real.inv_freq))[0][0].float()      # layer-0 keys
     native = kv.layers(at_pd)[0][0].float()
     rel = ((shifted - native).norm() / native.norm()).item()
-    assert rel < (6e-3 if real.dtype_name == "bfloat16" else 1e-4), rel
+    # Both low-precision dtypes incur rotation rounding; fp16 must not use the fp32 bound.
+    tolerance = {"bfloat16": 6e-3, "float16": 8e-4}.get(real.dtype_name, 1e-4)
+    assert rel < tolerance, rel
 
 
 @pytest.mark.parametrize("condition", ["blocked", "full"])
