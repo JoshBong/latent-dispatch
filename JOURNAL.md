@@ -4,6 +4,92 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-14, later: H1 on Qwen3-1.7B (scale trend, first point)
+
+H1 (B1, B1-mask, K0) on Qwen3-1.7B, 100 source questions per cell, seed 0, thinking off, EM. It took 7.2 hours on a T4. The rows are in `archive/Qwen3-1.7B-bfloat16-2026-11-14.tar.gz`: 9,300 rows, all on `04e09e1`, no duplicates, no answers cut off, and almost all boxed (0–0.2% unboxed).
+
+B1 / B1-mask / K0, next to the 4B numbers from the 11-13 entry:
+
+| | 1.7B | 4B |
+|---|---|---|
+| toy_d2 hop1 AB | 90 / 6 / 7 | 100 / 37 / 27 |
+| toy_d2 hop1 BA | 52 / 4 / 5 | 100 / 29 / 18 |
+| toy_d2 hop1 AA | 74 / 50 / 40 | 100 / 93 / 93 |
+| toy_d2 hop2, AB and BA | 23–33 / 13–18 / 19–20 | 98–100 / 22–24 / 18–19 |
+| MuSiQue 2-hop, 4 placements (B1) | 5–14 | 24–35 |
+| MuSiQue 3-hop (B1) | 23–25 | 41–44 |
+| MuSiQue 4-hop (B1) | 2–7 | 18–22 |
+
+Paired differences, 95% bootstrap interval over sources:
+
+| | 1.7B | 4B |
+|---|---|---|
+| B1 − K0, toy_d2 hop0–2 at AB+BA | +25 (21, 30) | +57 (52, 61) |
+| B1 − K0, toy_d2 hop0–2 at AA+BB | +8.7 (5.5, 12) | +3.8 (2, 6) |
+| B1 − B1-mask, MuSiQue 2-hop AB+BA | +3.5 (0, 7.5) | +11 (5, 17.5) |
+
+- **1.7B can barely chain even with everything in one context:** 23–37 on three-fact toy chains and 5–14 on MuSiQue 2-hop. So the gap is smaller mostly because B1 has less to lose.
+- **Where 1.7B can chain, separate encoding removes it:** toy hop1 AB goes from 90 to 7. It is the same failure as at 4B.
+- **B1 is not a clean ceiling at this size.** On toy hop1 it scores 90 at AB, 52 at BA, 74 at AA and 63 at BB. K0 also loses about 9 points with all gold on one worker. A trend across sizes should be reported as the gap relative to what B1 can do, not as raw points.
+
+Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions. Next: Qwen3-8B H1 at 50 per cell on an A100. Qwen3-8B in bf16 (about 16 GB) does not fit a T4.
+
+## 2026-11-14: text reports and sequential repair (Qwen3-4B, preliminary)
+
+The 11-13 overnight run used the new runner, starting from the 11-13 tarball. It ran two arms that had not been run before, at 50 source questions per cell, seed 0, thinking off, EM:
+
+- **T1** (`t1_1024`): each worker writes a text report of what its paragraphs say about the question, and the orchestrator answers from the reports.
+- **Repair** (`scan_1`, `scan_2`, notebook `h5_rounds`): the orchestrator reads one worker's cache at a time and keeps a one-line note between reads, for 1 or 2 rounds over all workers, then answers.
+
+The rows are in `archive/Qwen3-4B-bfloat16-2026-11-14.tar.gz`. It includes everything in the 11-13 tarball, so it replaces it for `LOAD`. The 11-13 rows in it are byte-identical to the 11-13 tarball's, so nothing was rerun. The 1,700 new rows are all on `04e09e1`, with no duplicates, and 9 answers hit the length cap. That makes this the first full Colab run with the new runner: the load, the gate and the resume all worked.
+
+Repair (B1 / K0 / 1 round / 2 rounds):
+
+| | B1 | K0 | 1 round | 2 rounds |
+|---|---|---|---|---|
+| toy_d2 hop1 AB | 100 | 32 | 100 | 100 |
+| toy_d2 hop1 BA | 100 | 22 | 14 | 86 |
+| toy_d2 hop2 AB | 100 | 22 | 2 | 70 |
+| toy_d2 hop2 BA | 100 | 16 | 8 | 56 |
+| toy_d0, same four cells | 100 | 22–50 | 6–100 | 76–100 |
+| MuSiQue 2-hop AB | 32 | 18 | 32 | 32 |
+| MuSiQue 2-hop BA | 38 | 14 | 20 | 30 |
+| MuSiQue 3-hop, 4-hop (5 cells) | 18–48 | 24–44 | 16–40 | 18–42 |
+
+Paired differences, mean over source questions, 95% bootstrap interval over sources:
+
+- 2 rounds − K0: toy_d2 +55 (47.5, 63), toy_d0 +56 (48, 64.5), MuSiQue 2-hop AB+BA +15 (6, 26), all MuSiQue +1.6 (−3.6, 7).
+- B1 − 2 rounds, MuSiQue 2-hop AB+BA: +4 (−6, 14). No gap to B1 can be resolved there at n = 50.
+
+- **Two sequential rounds recover most of the H1 loss on the toy and on 2-hop MuSiQue,** which is where H1 found a cost. 3-hop and 4-hop don't move, as expected, since B1 can't chain there at this size either (11-13 entry).
+- **One round helps only when the chain is read in order** (hop1 AB, one crossing). Beyond that it does worse than K0 (toy_d2 hop2 AB: 2 vs 22). In the notes it writes "not mentioned" early, and the orchestrator then trusts that note. Rounds have to keep up with crossings.
+- At 3 facts (hop2) two rounds still fall short of B1 (56–86). At hop2 BA the answer is in the final note only 8% of the time but EM is 56, so the final read of the caches does part of the work.
+
+T1 (only four cells ran):
+
+| | B1 | B1-mask | K0 | T1 |
+|---|---|---|---|---|
+| toy_d2 hop1 AB | 100 | 36 | 32 | 38 |
+| toy_d2 hop1 BB | 100 | 96 | 96 | 100 |
+| MuSiQue 2-hop AB | 32 | 18 | 18 | 20 |
+| MuSiQue 2-hop BB | 22 | 30 | 34 | 46 |
+
+T1 − K0: toy +5 (−5, 15), MuSiQue +7 (−4, 19).
+
+- **T1 fails at the orchestrator, not in the reports.** On toy_d2 hop1 AB the gold answer is in the workers' reports for 50 of 50 questions, yet T1 gets 19 right. The orchestrator has both facts as text and still doesn't chain them. That is the same failure as K0, a missed second lookup at answer time. The reports also state what they can't answer ("The document does not provide information about the mayor of Kastrel"), which may push the orchestrator to answer "not stated". That is a guess and would need a controlled test (reports with those sentences removed).
+- MuSiQue BB, where T1 beats B1 by 24, has not been looked into. Possibly the worker filters the distractors when it writes its report.
+
+Caveats on the repair result:
+
+- **Note budget.** One round writes one note and two rounds write three, so the two-round gain mixes more reads with more space for intermediate facts. Some longer-hop notes also hit the 48-token note cap. Equal total note budgets across 1 and 2 rounds would separate the two.
+- **One vs two rounds on MuSiQue 2-hop is not resolved:** 26 vs 31 pooled over AB+BA. "Rounds have to keep up with crossings" rests on the toy only.
+
+What it changes: the comparison that matters is independent vs sequential, not latent vs text. Whether the handoff is caches or text, the orchestrator fails to make the second lookup when the facts arrive separately. A second sequential pass with a few tokens of notes recovers most of the loss at 2-hop. That is the case for routed re-query.
+
+Checked: rows read with `results.load_all`, scored by the repo's `score`, intervals from 2,000 bootstrap resamples over source questions. Not checked: other seeds, other models, F1, hand labels of the notes.
+
+Still running on 11-14: Qwen3-1.7B H1 at 100 per cell. Qwen3-8B H1 is queued and needs a bigger GPU than a T4.
+
 ## 2026-11-13: masking follow-up prepared for Colab
 
 `colab_masking.ipynb` is a preset for the existing runner: preload the 11-13 archive, then run Qwen3-4B/bf16 on the full benchmark with seeds `[0, 1, 2]`, completing Part 0/H1/H2 and `h1_masking`. The smaller original seed-0/100-per-cell scope is available in the first cell. No new experiment was launched during this setup.
