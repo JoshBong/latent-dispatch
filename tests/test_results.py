@@ -78,6 +78,27 @@ def test_load_refuses_rows_made_with_other_options(tiny, tmp_path, monkeypatch):
     assert len(results._read(path)) == 1                                   # the broken last line is skipped
 
 
+@pytest.mark.parametrize("fragment", [b'{"id": "partial', b'{"id": "partial", "text": "\xc3'])
+def test_resume_discards_only_the_interrupted_final_fragment(tmp_path, fragment):
+    path = tmp_path / "arm.jsonl"
+    complete = b'{"id": "complete", "text": "kept"}\n'
+    path.write_bytes(complete + fragment)
+    assert list(results._read(path)) == ["complete"]
+    results._repair_tail(path)
+    assert path.read_bytes() == complete
+    with path.open("ab") as f:
+        f.write(b'{"id": "next"}\n')
+    assert list(results._read(path)) == ["complete", "next"]
+
+
+def test_resume_preserves_a_complete_row_without_a_final_newline(tmp_path):
+    path = tmp_path / "arm.jsonl"
+    row = b'{"id": "complete", "text": "kept"}'
+    path.write_bytes(row)
+    results._repair_tail(path)
+    assert path.read_bytes() == row + b"\n"
+
+
 def test_bad_option_values_raise(tiny, two_workers):
     for bad in ({"thinking": "on"}, {"positions": "global"}, {"merge": "sequential"}):
         with pytest.raises(ValueError):

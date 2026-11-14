@@ -6,9 +6,11 @@ Newest entry first. Add a dated entry when something is decided or ruled out. Do
 
 ## 2026-11-13: masking follow-up prepared for Colab
 
-`colab_masking.ipynb` is a preset for the existing runner: preload the 11-13 archive, keep the original Qwen3-4B/bf16 seed-0 sample of 100 questions per cell, then run Part 0/H1/H2 and `h1_masking`. The larger three-seed/full-benchmark scope is available in the first cell. No new experiment was launched during this setup.
+`colab_masking.ipynb` is a preset for the existing runner: preload the 11-13 archive, then run Qwen3-4B/bf16 on the full benchmark with seeds `[0, 1, 2]`, completing Part 0/H1/H2 and `h1_masking`. The smaller original seed-0/100-per-cell scope is available in the first cell. No new experiment was launched during this setup.
 
-The five A-side visibility conditions are blocked, gold-only, one distractor, all except gold, and full. Tokens and true positions stay fixed and the answer tail sees both blocks. Full runs filter by Part 0 composition labels, save EM and gold-answer likelihood, record selections and coverage, and compare endpoints against saved B1/B1-mask outputs. The archived sample yields 740 question rows, with 640 eligible for distractor-only. Smoke uses the runner's fixed unfiltered questions and now writes its Part 0 labels separately from full labels. See `MASKING_RUN.md` for the launch link and outputs.
+The preset stores its checkout, results, and executed notebooks on Google Drive for resuming across runtimes. Before appending results, the writer recovers a missing final newline or removes only an interrupted final fragment so that question can rerun.
+
+The five A-side visibility conditions are blocked, gold-only, one distractor, all except gold, and full. Tokens and true positions stay fixed and the answer tail sees both blocks. Full runs filter by Part 0 composition labels, save EM and gold-answer likelihood, record selections and coverage, and compare endpoints against saved B1/B1-mask outputs. The full masking scope has 21,024 candidate question/layout rows before the composition filter; the final count depends on the completed probes. Smoke uses the runner's fixed unfiltered questions and now writes its Part 0 labels separately from full labels. See `MASKING_RUN.md` for the launch link and outputs.
 
 The core mask endpoints and likelihood code passed tiny-model and Qwen3-0.6B checks during initial implementation. This packaging step performs static validation only; the Colab preset retains the normal model tests and smoke gates for Josh's run. Bridge-span interventions in B remain a later stage after observing the A-side results.
 

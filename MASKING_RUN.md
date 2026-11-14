@@ -2,24 +2,25 @@
 
 Open [the masking launcher in Colab](https://colab.research.google.com/github/ajit-mallav/latent-dispatch/blob/masking-experiment/colab_masking.ipynb), select an **L4 or A100 GPU**, and choose **Run all**. The launcher calls the existing `colab.ipynb` runner. It does not contain a second implementation of the experiment or runner.
 
-The source is the published fork branch so the notebook can run before the pull request is merged. After merging, Josh can use `REPO = "https://github.com/JoshBong/latent-dispatch.git"` and `COMMIT = "main"`. Pin `COMMIT` to a commit hash for a fixed code version. A new runtime uses `/content/latent-dispatch-masking`; rerunning on the same runtime keeps that checkout and resumes its saved rows.
+The source is the published fork branch so the notebook can run before the pull request is merged. After merging, Josh can use `REPO = "https://github.com/JoshBong/latent-dispatch.git"` and `COMMIT = "main"`. Pin `COMMIT` to a commit hash for a fixed code version. The launcher mounts Google Drive and uses `/content/drive/MyDrive/latent-dispatch-masking` for the checkout, per-question results, and executed notebooks. Authorize Drive when Colab prompts. Run all again with the same `ROOT` to resume, including on a new runtime. The saved checkout keeps its existing commit; choose a new `ROOT` when changing source or code version.
 
 The preset is:
 
 ```python
 MODEL = "Qwen/Qwen3-4B"
 DTYPE = "bfloat16"
-SEEDS = [0]
-N_PER_CELL = 100
+ROOT = "/content/drive/MyDrive/latent-dispatch-masking"
+SEEDS = [0, 1, 2]
+N_PER_CELL = None
 LOAD = ["Qwen3-4B-bfloat16-2026-11-13"]
 NOTEBOOKS = ["part0_ruler", "h1_encoding", "h2_thinking", "h1_masking"]
 SKIP = {"h2_thinking": ["t1_1024"]}
 RUN_TESTS = True
 ```
 
-This is a complete smoke-then-full execution of Josh's original sample with masking added. For the full benchmark across all three data seeds, set `SEEDS = [0, 1, 2]` and `N_PER_CELL = None`. The archive covers part of seed 0; the runner will complete the remaining Part 0/H1/H2 rows before the full masking stage. That is a substantially larger run. No model experiments were run as part of preparing this setup.
+This is a complete smoke-then-full execution of the full benchmark across all three data seeds, with masking added. The archive covers part of seed 0; the runner completes the remaining Part 0/H1/H2 rows before the full masking stage. To run only Josh's original sample plus masking, use `SEEDS = [0]` and `N_PER_CELL = 100`. No model experiments were run as part of preparing this setup.
 
-The common runner checks the archived files, builds and checksum-checks the benchmarks, runs unit and real-model checks, executes smoke passes, then runs the selected notebooks in order. Each answer is saved immediately. Part 0's smoke labels have their own filename so they cannot replace the full labels loaded from the archive. The masking smoke uses a fixed, unfiltered sample to match the runner's smoke audit; the full run requires complete, non-smoke composition labels for its requested seeds.
+The common runner checks the archived files, builds and checksum-checks the benchmarks, runs unit and real-model checks, executes smoke passes, then runs the selected notebooks in order. Each answer is saved immediately. An interrupted final JSONL fragment is removed before appending so that question can rerun; a complete final row missing its newline is preserved. Part 0's smoke labels have their own filename so they cannot replace the full labels loaded from the archive. The masking smoke uses a fixed, unfiltered sample to match the runner's smoke audit; the full run requires complete, non-smoke composition labels for its requested seeds.
 
 The masking stage recomputes the unchanged B1 tokens at their true positions and changes only which A tokens B can attend to. The final answer can still attend to both blocks.
 
@@ -31,13 +32,13 @@ The masking stage recomputes the unchanged B1 tokens at their true positions and
 | `except_gold` | Everything except gold paragraph tokens |
 | `full` | All tokens; reproduces B1 |
 
-The datasets are the two-fact toy (`toy_d2`, `hop1`) and two-hop MuSiQue, with AA/AB/BA/BB placements. Full-run analysis uses questions labeled as requiring composition by Part 0. Under the archived sample, 100 toy and 85 MuSiQue source questions remain, each in four placements: **740 question rows**. Four conditions have 740 eligible rows each; distractor-only has 640 because worker A has no distractor in 100 toy AA cases. That is **3,600 full-run arm/question rows**, plus any smoke rows outside the composition subset. The notebook prints eligible, saved, and remaining counts before loading a model.
+The masking datasets are the two-fact toy (`toy_d2`, `hop1`) and two-hop MuSiQue, with AA/AB/BA/BB placements. Full-run analysis uses questions labeled as requiring composition by Part 0. The default scope has 21,024 candidate question/layout rows before that filter: 6,000 toy rows and 15,024 MuSiQue rows. The number that passes the filter is determined by the completed three-seed Part 0 probes; it is not known in advance. As a smaller reference, the archived seed-0/100-per-cell sample has 740 eligible question rows and 3,600 condition/question rows, with 100 toy AA cases excluded from distractor-only. The notebook prints eligible, saved, and remaining counts before loading a model.
 
 The new rows record exact-match output, selected A paragraph indices, visible token counts, and the teacher-forced log-probability of the first gold answer in boxed format. Both summed and per-token mean log-probabilities are saved. Existing B1 and B1-mask outputs are read for paired endpoint checks; they are not regenerated by those checks. Masked endpoints are newly computed because their likelihoods and direct mask outputs are part of this experiment. Names beginning `mask_a_` keep these results separate from the previous arms.
 
 Read the smoke's raw answers and cut rates. The existing runner stops on broken B1 and skips broken arms; the masking notebook requires both blocked and full endpoints and fails explicitly if either is skipped. A skipped non-endpoint arm is excluded from its tables. Missing full-run labels or missing expected result rows also fail explicitly. If an answer cap needs changing, the results loader rejects mixing different options under the same arm filename; use a fresh results folder or a new arm name for that rerun.
 
-Download `/content/results-Qwen3-4B-bfloat16.tar.gz` before deleting the Colab runtime. It includes:
+The raw results and executed notebooks stay in the Drive checkout across runtimes. The runner also creates `/content/results-Qwen3-4B-bfloat16.tar.gz` after each full notebook; download that runtime-local bundle before deleting the runtime if you want a single file to share. It includes:
 
 - Previous and new JSONL rows under `results/Qwen3-4B-bfloat16/`.
 - `h1_masking-plan.json`, recording the exact commit, scope, conditions, and resume counts.
