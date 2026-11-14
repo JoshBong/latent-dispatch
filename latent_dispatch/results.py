@@ -35,16 +35,45 @@ def _read(path: Path) -> dict[str, dict]:
     if not path.exists():
         return {}
     rows, bad = {}, 0
-    with path.open(encoding="utf-8") as f:
+    with path.open("rb") as f:
         for line in f:
             try:
                 r = json.loads(line)
                 rows[r["id"]] = r
-            except (json.JSONDecodeError, KeyError):
+            except (json.JSONDecodeError, UnicodeDecodeError, KeyError, TypeError):
                 bad += 1
     if bad:
         print(f"warning: skipped {bad} unreadable line(s) in {path.name}")
     return rows
+
+
+def _repair_tail(path: Path) -> None:
+    """Recover an interrupted final write before appending: keep a complete row or remove its partial fragment."""
+    if not path.exists() or path.stat().st_size == 0:
+        return
+    with path.open("r+b") as f:
+        end = f.seek(0, 2)
+        f.seek(end - 1)
+        if f.read(1) == b"\n":
+            return
+        start, tail = end, b""
+        while start > 0 and b"\n" not in tail:
+            previous = max(0, start - 65536)
+            f.seek(previous)
+            tail = f.read(start - previous) + tail
+            start = previous
+        offset = tail.rfind(b"\n") + 1
+        try:
+            row = json.loads(tail[offset:])
+            valid = isinstance(row, dict) and "id" in row
+        except (json.JSONDecodeError, UnicodeDecodeError):
+            valid = False
+        if valid:
+            f.seek(0, 2)
+            f.write(b"\n")
+        else:
+            f.truncate(start + offset)
+            print(f"warning: removed an interrupted final row in {path.name}; that question will rerun")
 
 
 def _check(path: Path, rows: dict, want: dict) -> None:
@@ -69,6 +98,7 @@ def _commit() -> str:
 def run(model, questions: list[dict], name: str, arm, **options) -> None:
     """Run `arm(model, q, **options)` on every question not already saved under `name`."""
     path = results_path(model.name, model.dtype_name, name)
+    _repair_tail(path)
     done = _read(path)
     want = {"arm": arm.__name__, "options": json.loads(json.dumps(options))}
     _check(path, done, want)

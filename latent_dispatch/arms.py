@@ -15,7 +15,9 @@ The latent-step code (k1) follows JoshBong/LatentMAS models.py (fork of Gen-Vers
 https://github.com/JoshBong/LatentMAS/blob/main/models.py. The scan and text-report arms port Paper A's
 scan_judge.py and text_report_run.py.
 """
-from . import kv, prompts
+import torch
+
+from . import kv, masking, prompts
 
 
 def answer(model, cache, pos, thinking="off", think_budget=1024, max_answer_tokens=256, pre=""):
@@ -111,6 +113,34 @@ def k0(model, q, positions="local", merge="seq", visible=None, **answer_options)
 def b1_mask(model, q, **answer_options):
     """B1 with a block-diagonal attention mask and true positions = K0 with positions="true"."""
     return k0(model, q, positions="true", **answer_options)
+
+
+def masked_recompute(model, q, condition, distractor_seed=0, score_gold=True, **answer_options):
+    """A-side visibility experiment, with the same B1 tokens and true positions under every condition.
+
+    By default also teacher-force the first gold answer, formatted as \\boxed{answer}, immediately after the
+    thinking-off answer tail. This is a conditional sequence log-probability, not EM or a sum over aliases.
+    """
+    thinking = answer_options.get("thinking", "off")
+    if score_gold and (thinking != "off" or answer_options.get("pre", "")):
+        raise ValueError("gold likelihood requires thinking='off' and no extra answer preamble")
+    cache, pos, sizes, meta = masking.context(model, q, condition, distractor_seed)
+    likelihood = {}
+    if score_gold:
+        gold = next((a for a in q["answers"] if a and a.strip()), None)
+        if gold is None:
+            raise ValueError("instance has no gold answer")
+        target = model.ids("\\boxed{" + gold + "}")
+        tail = model.ids(prompts.tail(model.fmt, "off"))
+        if not target or not tail:
+            raise ValueError("empty tokenized answer or answer prompt")
+        out = model.forward(tail + target, kv.copy(cache), pos)
+        logits = out.logits[0, len(tail) - 1:len(tail) + len(target) - 1].float()
+        indices = torch.tensor(target, device=logits.device).unsqueeze(1)
+        logp = torch.log_softmax(logits, dim=-1).gather(1, indices).sum().item()
+        likelihood = {"gold_answer": gold, "gold_logprob": logp, "gold_token_count": len(target),
+                      "gold_mean_logprob": logp / len(target)}
+    return {**answer(model, cache, pos, **answer_options), "worker_tokens": sizes, "mask": meta, **likelihood}
 
 
 # ---------------------------------------------------------------------------------------------------- K1

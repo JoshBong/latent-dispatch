@@ -4,6 +4,16 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-13: masking follow-up prepared for Colab
+
+`colab_masking.ipynb` is a preset for the existing runner: preload the 11-13 archive, then run Qwen3-4B/bf16 on the full benchmark with seeds `[0, 1, 2]`, completing Part 0/H1/H2 and `h1_masking`. The smaller original seed-0/100-per-cell scope is available in the first cell. No new experiment was launched during this setup.
+
+The preset stores its checkout, results, and executed notebooks on Google Drive for resuming across runtimes. Before appending results, the writer recovers a missing final newline or removes only an interrupted final fragment so that question can rerun.
+
+The five A-side visibility conditions are blocked, gold-only, one distractor, all except gold, and full. Tokens and true positions stay fixed and the answer tail sees both blocks. Full runs filter by Part 0 composition labels, save EM and gold-answer likelihood, record selections and coverage, and compare endpoints against saved B1/B1-mask outputs. The full masking scope has 21,024 candidate question/layout rows before the composition filter; the final count depends on the completed probes. Smoke uses the runner's fixed unfiltered questions and now writes its Part 0 labels separately from full labels. See `MASKING_RUN.md` for the launch link and outputs.
+
+The core mask endpoints and likelihood code passed tiny-model and Qwen3-0.6B checks during initial implementation. This packaging step performs static validation only; the Colab preset retains the normal model tests and smoke gates for Josh's run. Bridge-span interventions in B remain a later stage after observing the A-side results.
+
 ## 2026-11-13, later: the runner loads earlier runs and takes its code from GitHub
 
 - `colab.ipynb` no longer carries the code inside itself. It clones this repo at `COMMIT` and prints the commit it runs. New code runs as soon as it is on GitHub, and nothing has to be repacked.

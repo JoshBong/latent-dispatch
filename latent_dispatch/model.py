@@ -157,7 +157,7 @@ class Model:
     # --------------------------------------------------------------- forward
     @torch.no_grad()
     def forward(self, ids: list[int] | None, cache=None, start_pos: int | None = None, embeds=None,
-                hidden: bool = False):
+                hidden: bool = False, attention_mask=None):
         """Run `ids` (or input `embeds` [1, L, d]) on top of `cache`, mutating it. RoPE positions start at
         `start_pos` (default: the cache length, i.e. a normal continuation)."""
         if cache is None:
@@ -170,15 +170,17 @@ class Model:
             cache_position=torch.arange(past, past + n, device=self.device),
             past_key_values=cache, use_cache=True, output_hidden_states=hidden,
         )
+        if attention_mask is not None:
+            kw["attention_mask"] = attention_mask
         if ids is not None:
             return self.hf(input_ids=torch.tensor([ids], device=self.device), **kw)
         return self.hf(inputs_embeds=embeds, **kw)
 
-    def prefill(self, ids: list[int], cache=None, start_pos: int | None = None):
+    def prefill(self, ids: list[int], cache=None, start_pos: int | None = None, attention_mask=None):
         """-> (cache, last hidden state [1, d])."""
         if cache is None:
             cache = DynamicCache()
-        out = self.forward(ids, cache, start_pos, hidden=True)
+        out = self.forward(ids, cache, start_pos, hidden=True, attention_mask=attention_mask)
         return out.past_key_values, out.hidden_states[-1][:, -1, :]
 
     # ----------------------------------------------------------- latent steps
