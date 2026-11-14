@@ -4,6 +4,54 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-14: text reports and sequential repair (Qwen3-4B, preliminary)
+
+The 11-13 overnight run used the new runner, starting from the 11-13 tarball. It ran two arms that had not been run before, at 50 source questions per cell, seed 0, thinking off, EM:
+
+- **T1** (`t1_1024`): each worker writes a text report of what its paragraphs say about the question, and the orchestrator answers from the reports.
+- **Repair** (`scan_1`, `scan_2`, notebook `h5_rounds`): the orchestrator reads one worker's cache at a time and keeps a one-line note between reads, for 1 or 2 rounds over all workers, then answers.
+
+The rows are in `archive/Qwen3-4B-bfloat16-2026-11-14.tar.gz`. It includes everything in the 11-13 tarball, so it replaces it for `LOAD`. The 11-13 rows in it are byte-identical to the 11-13 tarball's, so nothing was rerun. The 1,700 new rows are all on `04e09e1`, with no duplicates, and 9 answers hit the length cap. That makes this the first full Colab run with the new runner: the load, the gate and the resume all worked.
+
+Repair (B1 / K0 / 1 round / 2 rounds):
+
+| | B1 | K0 | 1 round | 2 rounds |
+|---|---|---|---|---|
+| toy_d2 hop1 AB | 100 | 32 | 100 | 100 |
+| toy_d2 hop1 BA | 100 | 22 | 14 | 86 |
+| toy_d2 hop2 AB | 100 | 22 | 2 | 70 |
+| toy_d2 hop2 BA | 100 | 16 | 8 | 56 |
+| toy_d0, same four cells | 100 | 22–50 | 6–100 | 76–100 |
+| MuSiQue 2-hop AB | 32 | 18 | 32 | 32 |
+| MuSiQue 2-hop BA | 38 | 14 | 20 | 30 |
+| MuSiQue 3-hop, 4-hop (5 cells) | 18–48 | 24–44 | 16–40 | 18–42 |
+
+Paired differences, mean over source questions, 95% bootstrap interval over sources:
+
+- 2 rounds − K0: toy_d2 +55 (47.5, 63), toy_d0 +56 (48, 64.5), MuSiQue 2-hop AB+BA +15 (6, 26), all MuSiQue +1.6 (−3.6, 7).
+- B1 − 2 rounds, MuSiQue 2-hop AB+BA: +4 (−6, 14). No gap to B1 can be resolved there at n = 50.
+
+- **Two sequential rounds recover most of the H1 loss on the toy and on 2-hop MuSiQue,** which is where H1 found a cost. 3-hop and 4-hop don't move, as expected, since B1 can't chain there at this size either (11-13 entry).
+- **One round helps only when the chain is read in order** (hop1 AB, one crossing). Beyond that it does worse than K0 (toy_d2 hop2 AB: 2 vs 22). In the notes it writes "not mentioned" early, and the orchestrator then trusts that note. Rounds have to keep up with crossings.
+- At 3 facts (hop2) two rounds still fall short of B1 (56–86). At hop2 BA the answer is in the final note only 8% of the time but EM is 56, so the final read of the caches does part of the work.
+
+T1 (only four cells ran):
+
+| | B1 | B1-mask | K0 | T1 |
+|---|---|---|---|---|
+| toy_d2 hop1 AB | 100 | 36 | 32 | 38 |
+| toy_d2 hop1 BB | 100 | 96 | 96 | 100 |
+| MuSiQue 2-hop AB | 32 | 18 | 18 | 20 |
+| MuSiQue 2-hop BB | 22 | 30 | 34 | 46 |
+
+T1 − K0: toy +5 (−5, 15), MuSiQue +7 (−4, 19). Independent text reports fail at a split chain the same way independent caches do: no worker sees the bridge, so whether the handoff is text or KV doesn't matter here. MuSiQue BB, where T1 beats B1 by 24, has not been looked into.
+
+What it changes: the comparison that matters is independent vs sequential, not latent vs text. The repair result is the case for routed re-query: a second pass carrying a few tokens of notes recovers what independent encoding loses at 2-hop.
+
+Checked: rows read with `results.load_all`, scored by the repo's `score`, intervals from 2,000 bootstrap resamples over source questions. Not checked: other seeds, other models, F1, hand labels of the notes.
+
+Still running on 11-14: Qwen3-1.7B H1 at 100 per cell. Qwen3-8B H1 is queued and needs a bigger GPU than a T4.
+
 ## 2026-11-13, later: the runner loads earlier runs and takes its code from GitHub
 
 - `colab.ipynb` no longer carries the code inside itself. It clones this repo at `COMMIT` and prints the commit it runs. New code runs as soon as it is on GitHub, and nothing has to be repacked.
