@@ -63,3 +63,35 @@ def test_masking_full_refuses_missing_part0_labels(tmp_path, monkeypatch):
     scope = scope_for_plan(tmp_path, monkeypatch, False)
     with pytest.raises(FileNotFoundError, match="Part 0"):
         exec(source("notebooks/h1_masking.ipynb", "labels_path ="), scope)
+
+
+@pytest.mark.parametrize("model,dtype,expected", [
+    ("Qwen/Qwen3-1.7B", "bfloat16", ["Qwen3-1.7B-bfloat16-2026-11-14"]),
+    ("Qwen/Qwen3-4B", "bfloat16", ["Qwen3-4B-bfloat16-2026-11-14"]),
+    ("Qwen/Qwen3-4B", "float32", ["Qwen3-4B-float32-2026-11-15"]),
+    ("Qwen/Qwen3-8B", "bfloat16", []),
+])
+def test_launcher_selects_only_latest_matching_model_and_dtype(tmp_path, model, dtype, expected):
+    folder = tmp_path / "archive"
+    folder.mkdir()
+    for name in ("Qwen3-1.7B-bfloat16-2026-11-14", "Qwen3-4B-bfloat16-2026-11-13",
+                 "Qwen3-4B-bfloat16-2026-11-14", "Qwen3-4B-float32-2026-11-15"):
+        (folder / f"{name}.tar.gz").touch()
+    scope = dict(Path=Path, checkout=tmp_path, MODEL=model, DTYPE=dtype, LOAD=None,
+                 SEEDS=[0, 1, 2], N_PER_CELL=None)
+    exec(source("colab_masking.ipynb", "archive_prefix ="), scope)
+    assert scope["LOAD"] == expected
+
+
+def test_launcher_refuses_archive_of_another_model(tmp_path):
+    scope = dict(Path=Path, checkout=tmp_path, MODEL="Qwen/Qwen3-8B", DTYPE="bfloat16",
+                 LOAD=["Qwen3-4B-bfloat16-2026-11-14"], SEEDS=[0, 1, 2], N_PER_CELL=None)
+    with pytest.raises(ValueError, match="LOAD must name archives"):
+        exec(source("colab_masking.ipynb", "archive_prefix ="), scope)
+
+
+def test_launcher_requires_explicit_archive_to_exist(tmp_path):
+    scope = dict(Path=Path, checkout=tmp_path, MODEL="Qwen/Qwen3-8B", DTYPE="bfloat16",
+                 LOAD=["Qwen3-8B-bfloat16-2026-11-15"], SEEDS=[0, 1, 2], N_PER_CELL=None)
+    with pytest.raises(FileNotFoundError, match="Archive .* absent"):
+        exec(source("colab_masking.ipynb", "archive_prefix ="), scope)

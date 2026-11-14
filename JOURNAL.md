@@ -4,6 +4,12 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-14: masking launcher aligned with the scale runs
+
+The masking branch incorporates the current main branch and its November 14 1.7B H1 and cumulative 4B archives. The launcher keeps the full benchmark and seeds `[0, 1, 2]`, defaulting to 4B, and lets Josh select 1.7B or 8B through `MODEL`. `LOAD = None` selects the newest archive for that model/dtype in the checkout; explicit archives for another model are refused. The 1.7B archive has no Part 0 probes, so those are completed before filtering the full masking stage. Add the 8B tarball to the checkout when its run finishes to reuse its rows.
+
+The dated Drive checkout avoids reusing the older preset, and runner logs are saved per model/dtype. Checked: static Python/notebook parsing, notebook schemas, launcher/runner parameter compatibility, archive availability, and source diff review. Regression cases for archive selection and model isolation are included for Josh's normal test pass. No tests, experiment cells, or model inference were executed for this update.
+
 ## 2026-11-14, later: H1 on Qwen3-1.7B (scale trend, first point)
 
 H1 (B1, B1-mask, K0) on Qwen3-1.7B, 100 source questions per cell, seed 0, thinking off, EM. It took 7.2 hours on a T4. The rows are in `archive/Qwen3-1.7B-bfloat16-2026-11-14.tar.gz`: 9,300 rows, all on `04e09e1`, no duplicates, no answers cut off, and almost all boxed (0–0.2% unboxed).
