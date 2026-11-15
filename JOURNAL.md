@@ -4,7 +4,11 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
-## 2026-11-14, night: H1 on Qwen3-8B (scale trend, third point)
+## 2026-11-15: forced thinking no longer ends a row inside `<think>`
+
+Review finding 6 (11-12): `model.greedy` stopped at the model's end token even inside forced thinking. The row then had no answer, and the scorer, finding no `</think>`, read `\boxed` out of the thinking text. Now an end token inside thinking forces `</think>` and decoding goes on to the answer, the same as when the thinking budget runs out. Rows record it as `think_eos`. Thinking-off arms are unchanged, so no saved row is affected; no forced-thinking arm had been run. Also here: the float16 RoPE test tolerance from the T4 masking run (`f4914e4`), so the real-model tests pass on a T4. Checked: a scripted-token test for the new path and the fast suite. No model run.
+
+
 
 H1 (B1, B1-mask, K0) on Qwen3-8B, 50 source questions per cell, seed 0, thinking off, EM. It took 6.7 hours on an A100. The rows are in `archive/Qwen3-8B-bfloat16-2026-11-14.tar.gz`: 4,650 rows, all on `18892fb`, no duplicates.
 

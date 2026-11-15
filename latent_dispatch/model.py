@@ -71,6 +71,7 @@ class Gen:
     answer_tokens: int
     cut: bool = False         # stopped by a token cap (max_new or hard_cap), not by the model's own end token
     think_cut: bool = False   # thinking ran to think_budget and "</think>" was forced
+    think_eos: bool = False   # the model emitted its end token inside thinking; "</think>" was forced there
 
 
 def _auto_device() -> str:
@@ -215,7 +216,8 @@ class Model:
 
         think_budget=None: the tail already closed thinking (or there is none); decode up to max_new tokens.
         think_budget=k: the tail ends inside an open <think>; allow k thinking tokens, then force "</think>", then
-        up to max_new answer tokens.
+        up to max_new answer tokens. An end token inside thinking also forces "</think>" and decoding goes on to
+        the answer: stopping there would leave a row with no answer, and the scorer would read the thinking text.
         """
         if cache is None:
             cache = DynamicCache()
@@ -225,14 +227,16 @@ class Model:
         gen: list[int] = []
         think = answer = 0
         thinking = think_budget is not None
-        cut = think_cut = False
+        cut = think_cut = think_eos = False
         force_close = self.ids(prompts.THINK_CLOSE)
         while len(gen) < hard_cap:
             nxt = int(out.logits[0, -1].argmax())
             if thinking and think >= think_budget and nxt != self.think_end_id:
                 feed, thinking, think_cut = force_close, False, True
             elif nxt in self.eos_ids:
-                break
+                if not thinking:
+                    break
+                feed, thinking, think_eos = force_close, False, True
             elif thinking:
                 feed = [nxt]
                 if nxt == self.think_end_id:
@@ -250,4 +254,4 @@ class Model:
             pos += len(feed)
         else:
             cut = True                                    # hit hard_cap
-        return Gen(self.decode(gen), len(gen), think, answer, cut, think_cut)
+        return Gen(self.decode(gen), len(gen), think, answer, cut, think_cut, think_eos)

@@ -26,7 +26,7 @@ def answer(model, cache, pos, thinking="off", think_budget=1024, max_answer_toke
     g = model.greedy(tail, cache, pos, max_new=max_answer_tokens,
                      think_budget=think_budget if thinking == "forced" else None)
     return {"text": g.text, "think_tokens": g.think_tokens, "gen_tokens": g.tokens, "cut": g.cut,
-            "think_cut": g.think_cut}
+            "think_cut": g.think_cut, "think_eos": g.think_eos}
 
 
 # ---------------------------------------------------------------------------------------------------- B0, B1
