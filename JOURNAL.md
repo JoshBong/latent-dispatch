@@ -4,6 +4,45 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-14, night: H1 on Qwen3-8B (scale trend, third point)
+
+H1 (B1, B1-mask, K0) on Qwen3-8B, 50 source questions per cell, seed 0, thinking off, EM. It took 6.7 hours on an A100. The rows are in `archive/Qwen3-8B-bfloat16-2026-11-14.tar.gz`: 4,650 rows, all on `18892fb`, no duplicates.
+
+The real-model tests were skipped for this run (`RUN_TESTS=False`). On the 8B, 17 of 18 passed. The one that failed requires K0 with all paragraphs on one worker to give exactly the same text as B1. The two answers were both correct but split at the first word ("The mayor of…" vs "To determine…"), which is a bf16 near-tie, not a bug. The test that checks the RoPE shift against native encoding passed. The results confirm it: with all gold on one worker, K0 matches B1 (below). That test should compare first-token probabilities instead of exact text.
+
+The 8B writes longer answers (89–98 generated tokens on average, thinking off) and 5–7% hit the 256-token cap (B1 4.7%, B1-mask 7.2%, K0 7.1%), against 2–3% at 4B. The cap costs the split arms slightly more than B1.
+
+B1 / K0 on the same questions for all three sizes (the 8B's 50 per cell):
+
+| | 1.7B | 4B | 8B |
+|---|---|---|---|
+| toy_d2 hop1 AB | 84 / 8 | 100 / 27 | 100 / 82 |
+| toy_d2 hop1 BA | 46 / 6 | 100 / 18 | 100 / 58 |
+| toy_d2 hop2 AB | 24 / 20 | 98 / 19 | 100 / 72 |
+| toy_d2 hop2 BA | 32 / 18 | 100 / 18 | 100 / 48 |
+| MuSiQue 2-hop AB | 18 / 14 | 29 / 18 | 46 / 18 |
+| MuSiQue 2-hop BA | 16 / 12 | 35 / 17 | 38 / 20 |
+| MuSiQue 2-hop AA, BB | 6–16 / 8–14 | 24–35 / 32–33 | 40–52 / 40–54 |
+
+B1 − K0, 95% bootstrap interval over sources:
+
+| | 1.7B | 4B | 8B |
+|---|---|---|---|
+| toy_d2 hop0–2, AB+BA | +23 (17, 30) | +55 (49, 62) | +27 (21, 33) |
+| toy_d2 hop0–2, AA+BB | +9 (4, 13) | +3 (1, 6) | +2 (0, 4) |
+| MuSiQue 2-hop AB+BA | +4 (−1, 10) | +19 (10, 28) | +23 (13, 34) |
+| MuSiQue 2-hop AA+BB | 0 (−6, 6) | −4 (−11, 2) | −1 (−10, 8) |
+
+- With all gold on one worker, K0 ≈ B1 at every size.
+- **On the toy the 8B keeps most of B1's accuracy with the facts split** (K0 48–82, against 18–27 at 4B).
+- **On MuSiQue 2-hop split, K0 stays at 18–20 at 4B and 8B while B1 rises,** so the gap grows with size: +4, +19, +23.
+- The 8B's toy K0 is 24 points lower at BA than at AB at both chain lengths. The 4B showed no clear direction effect.
+- B1-mask ≈ K0 within about 10 points at every size.
+
+Reading (an argument, not tested): the 8B writes the chain out in its answer ("Dev Anand's favorite city is Kastrel. The mayor of Kastrel is…"), so its own text carries the bridge into the second lookup. That works on short, clean toy facts and not on MuSiQue paragraphs. The test is to force a short answer, or score the gold answer's log-probability right after the prompt, and see whether the 8B's toy K0 falls back toward 4B's. If MuSiQue's gap keeps growing at 14B, independent encoding costs more as models get better at chaining, which is the case for sequential repair. Next candidate: 2-round repair on the 8B, MuSiQue 2-hop only.
+
+Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions. Not checked: EM among capped answers, F1, other seeds.
+
 ## 2026-11-14, later: H1 on Qwen3-1.7B (scale trend, first point)
 
 H1 (B1, B1-mask, K0) on Qwen3-1.7B, 100 source questions per cell, seed 0, thinking off, EM. It took 7.2 hours on a T4. The rows are in `archive/Qwen3-1.7B-bfloat16-2026-11-14.tar.gz`: 9,300 rows, all on `04e09e1`, no duplicates, no answers cut off, and almost all boxed (0–0.2% unboxed).
@@ -32,7 +71,7 @@ Paired differences, 95% bootstrap interval over sources:
 - **Where 1.7B can chain, separate encoding removes it:** toy hop1 AB goes from 90 to 7. It is the same failure as at 4B.
 - **B1 is not a clean ceiling at this size.** On toy hop1 it scores 90 at AB, 52 at BA, 74 at AA and 63 at BB. K0 also loses about 9 points with all gold on one worker. A trend across sizes should be reported as the gap relative to what B1 can do, not as raw points.
 
-Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions. Next: Qwen3-8B H1 at 50 per cell on an A100. Qwen3-8B in bf16 (about 16 GB) does not fit a T4.
+Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions.
 
 ## 2026-11-14: text reports and sequential repair (Qwen3-4B, preliminary)
 
