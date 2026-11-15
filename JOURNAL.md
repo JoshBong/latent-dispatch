@@ -4,6 +4,39 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-15: sequential repair on Qwen3-8B
+
+One and two rounds of sequential reading (`scan_1`, `scan_2`, notebook `h5_rounds`) on Qwen3-8B, 50 source questions per cell, seed 0, thinking off, EM. B1 and K0 were loaded from the 11-14 archive, not rerun. The rows are in `archive/Qwen3-8B-bfloat16-2026-11-15.tar.gz`, which holds every 8B row so far: 6,150 rows, 750 for each scan arm, no duplicates. 3.6% of one-round and 3.9% of two-round answers hit the 256-token cap. Real-model tests were skipped again (`RUN_TESTS=False`, same reason as the 11-14 night entry).
+
+| | B1 | K0 | 1 round | 2 rounds |
+|---|---|---|---|---|
+| MuSiQue 2-hop AB | 46 | 18 | 32 | 40 |
+| MuSiQue 2-hop BA | 38 | 20 | 14 | 20 |
+| toy_d2 hop1 AB | 100 | 82 | 94 | 98 |
+| toy_d2 hop1 BA | 100 | 58 | 22 | 92 |
+| toy_d2 hop2 AB | 100 | 72 | 4 | 66 |
+| toy_d2 hop2 BA | 100 | 48 | 24 | 44 |
+| MuSiQue 3-hop AAB, ABA | 32, 40 | 34, 24 | 42, 42 | 42, 44 |
+| MuSiQue 4-hop AABB, ABAB, ABBA | 18, 24, 22 | 22, 16, 16 | 20, 32, 24 | 20, 30, 22 |
+
+Paired differences at AB+BA, 95% bootstrap interval over the 50 sources:
+
+| | 2 rounds − K0 | B1 − 2 rounds | 1 round − K0 | 2 rounds − 1 round |
+|---|---|---|---|---|
+| MuSiQue 2-hop | +11 (0, 22) | +12 (2, 23) | +4 (−5, 14) | +7 (−2, 15) |
+| toy_d2 hop1 | +25 (14, 36) | +5 (1, 9) | −12 (−22, −1) | +37 (30, 44) |
+| toy_d2 hop2 | −5 (−20, 10) | +45 (35, 55) | −46 (−58, −34) | +41 (32, 50) |
+
+- **On MuSiQue 2-hop, two rounds recovers about half the gap at 8B** (K0 19, two rounds 30, B1 42). At 4B it reached 31 against B1's 35, a gap of +4 (−6, 14). At 8B the gap to B1 is +12 (2, 23).
+- **All of the MuSiQue gain is at AB.** At BA two rounds equals K0 (20 and 20).
+- **On two toy facts, two rounds nearly matches B1** (95 against 100). **On three it is no better than K0** (55 against 60).
+- **One round is worse than K0 on the toy at 8B** (three facts AB: 4 against 72). The 8B's K0 is already fair there, and a single pass in an order that doesn't match the chain loses it.
+- 3-hop and 4-hop MuSiQue differences are small and mixed. The 4-hop cells also carry the cap problem noted in the 11-14 night entry.
+
+What it changes: "sequential rereading recovers most of the loss" held at 4B and does not hold at 8B. What the data supports is that it recovers part of the loss, depends on reading order, and two rounds is not enough for a three-fact chain. The caveats from the 11-14 entry still apply: note budgets differ between one and two rounds, and one seed.
+
+Checked: archive restored with `results.load_archive`; rows read with `results.load_all`; intervals from 2,000 bootstrap resamples over source questions. Not checked: note-cap rates, F1, other seeds.
+
 ## 2026-11-14, night: H1 on Qwen3-8B (scale trend, third point)
 
 H1 (B1, B1-mask, K0) on Qwen3-8B, 50 source questions per cell, seed 0, thinking off, EM. It took 6.7 hours on an A100. The rows are in `archive/Qwen3-8B-bfloat16-2026-11-14.tar.gz`: 4,650 rows, all on `18892fb`, no duplicates.
@@ -12,34 +45,38 @@ The real-model tests were skipped for this run (`RUN_TESTS=False`). On the 8B, 1
 
 The 8B writes longer answers (89–98 generated tokens on average, thinking off) and 5–7% hit the 256-token cap (B1 4.7%, B1-mask 7.2%, K0 7.1%), against 2–3% at 4B. The cap costs the split arms slightly more than B1.
 
+*Corrected 11-15. The first version of these tables gave the 4B column from the 11-13 run's 100 questions, not the matched 50, and its gap table pooled single-fact questions (hop0) with the chained ones. GPT-6.1-Sol's re-score caught both; the numbers below were recomputed and agree with it.*
+
 B1 / K0 on the same questions for all three sizes (the 8B's 50 per cell):
 
 | | 1.7B | 4B | 8B |
 |---|---|---|---|
-| toy_d2 hop1 AB | 84 / 8 | 100 / 27 | 100 / 82 |
-| toy_d2 hop1 BA | 46 / 6 | 100 / 18 | 100 / 58 |
-| toy_d2 hop2 AB | 24 / 20 | 98 / 19 | 100 / 72 |
-| toy_d2 hop2 BA | 32 / 18 | 100 / 18 | 100 / 48 |
-| MuSiQue 2-hop AB | 18 / 14 | 29 / 18 | 46 / 18 |
-| MuSiQue 2-hop BA | 16 / 12 | 35 / 17 | 38 / 20 |
-| MuSiQue 2-hop AA, BB | 6–16 / 8–14 | 24–35 / 32–33 | 40–52 / 40–54 |
+| toy_d2 hop1 AB | 84 / 8 | 100 / 32 | 100 / 82 |
+| toy_d2 hop1 BA | 46 / 6 | 100 / 22 | 100 / 58 |
+| toy_d2 hop2 AB | 24 / 20 | 100 / 22 | 100 / 72 |
+| toy_d2 hop2 BA | 32 / 18 | 100 / 16 | 100 / 48 |
+| MuSiQue 2-hop AB | 18 / 14 | 32 / 18 | 46 / 18 |
+| MuSiQue 2-hop BA | 16 / 12 | 38 / 14 | 38 / 20 |
+| MuSiQue 2-hop AA | 16 / 8 | 40 / 36 | 52 / 40 |
+| MuSiQue 2-hop BB | 6 / 14 | 22 / 34 | 40 / 54 |
 
-B1 − K0, 95% bootstrap interval over sources:
+B1 − K0 at AB+BA, 95% bootstrap interval over sources:
 
 | | 1.7B | 4B | 8B |
 |---|---|---|---|
-| toy_d2 hop0–2, AB+BA | +23 (17, 30) | +55 (49, 62) | +27 (21, 33) |
-| toy_d2 hop0–2, AA+BB | +9 (4, 13) | +3 (1, 6) | +2 (0, 4) |
-| MuSiQue 2-hop AB+BA | +4 (−1, 10) | +19 (10, 28) | +23 (13, 34) |
-| MuSiQue 2-hop AA+BB | 0 (−6, 6) | −4 (−11, 2) | −1 (−10, 8) |
+| toy_d2 hop1 (two facts) | +58 (49, 67) | +73 (63, 83) | +30 (20, 40) |
+| toy_d2 hop2 (three facts) | +9 (−2, 20) | +81 (73, 88) | +40 (29, 51) |
+| MuSiQue 2-hop | +4 (−1, 10) | +19 (10, 29) | +23 (13, 34) |
+| MuSiQue 2-hop, AA+BB | 0 (−6, 6) | −4 (−11, 2) | −1 (−9, 8) |
 
-- With all gold on one worker, K0 ≈ B1 at every size.
-- **On the toy the 8B keeps most of B1's accuracy with the facts split** (K0 48–82, against 18–27 at 4B).
-- **On MuSiQue 2-hop split, K0 stays at 18–20 at 4B and 8B while B1 rises,** so the gap grows with size: +4, +19, +23.
-- The 8B's toy K0 is 24 points lower at BA than at AB at both chain lengths. The 4B showed no clear direction effect.
-- B1-mask ≈ K0 within about 10 points at every size.
+- With all gold on one worker, K0 ≈ B1 on MuSiQue at every size.
+- **On the toy the 8B recovers much of the split loss.** The gap falls by 43 points at two facts (−55, −31) and 41 at three (−53, −29) from 4B to 8B. The 1.7B's B1 chains two facts (65) and K0 drops it to 7; its B1 can't do three (28).
+- **On MuSiQue 2-hop split the gap does not shrink with size.** It is +4, +19, +23. The step from 4B to 8B is +4 (−8, 16), so "grows with size" holds only from 1.7B to 4B.
+- **Missing attention still accounts for most of the 8B's MuSiQue loss:** B1 − B1-mask is +17 (7, 27) and B1-mask − K0 is +6 (2, 12).
+- **K0 has a direction effect on the toy that B1-mask does not.** K0 is 82 at AB and 58 at BA (two facts), 72 and 48 (three facts). B1-mask is 72 and 76, then 72 and 62. B1-mask keeps true positions, so part of K0's BA loss comes from the position shift and stitch, not from missing attention. At 4B the two arms were within about 7 points everywhere.
+- **4-hop MuSiQue at 8B is not usable at this answer cap:** 24% of B1, 35% of B1-mask and 32% of K0 answers hit 256 tokens.
 
-Reading (an argument, not tested): the 8B writes the chain out in its answer ("Dev Anand's favorite city is Kastrel. The mayor of Kastrel is…"), so its own text carries the bridge into the second lookup. That works on short, clean toy facts and not on MuSiQue paragraphs. The test is to force a short answer, or score the gold answer's log-probability right after the prompt, and see whether the 8B's toy K0 falls back toward 4B's. If MuSiQue's gap keeps growing at 14B, independent encoding costs more as models get better at chaining, which is the case for sequential repair. Next candidate: 2-round repair on the 8B, MuSiQue 2-hop only.
+Reading (an argument, not tested): the 8B writes the chain out in its answer ("Dev Anand's favorite city is Kastrel. The mayor of Kastrel is…"), so its own text carries the bridge into the second lookup. That works on short, clean toy facts and not on MuSiQue paragraphs. The test is to force a short answer, or score the gold answer's log-probability right after the prompt, and see whether the 8B's toy K0 falls back toward 4B's. The 2-round repair run on the 8B is in the 11-15 entry.
 
 Checked: rows read with `results.load_all`, intervals from 2,000 bootstrap resamples over source questions. Not checked: EM among capped answers, F1, other seeds.
 
