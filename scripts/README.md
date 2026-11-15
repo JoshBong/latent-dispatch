@@ -19,7 +19,7 @@ length and cap counts, writes a summary CSV, and checkpoints an archive after
 each arm and on Python exit. Raw rows flush after every question.
 
 The VM wrapper records success/failure, emits the existing Monitoring serial
-marker, and shuts down on exit. A separate guest shutdown is scheduled at 24h.
+marker, and schedules shutdown five minutes after exit for artifact retrieval. A separate guest shutdown is scheduled at 24h.
 No new email policy is created. Artifacts remain on the boot disk on shutdown.
 
 Paths on the VM:

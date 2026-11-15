@@ -9,7 +9,8 @@ finish() {
   mv /home/elkalt/thinking-experiment.status.tmp /home/elkalt/thinking-experiment.status
   if [ "$code" = 0 ]; then outcome=COMPLETED; else outcome=FAILED; fi
   printf 'LATENT_MASKING_JOB_RESULT outcome=%s exit_code=%s experiment=thinking\n' "$outcome" "$code" | sudo tee /dev/ttyS0 || true
-  sudo shutdown -h now
+  # Leave five minutes for the supervising chat to download and push artifacts.
+  sudo shutdown -h +5
   exit "$code"
 }
 trap finish EXIT
