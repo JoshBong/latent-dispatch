@@ -4,6 +4,16 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-15: completed Qwen3-4B masking pilot on a T4
+
+Saved the completed run on branch `results/t4-masking-2026-11-15`. See [the run record and executed notebook](reports/2026-11-15-t4-masking/README.md). Raw results, labels, manifests, and the executed notebook are in `archive/Qwen3-4B-float16-2026-11-15.tar.gz`, compatible with `results.load_archive`. The saved standalone notebook and exact runner scripts are also available in the report directory.
+
+Scope: Qwen3-4B/float16, seed 0, 100 source questions each from the two-fact toy and two-hop MuSiQue. All 600 composition checks completed; 187/200 sources qualified. Their AA/AB/BA/BB layouts produced 748 rows each for blocked, gold, except-gold and full, and 648 distractor-control rows: 3,640 masking evaluations in total. The 100 omitted distractor rows are toy AA layouts without an A distractor. Finished successfully at 06:07 UTC (01:07 EST), about 4 hours 12 minutes of masking and 4 hours 55 minutes including targeted prerequisites. An initially over-scoped preset was stopped earlier; its saved float16 probe/smoke rows are retained in the archive but excluded from the masking tables by the notebook's scope and composition filter.
+
+Source commit: `f4914e4`, PR #1 at `e7fbc32` plus a test-only float16 RoPE tolerance correction. No model or masking changes. The T4's bf16 emulation failed the blocked endpoint gate (0.02052 relative logit difference against a 0.01 limit); float16 passed it. Its old RoPE test used the fp32 tolerance (0.0001) for fp16 and measured 0.0002467; the correction gives fp16 a 0.0008 rounding bound while retaining all other gates. Before the run, 206 fast tests and all 21 real Qwen3-4B/float16 GPU checks passed.
+
+Validation of saved artifacts: standard archive restored successfully, a second restore kept existing files, all expected mask row counts and unique IDs verified, notebook completion has no error cells, and checksums and the recorded Python-runner hash match. Scientific interpretation of the tables has not yet been reviewed. This branch preserves the code ancestry needed to resolve the results' source commit; it does not alter `main`.
+
 ## 2026-11-14: masking launcher aligned with the scale runs
 
 The masking branch incorporates the current main branch and its November 14 1.7B H1 and cumulative 4B archives. The launcher keeps the full benchmark and seeds `[0, 1, 2]`, defaulting to 4B, and lets Josh select 1.7B or 8B through `MODEL`. `LOAD = None` selects the newest archive for that model/dtype in the checkout; explicit archives for another model are refused. The 1.7B archive has no Part 0 probes, so those are completed before filtering the full masking stage. Add the 8B tarball to the checkout when its run finishes to reuse its rows.

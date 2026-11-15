@@ -233,6 +233,8 @@ transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is teste
 
 ## Running
 
+Completed T4 masking pilot (Qwen3-4B/float16): [results, executed notebook, and reproduction record](reports/2026-11-15-t4-masking/README.md).
+
 **Masking follow-up:** open [colab_masking.ipynb in Colab](https://colab.research.google.com/github/ajit-mallav/latent-dispatch/blob/masking-experiment/colab_masking.ipynb), choose an L4 or A100, and run all. It uses the common runner and adds `h1_masking` to Josh's Part 0/H1/H2 experiment. Defaults are Qwen3-4B/bf16, the full benchmark, and seeds `[0, 1, 2]`. Set `MODEL` to 1.7B or 8B to run the same design at that size; `LOAD = None` chooses the newest matching archive in the checkout. The November 14 1.7B and cumulative 4B archives are included; add the 8B archive when it is ready. Use an A100 for 8B. The checkout and results are stored in Google Drive so another runtime can resume them. See [MASKING_RUN.md](MASKING_RUN.md) for scope, model settings, and outputs. This setup has not launched a new experiment.
 
 **On Colab:** open `colab.ipynb` in Colab (its first cell has the link; uploading the file works too), pick an L4 GPU and run all. The VS Code Colab extension's kernel works too, but ours kept disconnecting on Nov 12. The notebook clones this repo onto the Colab machine at `COMMIT` (`main` by default; give a commit hash to pin a run) and prints the commit it runs. Every results row records it. `LOAD` names finished runs in `archive/` to start from. Each tarball is checked and then unpacked, so only the questions it didn't answer are run. The check covers the row format, and that the rows were made with the same benchmark files and prompts as the code about to run.

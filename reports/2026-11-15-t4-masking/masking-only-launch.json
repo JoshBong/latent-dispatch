@@ -1,0 +1,32 @@
+{
+  "scope": "masking_only_pilot",
+  "model": "Qwen/Qwen3-4B",
+  "dtype": "float16",
+  "seeds": [
+    0
+  ],
+  "n_per_cell": 100,
+  "commit": "f4914e4",
+  "source_questions": 200,
+  "probes": [
+    {
+      "arm": "b0",
+      "total": 200,
+      "saved": 102,
+      "remaining": 98
+    },
+    {
+      "arm": "b1_only_hop1",
+      "total": 200,
+      "saved": 4,
+      "remaining": 196
+    },
+    {
+      "arm": "b1_only_hop2",
+      "total": 200,
+      "saved": 4,
+      "remaining": 196
+    }
+  ],
+  "script_sha256": "83c16358e137afbdb0e4dfb2ca77bd000eb8f866a93fe44db12df8af68478d9e"
+}

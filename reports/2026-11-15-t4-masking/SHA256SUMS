@@ -1,0 +1,7 @@
+e0b7f58a05d37f4b3851f8840ddaf0e2f9cd23c348754ef7dbc567c67c8057e6  archive/Qwen3-4B-float16-2026-11-15.tar.gz
+f925754158ee046caad2a64275c94e2daf9e1b0589a910cc6091574f64670100  reports/2026-11-15-t4-masking/Qwen3-4B-float16-h1_masking-only.ipynb
+9fff78b8b2fd5ea494ad3d7a1d1b582e7ceea5730b1a526ec6e92c5d0996367c  reports/2026-11-15-t4-masking/h1_masking-plan.json
+a14c1cdcda132c546a0b80a11b487a483b717a2474fb8cba9060205dc4d6484d  reports/2026-11-15-t4-masking/masking-only-launch.json
+225aabb58d3936cc869c45326f0f7fd241ded5b328bf9bf658bcc26f778ba8b4  reports/2026-11-15-t4-masking/part0_requires_composition.json
+bebb171a68bb75a948ab8912a60b831c3cf663db7d7e0e2aafef1440601ffae2  reports/2026-11-15-t4-masking/run-masking-only-vm.sh
+83c16358e137afbdb0e4dfb2ca77bd000eb8f866a93fe44db12df8af68478d9e  reports/2026-11-15-t4-masking/run-masking-only.py
