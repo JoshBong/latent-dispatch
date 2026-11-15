@@ -33,8 +33,8 @@ def scope_for_plan(tmp_path, monkeypatch, smoke):
     monkeypatch.setattr(results, "_commit", lambda: "test-commit")
     def load(name, **where):
         return [dict(id=name, dataset=name, source_id="q", qtype=where["qtype"], placement="AB", seed=0,
-                     workers=[["gold", "distractor"], ["gold"]],
-                     gold=[{"hop": 0, "worker": 0, "index": 0}, {"hop": 1, "worker": 1, "index": 0}])]
+                     workers=[["distractor", "gold"], ["gold"]],  # a distractor before A's gold: controls defined
+                     gold=[{"hop": 0, "worker": 0, "index": 1}, {"hop": 1, "worker": 1, "index": 0}])]
     def arm(*args, **kwargs):
         raise AssertionError("planning must not run a model")
     return dict(json=json, pd=pd, data=SimpleNamespace(load=load, per_cell=data.per_cell),

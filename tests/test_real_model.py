@@ -98,8 +98,9 @@ def test_mask_recompute_endpoints_on_real_weights(real, condition):
 
 
 def test_mask_recompute_partial_controls_on_real_weights(real):
-    q = toy.questions(1, 1, 0, ["AB"], n_distract=2)[0]
-    for condition in ("gold", "distractor", "except_gold"):
+    q = next(q for q in toy.questions(1, 20, 0, ["AB"], n_distract=2)
+             if any(g["worker"] == 0 and g["index"] > 0 for g in q["gold"]))  # the controls need A gold after a distractor
+    for condition in ("gold", "distractor", "before_gold"):
         out = arms.masked_recompute(real, q, condition, max_answer_tokens=1)
         assert out["mask"]["condition"] == condition
         assert out["gold_logprob"] < 0

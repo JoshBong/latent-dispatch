@@ -4,9 +4,21 @@ import torch
 
 from latent_dispatch import arms, kv, masking, prompts, results
 
+from .conftest import make_question
 
-def test_visibility_selects_a_paragraphs_only(tiny, two_workers):
-    q = two_workers
+
+@pytest.fixture
+def gold_second():
+    """A lists two distractors, then its gold paragraph: the controls are defined and must stay before the gold."""
+    return make_question(
+        [["Aria Venn was born in Dunmere.", "Tomas Reed plays the cello.",
+          "People: Ines Farrow's favorite city is Velmora.", "Lena Park was born in Ostrava."],
+         ["Cities: The mayor of Velmora is Bram Holt.", "The river the Calder flows through Irvale."]],
+        gold=((0, 0, 2), (1, 1, 0)))
+
+
+def test_visibility_selects_a_paragraphs_only(tiny, gold_second):
+    q = gold_second
     s = tiny.ids(prompts.prefix(tiny.fmt, q["question"]))
     a, groups = masking.paragraph_tokens(tiny, q["workers"][0])
     b_start = len(s) + len(a)
@@ -15,15 +27,29 @@ def test_visibility_selects_a_paragraphs_only(tiny, two_workers):
         assert ids == s + tiny.ids(prompts.block(q["workers"][0])) + tiny.ids(prompts.block(q["workers"][1]))
         assert sizes[0] == len(a)
         visible = mask[0, 0, b_start, len(s):b_start] == 0
-        expected = {"blocked": [], "gold": groups[0], "distractor": groups[1],
-                    "except_gold": [i for i in range(len(a)) if i not in groups[0]],
+        distractor = groups[by_condition["distractor"][3]["a_paragraphs"][0]]
+        expected = {"blocked": [], "gold": groups[2], "distractor": distractor,
+                    "before_gold": list(range(groups[2][0])),
                     "full": list(range(len(a)))}[condition]
         assert visible.nonzero().flatten().tolist() == expected
         assert meta["a_visible_tokens"] == len(expected)
         future = torch.triu(torch.ones(len(ids), len(ids), dtype=torch.bool), 1)
         assert torch.all(mask[0, 0][future] < 0)
         assert torch.all(mask[0, 0, b_start:, :len(s)] == 0)
-    assert by_condition["distractor"][3]["a_paragraphs"] == [1]
+    assert by_condition["distractor"][3]["a_paragraphs"][0] in (0, 1)
+    assert by_condition["before_gold"][3]["a_paragraphs"] == [0, 1]
+
+
+def test_distractor_is_always_drawn_before_the_gold(tiny, gold_second):
+    picks = {masking.layout(tiny, {**gold_second, "id": f"t:{k}"}, "distractor")[3]["a_paragraphs"][0]
+             for k in range(40)}
+    assert picks == {0, 1}  # both earlier distractors get drawn; paragraph 3 (after the gold) never does
+
+
+def test_controls_are_undefined_when_gold_is_first_in_a(tiny, two_workers):
+    for condition in ("distractor", "before_gold"):
+        with pytest.raises(ValueError, match="no distractor before its gold"):
+            masking.layout(tiny, two_workers, condition)
 
 
 @pytest.mark.parametrize("condition,baseline", [("blocked", "blocked"), ("full", "full")])
@@ -44,7 +70,7 @@ def test_mask_endpoints_match_original_logits_and_caches(tiny_family, two_worker
 
 def test_mask_validates_controls_and_gold_refs(tiny, two_workers):
     q = {**two_workers, "workers": [[two_workers["workers"][0][0]], two_workers["workers"][1]]}
-    with pytest.raises(ValueError, match="no distractor"):
+    with pytest.raises(ValueError, match="no distractor before its gold"):
         masking.layout(tiny, q, "distractor")
     with pytest.raises(ValueError, match="invalid gold"):
         masking.layout(tiny, {**q, "gold": [{"worker": 0, "index": 99}]}, "gold")
@@ -57,10 +83,10 @@ def test_no_a_gold_collapses_to_the_expected_controls(tiny, two_workers):
     _, blocked, _, _ = masking.layout(tiny, q, "blocked")
     _, gold, _, meta = masking.layout(tiny, q, "gold")
     _, full, _, _ = masking.layout(tiny, q, "full")
-    _, except_gold, _, _ = masking.layout(tiny, q, "except_gold")
+    _, before_gold, _, _ = masking.layout(tiny, q, "before_gold")
     assert meta["a_gold_paragraphs"] == []
     assert torch.equal(blocked, gold)
-    assert torch.equal(full, except_gold)
+    assert torch.equal(full, before_gold)
 
 
 def test_gold_likelihood_and_generation_are_independent(tiny, two_workers):

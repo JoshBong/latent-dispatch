@@ -9,7 +9,7 @@ import torch
 
 from . import prompts
 
-CONDITIONS = ("blocked", "gold", "distractor", "except_gold", "full")
+CONDITIONS = ("blocked", "gold", "distractor", "before_gold", "full")
 
 
 def paragraph_tokens(model, paragraphs):
@@ -47,9 +47,14 @@ def paragraph_tokens(model, paragraphs):
 def layout(model, q, condition, distractor_seed=0):
     """Return B1 ids, additive 4D causal mask, block sizes, and the chosen A paragraph indices.
 
-    'gold' exposes all A gold paragraphs, 'distractor' exposes one deterministically chosen A distractor, and
-    'except_gold' exposes all of A except its gold paragraphs. 'full' also exposes separators; 'blocked' exposes
-    no A tokens. A control with no A gold is necessarily identical to blocked (gold) or full (except_gold).
+    'gold' exposes all A gold paragraphs. 'distractor' exposes one deterministically chosen A distractor, and
+    'before_gold' exposes all of A before its first gold paragraph (separators included). 'full' exposes all of A;
+    'blocked' exposes none of it.
+
+    The controls only use A tokens that come before A's gold. A's tokens attend causally within A, so any A token
+    after a gold paragraph has already read it: a distractor placed after the gold, or "everything but the gold
+    tokens", would hand B the gold fact through a relay. With no gold in A, 'distractor' samples from all of A and
+    'before_gold' equals 'full'. With gold first in A, both controls are undefined and raise.
     """
     if condition not in CONDITIONS:
         raise ValueError(f"condition must be one of {CONDITIONS}, not {condition!r}")
@@ -65,25 +70,31 @@ def layout(model, q, condition, distractor_seed=0):
     s = model.ids(prompts.prefix(model.fmt, q["question"]))
     a, spans = paragraph_tokens(model, q["workers"][0])
     b = model.ids(prompts.block(q["workers"][1]))
-    distractors = [i for i in range(len(spans)) if i not in gold]
-    if condition == "distractor" and not distractors:
-        raise ValueError("worker A has no distractor paragraph for the distractor control")
+    first_gold = min(gold) if gold else len(spans)
+    before = list(range(first_gold))  # paragraphs before A's first gold: all distractors, none has seen gold
+    if condition in ("distractor", "before_gold") and not before:
+        raise ValueError(f"worker A has no distractor before its gold paragraph for the {condition} control")
     if condition == "gold":
         chosen = sorted(gold)
     elif condition == "distractor":
         # Stable across processes and Python versions, and independent of arm execution order.
         digest = hashlib.sha256(f"{distractor_seed}:{q['id']}".encode()).digest()
-        chosen = [distractors[int.from_bytes(digest, "big") % len(distractors)]]
-    elif condition in ("except_gold", "full"):
-        chosen = distractors if condition == "except_gold" else list(range(len(spans)))
+        chosen = [before[int.from_bytes(digest, "big") % len(before)]]
+    elif condition == "before_gold":
+        chosen = before
+    elif condition == "full":
+        chosen = list(range(len(spans)))
     else:
         chosen = []
 
     visible = torch.zeros(len(a), dtype=torch.bool, device=model.device)
-    if condition in ("full", "except_gold"):
-        visible[:] = True  # include separators, so except_gold is the literal complement of gold tokens
-    for i in (sorted(gold) if condition == "except_gold" else chosen):
-        visible[spans[i]] = condition != "except_gold"
+    if condition == "full":
+        visible[:] = True
+    elif condition == "before_gold":
+        visible[:spans[first_gold][0] if gold else len(a)] = True  # separators before the gold too
+    else:
+        for i in chosen:
+            visible[spans[i]] = True
     ids = s + a + b
     n, b_start = len(ids), len(s) + len(a)
     allow = torch.ones((n, n), dtype=torch.bool, device=model.device).tril()

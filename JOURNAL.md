@@ -4,6 +4,12 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-15: the masking controls only use A tokens before A's gold
+
+The `distractor` control sampled any non-gold paragraph in A, and `except_gold` showed B all of A except the gold paragraph tokens. A's tokens attend causally within A, so every A token after a gold paragraph has already read it. Both controls could therefore hand B the gold fact through a relay. The 11-14 pilot fits this: toy AB distractor-only scored 66 against blocked 34, BA 24 against 29.
+
+Now `distractor` samples only from paragraphs before A's first gold paragraph, and `except_gold` is replaced by `before_gold`: all of A before its first gold paragraph. When A's gold comes first, both are undefined and those rows are skipped for the two control arms. On the seed-0, 100-per-cell sample, before the Part 0 composition filter, that keeps 42–43 of 100 toy AB/BA rows and 83–100 of 100 MuSiQue rows per placement. Pilot rows from the old controls should not be pooled with the new ones; `mask.a_paragraphs` and `mask.a_gold_paragraphs` in each saved row tell which old distractor rows came before the gold. Checked: CPU tests (new cases: the distractor is always drawn before the gold, both controls raise when gold is first). No model run.
+
 ## 2026-11-14: masking launcher aligned with the scale runs
 
 The masking branch incorporates the current main branch and its November 14 1.7B H1 and cumulative 4B archives. The launcher keeps the full benchmark and seeds `[0, 1, 2]`, defaulting to 4B, and lets Josh select 1.7B or 8B through `MODEL`. `LOAD = None` selects the newest archive for that model/dtype in the checkout; explicit archives for another model are refused. The 1.7B archive has no Part 0 probes, so those are completed before filtering the full masking stage. Add the 8B tarball to the checkout when its run finishes to reuse its rows.
