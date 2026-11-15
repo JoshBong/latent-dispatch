@@ -48,7 +48,7 @@ def pack():
 
 try:
     model = Model.load(MODEL, dtype=DTYPE)
-    smoke = [next(q for q in qs if q['dataset']=='toy'),
+    smoke = [next(q for q in qs if q['dataset']=='toy_d2'),
              next(q for q in qs if q['dataset']=='musique')]
     for name, (arm, opts) in specs.items():
         smoke_name = name + '_smoke'
