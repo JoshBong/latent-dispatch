@@ -24,10 +24,10 @@ folder.mkdir(parents=True, exist_ok=True)
 specs = {}
 for thinking in ('forced', 'off'):
     for name in ('b1', 'k0', 't1'):
-        options = dict(thinking=thinking, think_budget=1024, max_answer_tokens=256)
+        options = dict(thinking=thinking, think_budget=1024, max_answer_tokens=1024)
         if name == 't1':
             options['report_tokens'] = 1024
-        specs[f'thinking_pilot_{name}_{thinking}'] = (getattr(arms, name), options)
+        specs[f'thinking_pilot_v2_{name}_{thinking}'] = (getattr(arms, name), options)
 manifest = dict(model=MODEL, dtype=DTYPE, commit=results._commit(), seed=0,
                 per_cell=50, count=len(qs), question_ids=[q['id'] for q in qs],
                 cells=dict(collections.Counter(f"{q['dataset']}/{q['qtype']}/{q['placement']}" for q in qs)),

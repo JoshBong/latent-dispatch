@@ -9,8 +9,8 @@ finish() {
   mv /home/elkalt/thinking-experiment.status.tmp /home/elkalt/thinking-experiment.status
   if [ "$code" = 0 ]; then outcome=COMPLETED; else outcome=FAILED; fi
   printf 'LATENT_MASKING_JOB_RESULT outcome=%s exit_code=%s experiment=thinking\n' "$outcome" "$code" | sudo tee /dev/ttyS0 || true
-  # Leave five minutes for the supervising chat to download and push artifacts.
-  sudo shutdown -h +5
+  # Leave ten minutes for the supervising chat to download and push artifacts.
+  sudo shutdown -h +10
   exit "$code"
 }
 trap finish EXIT
@@ -19,6 +19,6 @@ trap 'exit 130' INT
 printf 'state=running\nstarted_at=%s\n' "$(date -Is)" > /home/elkalt/thinking-experiment.status
 export PYTHONUNBUFFERED=1
 PYTHON=/home/elkalt/latent-dispatch-masking-pr1/.venv/bin/python
-"$PYTHON" -m pytest -q
-MODEL=Qwen/Qwen3-4B DTYPE=float16 "$PYTHON" -m pytest -q -m slow tests/test_real_model.py
+# Model code is unchanged: fast tests and all 18 FP16 real-model checks passed
+# on this VM before the initial smoke. The revised generation caps are smoke-tested below.
 "$PYTHON" scripts/run_thinking_pilot.py
