@@ -273,3 +273,7 @@ Code ported from [JoshBong/LatentMAS](https://github.com/JoshBong/LatentMAS) (a 
 - RecursiveMAS / RecursiveLink, arXiv 2604.25917
 - CacheBack, arXiv 2609.32046 (code: maxr0ssi/cacheback)
 - Min et al. 2019, "Compositional Questions Do Not Necessitate Multi-hop Reasoning"
+
+## Milestone paper
+
+The ACM LaTeX scaffold and local compilation instructions are in [paper/](paper/README.md).

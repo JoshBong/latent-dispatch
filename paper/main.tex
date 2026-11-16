@@ -1,0 +1,206 @@
+% ACM v2.20 class and bibliography style are included. See README.md to build.
+\documentclass[sigconf,nonacm]{acmart}
+
+% acmart already loads amsmath, booktabs, graphicx, hyperref, and natbib.
+% Do not load geometry, titlesec, caption, or a second bibliography system.
+\usepackage{mathtools}       % Additional equation tools
+\usepackage{bm}              % Bold mathematical symbols
+\usepackage{siunitx}         % Aligned numerical columns and units
+\usepackage{xcolor}          % Draft notes
+
+% Course milestone: retain ACM typography without publication metadata.
+\settopmatter{printacmref=false,printfolios=true}
+\setcopyright{none}
+
+% Set to \draftfalse before submission; remove all remaining TODOs first.
+\newif\ifdraft
+\drafttrue
+\ifdraft\emergencystretch=2em\fi
+\newcommand{\todo}[1]{\ifdraft\textcolor{red}{[TODO: #1]}\fi}
+\newcommand{\method}[1]{\textsc{#1}}
+\newcommand{\EM}{\operatorname{EM}}
+
+\title{Reasoning Begins During Reading}
+\subtitle{Cross-Worker Evidence Access in Multi-Hop Question Answering}
+
+% Names follow the project README. Confirm spelling and desired order.
+% Net IDs are deliberately left blank rather than guessed.
+\author{Josh Huang}
+\authornote{Net ID: \texttt{JOSH-NETID}.}
+\affiliation{\institution{Cornell Tech}\city{New York}\state{NY}\country{USA}}
+
+\author{Elliott Kalt}
+\authornote{Net ID: \texttt{ELLIOTT-NETID}.}
+\affiliation{\institution{Cornell Tech}\city{New York}\state{NY}\country{USA}}
+
+\author{Ajit Mallavarapu}
+\authornote{Net ID: \texttt{AJIT-NETID}.}
+\affiliation{\institution{Cornell Tech}\city{New York}\state{NY}\country{USA}}
+
+\renewcommand{\shortauthors}{Huang, Kalt, and Mallavarapu}
+
+\begin{document}
+
+% ACM places the abstract before \maketitle in the source.
+% The title, authors, and abstract appear on the first page, not a cover sheet.
+\begin{abstract}
+Our working hypothesis is that reasoning begins during reading: models
+form relationships between evidence while encoding it, and independently
+encoding related documents can make these relationships harder to recover
+during answer generation. We investigate this hypothesis using controlled
+attention interventions in a two-worker question-answering system.
+\todo{Add 2--3 sentences describing the datasets, strongest verified
+result, and principal limitation. Keep the abstract around 100--150 words.}
+\end{abstract}
+
+\keywords{multi-hop question answering, multi-agent systems, KV cache,
+attention masking}
+\maketitle
+
+\begin{center}
+\small CS 5787 Deep Learning --- Project Milestone --- November 16, 2026
+\end{center}
+
+\section{Introduction}
+\label{sec:intro}
+% Target: 2--3 paragraphs, about 0.4 page.
+\todo{Explain the setting: an orchestrator splits evidence across parallel
+workers and answers using their outputs. Why is this useful? Why might
+independent encoding make composition difficult even without token loss?}
+
+\paragraph{Working hypothesis.}
+Reading conditions shape later reasoning. We hypothesize that joint
+encoding builds relationships between evidence that are harder to
+reconstruct during answer generation.
+
+\paragraph{Research questions.}
+\todo{State two questions: (1) Does independent encoding impair composition
+when all source tokens are retained? (2) Which cross-worker evidence
+access recovers performance, and how does answer-time reasoning interact
+with that access?}
+
+\paragraph{Milestone contributions.}
+\todo{List only completed contributions: controlled encoding comparison,
+paragraph-level attention interventions, and preliminary results.
+Distinguish observations from proposed mechanisms.}
+
+\section{Background and Related Work}
+\label{sec:related}
+% Target: one compact paragraph, about 0.2 page.
+\todo{Position the project relative to LatentMAS, Parallel Context Windows,
+and Masking in Multi-hop QA. Cite the papers from references.bib after
+checking their full text. Explain that your focus is a controlled diagnosis
+of evidence access, rather than a demonstrated efficient repair algorithm.}
+% Example citation syntax: \cite{pcw2023,masking2025,latentmas2025}.
+
+\section{Problem Formulation and Evaluation}
+\label{sec:problem}
+% Target: about 0.4 page.
+\subsection{Task and Data}
+Let an instance be $x=(q,D,y^*)$, where $q$ is a question,
+$D=\{d_1,\ldots,d_m\}$ is a set of evidence paragraphs, and $y^*$
+is a reference answer. A placement $\pi$ partitions $D$ between two
+workers, producing blocks $D_A$ and $D_B$. The orchestrator predicts
+$\hat y$ using their encoded evidence.
+
+\todo{Describe synthetic two-fact chains and two-hop MuSiQue, sample
+sizes, distractors, and seed. Define AB/BA and co-located placements (AA and BB).
+Explain the composition filter and report which
+tables use it. Avoid treating mirrored layouts as independent questions.}
+
+\subsection{Metrics and Statistical Analysis}
+Our primary metric is normalized exact match:
+\begin{equation}
+\EM(\hat y,y^*) =
+\mathbf{1}\!\left[\operatorname{norm}(\hat y)
+=\operatorname{norm}(y^*)\right].
+\end{equation}
+\todo{Specify normalization, aliases if used, and token F1 if reported.
+Average layouts within each source before paired bootstrap confidence
+intervals. Separate official scores from exploratory manual same-entity
+judgments. State the bootstrap count for each reported experiment.}
+
+\section{Method}
+\label{sec:method}
+% Target: about 0.5 page.
+\subsection{Joint and Independent Encoding}
+\todo{Define B1 (joint text encoding), B1-mask (blocked cross-worker
+attention at true positions), and K0 (independently encoded, stitched KV
+caches). Explain the shared question prefix and position handling.}
+
+\subsection{Controlled Evidence Access}
+For a token $i$ in block $B$ and token $j$ in block $A$, define
+\begin{equation}
+M^{(V)}_{ij} =
+\begin{cases}
+0, & j\in V,\\
+-\infty, & j\notin V,
+\end{cases}
+\end{equation}
+where $M$ is added to attention logits and $V$ is the set of
+accessible tokens in $A$. Other attention edges follow the common
+causal layout. We vary $V$ between no tokens, the gold supporting
+paragraph, a distractor paragraph, all non-gold paragraphs, and all
+of $A$. The answer tokens can attend to both blocks in every condition.
+
+\todo{State that the masked runs re-encode B, use oracle paragraph labels,
+and do not establish compute savings. Discuss indirect gold-information
+relay through A's later tokens when interpreting non-gold controls.}
+
+\subsection{Answer-Time Reasoning}
+\todo{Describe thinking-off and forced-thinking conditions, the 1,024-token
+thinking budget, answer caps, and recorded cap rates. Thinking-off does
+not necessarily mean an absence of reasoning in generated answer text.}
+
+\section{Preliminary Results}
+\label{sec:results}
+% Target: about 0.6 page. Prefer one primary table and a compact discussion.
+\begin{table}[t]
+\centering
+\caption{Qwen3-8B preliminary masking results, thinking off.
+EM (\%), AB/BA pooled, composition-required sources, seed 0.
+Values use the existing automatic scorer; scoring limitations remain.}
+\label{tab:masking}
+\begin{tabular}{lrrrr}
+\toprule
+Dataset & Sources & Blocked & Gold & Full \\
+\midrule
+Two-fact toy & 100 & 64.5 & 100.0 & 100.0 \\
+MuSiQue & 79 & 14.5 & 38.5 & 29.0 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Encoding-time access.}
+\todo{Interpret Table~\ref{tab:masking}. Report paired differences and
+source-level confidence intervals from the larger masking run. State that
+supporting-paragraph access substantially improves accuracy; avoid claiming
+that an exact bridge mechanism has been isolated.}
+
+\paragraph{Interaction with answer-time reasoning.}
+\todo{Summarize the separate 25-source-per-dataset experiment. Do not merge
+its sample with the larger masking table. Discuss cap rates and the latest
+scoring audit; do not claim that reasoning adds nothing under gold access.}
+
+\paragraph{Qualitative observations.}
+\todo{Optionally give one short example of evidence confusion or report
+failure. Label exploratory trace interpretations as hypotheses.}
+
+\section{Limitations and Remaining Work}
+\label{sec:next}
+% Target: about 0.3 page.
+\todo{Cover oracle paragraph selection, one model family, limited seeds,
+small/reused samples, shared evidence across sources, scorer sensitivity,
+finite generation budgets, and unresolved numerical endpoint differences.}
+
+\todo{Prioritize: verify scoring with a second reader; evaluate a fresh,
+checked MuSiQue sample; run clean pre-gold non-gold controls; test a selector
+without gold labels. Describe future experiments as planned work.}
+
+\paragraph{Team responsibilities.}
+\todo{Assign a concrete completed or planned component to each author.}
+
+\nocite{latentmas2025,pcw2023,masking2025}
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+\end{document}
