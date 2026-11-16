@@ -139,6 +139,16 @@ class SearchTests(unittest.TestCase):
             self.assertIn("--range=10.200.1.0/24", cloud.call_args.args)
             self.assertIn("--region=us-east1", cloud.call_args.args)
 
+    def test_unreadable_existing_subnet_stops_allocation(self):
+        args = self.args()
+        with patch.object(gpu, "cloud", side_effect=[
+            {"subnetworks": ["regions/us-west1/subnetworks/existing"]},
+            gpu.CloudError("regional read failed"),
+        ]) as cloud:
+            with self.assertRaises(gpu.CloudError):
+                gpu.ensure_subnet(args, "us-east1")
+            self.assertFalse(any("create" in c.args for c in cloud.call_args_list))
+
     def test_inventory_only_reads(self):
         with patch.object(gpu, "cloud", return_value=[]) as cloud, patch("builtins.print"):
             gpu.inventory(self.args())

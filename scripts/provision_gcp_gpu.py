@@ -61,8 +61,8 @@ def ensure_subnet(args, region):
     links = network.get("subnetworks", [])
     def read(link):
         return cloud(args.project, "compute", "networks", "subnets", "describe",
-                     basename(link), f"--region={link.split('/regions/')[1].split('/')[0]}")
-    regional = [link for link in links if f"/regions/{region}/" in link]
+                     basename(link), f"--region={link.split('regions/', 1)[1].split('/')[0]}")
+    regional = [link for link in links if f"regions/{region}/" in link]
     loaded = {link: read(link) for link in regional}
     candidates = [s for s in loaded.values()
                   if s.get("purpose", "PRIVATE") == "PRIVATE" and s.get("ipCidrRange")]
