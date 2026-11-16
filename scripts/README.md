@@ -5,8 +5,8 @@ checks passed on the VM before the first smoke; model code is unchanged.
 The branch includes fix/think-eos so EOS during reasoning closes thinking and
 continues to a final answer.
 
-Scope: seed 0, first 50 rows per cell: toy hop1/hop2 AB/BA and MuSiQue 2hop
-AB/BA/BB (350 question layouts; source questions repeat across placements).
+Scope: seed 0, first 25 rows per cell: toy hop1/hop2 AB/BA and MuSiQue 2hop
+AB/BA/BB (175 question layouts; source questions repeat across placements).
 All six arms run on those same layouts: B1, K0, T1 with thinking forced/off.
 Thinking budget 1024, answer cap 1024, T1 report budget 1024 per worker.
 Forced arms run first. T1 enables thinking only in the orchestrator; worker
@@ -35,3 +35,15 @@ inference began. Version 2 raises the answer cap to 1024 for all six conditions
 and uses separate v2 result names; the 1024-token thinking budget is unchanged.
 The shutdown grace is ten minutes because Linux blocks new non-root SSH logins
 in the last five minutes before shutdown. This leaves time for artifact retrieval.
+
+## Reduced scope after approved checkpoint
+
+Reduced to 25 per cell (175 layouts, 1050 main responses). Model, FP16,
+arm/result names, thinking/report budgets, and answer cap are unchanged.
+A frozen pre-change snapshot preserved 232 main responses and 12 smoke responses.
+132 main responses are in the reduced sample; the other 100 stay in their files.
+The 25-per-cell summary filters to selected IDs and does not count those extras.
+Local simulation using the actual resume functions verified append-only reuse,
+zero repeated work on a second resume, and only missing IDs on expansion to 50.
+To expand later, update the selection, per_cell manifest, and expected count
+assertions together; do not change the arm names or generation options.

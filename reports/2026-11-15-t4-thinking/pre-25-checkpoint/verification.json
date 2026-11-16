@@ -1,0 +1,58 @@
+{
+  "scope_50": 350,
+  "scope_25": 175,
+  "cells": {
+    "toy_d2/hop1/AB": 25,
+    "toy_d2/hop1/BA": 25,
+    "toy_d2/hop2/AB": 25,
+    "toy_d2/hop2/BA": 25,
+    "musique/2hop/BB": 25,
+    "musique/2hop/AB": 25,
+    "musique/2hop/BA": 25
+  },
+  "conditions": [
+    {
+      "condition": "thinking_pilot_v2_b1_forced",
+      "saved": 232,
+      "reused_at_25": 132,
+      "saved_outside_25": 100,
+      "new_at_25": 43
+    },
+    {
+      "condition": "thinking_pilot_v2_k0_forced",
+      "saved": 0,
+      "reused_at_25": 0,
+      "saved_outside_25": 0,
+      "new_at_25": 175
+    },
+    {
+      "condition": "thinking_pilot_v2_t1_forced",
+      "saved": 0,
+      "reused_at_25": 0,
+      "saved_outside_25": 0,
+      "new_at_25": 175
+    },
+    {
+      "condition": "thinking_pilot_v2_b1_off",
+      "saved": 0,
+      "reused_at_25": 0,
+      "saved_outside_25": 0,
+      "new_at_25": 175
+    },
+    {
+      "condition": "thinking_pilot_v2_k0_off",
+      "saved": 0,
+      "reused_at_25": 0,
+      "saved_outside_25": 0,
+      "new_at_25": 175
+    },
+    {
+      "condition": "thinking_pilot_v2_t1_off",
+      "saved": 0,
+      "reused_at_25": 0,
+      "saved_outside_25": 0,
+      "new_at_25": 175
+    }
+  ],
+  "checks": "All original rows byte-preserved; rerun at 25 makes zero calls; expansion to 50 calls only missing IDs; smoke fully reused. Simulation used stand-in generation functions on temporary local copies, not GPU inference."
+}

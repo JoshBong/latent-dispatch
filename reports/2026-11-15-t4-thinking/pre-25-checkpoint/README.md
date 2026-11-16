@@ -1,0 +1,1 @@
+Frozen checkpoint before reducing to 25 per cell. Archive hashes and per-file hashes are in frozen-snapshot.json; local resume simulation results are in verification.json. All 232 main rows, including 100 outside the smaller sample, are preserved. The snapshot archive includes the original launch manifest, logs, status, and scripts.
