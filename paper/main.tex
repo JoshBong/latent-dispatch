@@ -44,28 +44,28 @@
 % ACM places the abstract before \maketitle in the source.
 % The title, authors, and abstract appear on the first page, not a cover sheet.
 \begin{abstract}
-Our working hypothesis is that reasoning begins during reading: models
-form relationships between evidence while encoding it, and independently
-encoding related documents can make these relationships harder to recover
-during answer generation. We evaluate this hypothesis on synthetic fact chains
-and two-hop MuSiQue using attention masks that control which evidence one
-worker can access from another. In preliminary Qwen3-8B experiments, exposing
-only the other worker's supporting paragraph raises exact-match accuracy from
-64.5\% to 100\% on synthetic questions and from 14.5\% to 38.5\% on MuSiQue.
-Answer-time reasoning also improves performance, with gains varying across
-tasks and encoding conditions. These results suggest that preserving source
-tokens alone does not ensure successful evidence composition. However, the
-interventions use gold supporting-paragraph labels, and the precise mechanism
-remains unresolved.
+Multi-agent systems distribute work across multiple language-model agents,
+which can communicate through generated text or latent representations such
+as key--value caches. Latent communication can retain representations of
+source tokens without generating text reports, but independently encoded
+evidence may remain difficult to combine. We investigate the hypothesis
+that reasoning begins during reading: models form relationships between
+evidence during encoding that are harder to recover during answer generation.
+Using synthetic fact chains and two-hop MuSiQue (multi-hop QA benchmark), we control cross-worker
+evidence access through attention masks. In preliminary Qwen3-8B experiments,
+exposing the other worker's supporting paragraph raises exact-match accuracy
+from 64.5\% to 100\% on synthetic questions and from 14.5\% to 38.5\% on MuSiQue.
+Answer-time reasoning also helps, with gains varying across tasks and encoding
+conditions. These findings suggest that retaining source-token representations
+does not ensure successful evidence composition. Our interventions use gold
+supporting-paragraph labels, and the precise mechanism remains unresolved.
 \end{abstract}
 
 \keywords{multi-hop question answering, multi-agent systems, KV cache,
 attention masking}
 \maketitle
 
-\begin{center}
-\small CS 5787 Deep Learning --- Project Milestone --- November 16, 2026
-\end{center}
+
 
 \section{Introduction}
 An orchestrator can distribute a question's documents across parallel workers,
@@ -151,14 +151,25 @@ these exploratory comparisons are not corrected for multiple testing.
 
 \section{Method}
 \subsection{Joint and Independent Encoding}
-All workers receive a shared system-and-question prefix $S$. B1 jointly
-encodes $[S,D_A,D_B]$ with causal attention. B1-mask preserves these token
-positions but blocks B from attending to A during encoding. K0 encodes each
-worker's block independently after $S$, then concatenates their KV caches,
-shifting rotary-position keys to their combined positions. Every answerer
-can attend to both evidence blocks. Thus B1 versus B1-mask measures the
-effect of cross-block attention, while B1-mask versus K0 checks the
-additional effects of separate encoding and position handling.
+We use project-specific identifiers for experimental conditions: B denotes
+baseline conditions and K denotes KV-cache conditions. The numbers identify
+variants, not worker counts or reasoning hops. All conditions receive a
+shared system-and-question prefix $S$. The three conditions relevant here are:
+\begin{itemize}
+\item \textbf{Joint encoding (B1):} the model encodes $[S,D_A,D_B]$
+together with causal attention, so B can attend to A while reading.
+\item \textbf{Blocked encoding (B1-mask):} the model preserves B1's token
+positions but blocks B from attending to A during encoding.
+\item \textbf{Independent KV encoding (K0):} workers encode their blocks
+independently after $S$. Their KV caches are then concatenated, with
+rotary-position keys shifted to the combined positions. K0 adds no worker
+latent-thinking steps; it does not restrict the answerer's thinking mode.
+\end{itemize}
+Every answerer can attend to both evidence blocks. Joint versus blocked
+encoding measures the effect of cross-block attention. Blocked versus
+independent KV encoding checks the additional effects of separate cache
+construction and position handling. We retain the identifiers in parentheses
+to connect these conditions to the implementation and experiment records.
 
 \subsection{Controlled Evidence Access}
 We recompute the joint sequence while changing only B's access to A.
@@ -276,7 +287,15 @@ matched quality and measured end-to-end cost. Until those tests, we treat
 ``reasoning begins during reading'' as a working hypothesis.
 
 \paragraph{Team responsibilities.}
-\todo{Confirm each author's completed contribution and remaining responsibility.}
+Josh Huang developed the core experimental framework, benchmark pipeline,
+and evaluation notebooks; conducted the model-scale and Qwen3-8B experiments;
+and analyzed answer traces, scoring, and dataset-screening issues.
+Ajit Mallavarapu implemented the controlled attention-masking experiments,
+including paragraph-level visibility conditions, validation tests, and
+reproducible execution with persistent results. Elliott Kalt developed GPU
+provisioning and experiment-execution infrastructure for Google Cloud Platform
+(GCP), conducted the Qwen3-4B masking and thinking pilots, performed paired
+analysis of the thinking results, and took the lead on the milestone report.
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
