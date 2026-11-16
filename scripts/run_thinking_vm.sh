@@ -18,6 +18,9 @@ trap 'exit 143' TERM
 trap 'exit 130' INT
 printf 'state=running\nstarted_at=%s\n' "$(date -Is)" > /home/elkalt/thinking-experiment.status
 export PYTHONUNBUFFERED=1
+# Use the restored model/tokenizer cache rather than refreshing upstream revisions.
+export HF_HUB_OFFLINE=1
+export TRANSFORMERS_OFFLINE=1
 PYTHON=/home/elkalt/latent-dispatch-masking-pr1/.venv/bin/python
 # Model code is unchanged: fast tests and all 18 FP16 real-model checks passed
 # on this VM before the initial smoke. The revised generation caps are smoke-tested below.
