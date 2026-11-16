@@ -47,3 +47,15 @@ Local simulation using the actual resume functions verified append-only reuse,
 zero repeated work on a second resume, and only missing IDs on expansion to 50.
 To expand later, update the selection, per_cell manifest, and expected count
 assertions together; do not change the arm names or generation options.
+
+
+## 50-per-cell continuation
+
+The runner now selects 50 layouts per cell, 350 layouts total, with 2100 main
+responses across six conditions. Result names and model/generation settings are
+unchanged. The completed 25-per-cell results remain in their dated report.
+The existing files contain 1150 reusable main rows: 275 B1-forced and 175 each
+in the other five conditions, leaving 950 new responses. The twelve cached smoke
+responses are also reused. The run must validate original file hashes before
+launch and byte-prefix preservation after resume. A separate launch manifest
+and log backup preserve the 25-per-cell provenance.

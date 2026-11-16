@@ -1,0 +1,132 @@
+{
+  "model": "Qwen/Qwen3-4B",
+  "dtype": "float16",
+  "per_cell": 50,
+  "layouts": 350,
+  "files": {
+    "thinking_pilot_v2_k0_off.jsonl": {
+      "sha256": "8b24abdf93541f46f246458a6b5db25b61b9a2390ec80a2cb4d36a9ae6e2f23c",
+      "bytes": 121901,
+      "rows": 175
+    },
+    "thinking_pilot_v2_k0_forced_smoke.jsonl": {
+      "sha256": "6e0430e73c366a63c9580ace935e2acde193e9ace0fe4b9553d0f71b77a00158",
+      "bytes": 10110,
+      "rows": 2
+    },
+    "thinking_pilot_v2_b1_off_smoke.jsonl": {
+      "sha256": "c4009262aea4a696f96268a5656fda2b12a8d158d3cf64a3240096015c28b498",
+      "bytes": 796,
+      "rows": 2
+    },
+    "thinking_pilot_v2_b1_forced_smoke.jsonl": {
+      "sha256": "a87a7d7da8b0ef37e2a351cbcb69ecded3778fc2a30d080f11e4fbd18d75eb00",
+      "bytes": 6324,
+      "rows": 2
+    },
+    "thinking_pilot_v2_t1_off_smoke.jsonl": {
+      "sha256": "52887199d7a264089b24bcbe9f74b5e48e4315a074dfbee189767c5949d4d573",
+      "bytes": 6306,
+      "rows": 2
+    },
+    "thinking_pilot_v2_t1_forced_smoke.jsonl": {
+      "sha256": "7f4b15ce265670f7181afc22e30d43c0d56d81f4f2392bef6a3e2ce1da882688",
+      "bytes": 15572,
+      "rows": 2
+    },
+    "thinking_pilot_v2_b1_forced.jsonl": {
+      "sha256": "4cf915e1b38c919dfdcaf68971358b78e9bc4406d33fabc69d345475f535c2a1",
+      "bytes": 555936,
+      "rows": 275
+    },
+    "thinking_pilot_v2_t1_off.jsonl": {
+      "sha256": "0a87ef5696995a12c91b234b2e5ca0965e7bc35ab3bceb565f4857818baa4dc7",
+      "bytes": 403259,
+      "rows": 175
+    },
+    "thinking_pilot_v2_t1_forced.jsonl": {
+      "sha256": "ecec33696bd88383c76fe7d8dca088af6f204bfbd27b2949b9165ac439ae590a",
+      "bytes": 965508,
+      "rows": 175
+    },
+    "thinking_pilot_v2_k0_forced.jsonl": {
+      "sha256": "397df490d70e6b5261b9fcff7f4cca8c9626b502d740a32203b8a16340161b4d",
+      "bytes": 588194,
+      "rows": 175
+    },
+    "thinking_pilot_v2_k0_off_smoke.jsonl": {
+      "sha256": "54116afaadc7b8cf47a3b9714774423d526526f853ceaaf71320f436ac9902cd",
+      "bytes": 2059,
+      "rows": 2
+    },
+    "thinking_pilot_v2_b1_off.jsonl": {
+      "sha256": "227d5c0774063cc1dd1e6ae22406e6c2cb1497cb0a9acd720aa64285a82ab042",
+      "bytes": 94219,
+      "rows": 175
+    }
+  },
+  "conditions": [
+    {
+      "name": "thinking_pilot_v2_b1_forced",
+      "saved": 275,
+      "new": 75,
+      "options": {
+        "thinking": "forced",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024
+      }
+    },
+    {
+      "name": "thinking_pilot_v2_k0_forced",
+      "saved": 175,
+      "new": 175,
+      "options": {
+        "thinking": "forced",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024
+      }
+    },
+    {
+      "name": "thinking_pilot_v2_t1_forced",
+      "saved": 175,
+      "new": 175,
+      "options": {
+        "thinking": "forced",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024,
+        "report_tokens": 1024
+      }
+    },
+    {
+      "name": "thinking_pilot_v2_b1_off",
+      "saved": 175,
+      "new": 175,
+      "options": {
+        "thinking": "off",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024
+      }
+    },
+    {
+      "name": "thinking_pilot_v2_k0_off",
+      "saved": 175,
+      "new": 175,
+      "options": {
+        "thinking": "off",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024
+      }
+    },
+    {
+      "name": "thinking_pilot_v2_t1_off",
+      "saved": 175,
+      "new": 175,
+      "options": {
+        "thinking": "off",
+        "think_budget": 1024,
+        "max_answer_tokens": 1024,
+        "report_tokens": 1024
+      }
+    }
+  ]
+}

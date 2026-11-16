@@ -1,4 +1,4 @@
-"""175-question T4 pilot: B1/K0/T1, thinking off/1024; resumes per arm."""
+"""350-question T4 pilot: B1/K0/T1, thinking off/1024; resumes per arm."""
 import collections
 import hashlib
 import json
@@ -16,8 +16,8 @@ from latent_dispatch.score import score
 MODEL, DTYPE = 'Qwen/Qwen3-4B', 'float16'
 qs = data.per_cell(
     data.load('toy', seed=0, qtype=['hop1', 'hop2'], placement=['AB', 'BA'])
-    + data.load('musique', seed=0, qtype='2hop', placement=['AB', 'BA', 'BB']), 25)
-assert len(qs) == len({q['id'] for q in qs}) == 175
+    + data.load('musique', seed=0, qtype='2hop', placement=['AB', 'BA', 'BB']), 50)
+assert len(qs) == len({q['id'] for q in qs}) == 350
 folder = results.results_path(MODEL, DTYPE, 'x').parent
 folder.mkdir(parents=True, exist_ok=True)
 # Separate result names prevent mixing with older thinking implementations.
@@ -29,7 +29,7 @@ for thinking in ('forced', 'off'):
             options['report_tokens'] = 1024
         specs[f'thinking_pilot_v2_{name}_{thinking}'] = (getattr(arms, name), options)
 manifest = dict(model=MODEL, dtype=DTYPE, commit=results._commit(), seed=0,
-                per_cell=25, count=len(qs), question_ids=[q['id'] for q in qs],
+                per_cell=50, count=len(qs), question_ids=[q['id'] for q in qs],
                 cells=dict(collections.Counter(f"{q['dataset']}/{q['qtype']}/{q['placement']}" for q in qs)),
                 arms={n:o for n,(_,o) in specs.items()},
                 script_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
@@ -75,7 +75,7 @@ try:
         pack()
     df = results.load_results(qs, specs, MODEL, DTYPE)
     df.groupby(['arm','dataset','qtype','placement'])[['em','think_tokens','gen_tokens','seconds','cut']].mean().to_csv(folder/'thinking-pilot-summary.csv')
-    assert len(df)==1050
-    print('COMPLETED: 1050 main rows.', flush=True)
+    assert len(df)==2100
+    print('COMPLETED: 2100 main rows.', flush=True)
 finally:
     pack()
