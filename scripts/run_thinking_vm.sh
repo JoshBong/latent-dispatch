@@ -21,5 +21,6 @@ export PYTHONUNBUFFERED=1
 PYTHON=/home/elkalt/latent-dispatch-masking-pr1/.venv/bin/python
 # Model code is unchanged: fast tests and all 18 FP16 real-model checks passed
 # on this VM before the initial smoke. The revised generation caps are smoke-tested below.
+"$PYTHON" -c 'import torch; assert torch.cuda.is_available(), "CUDA unavailable; refusing CPU fallback"; name=torch.cuda.get_device_name(0); assert "T4" in name, name; print("CUDA GPU:",name,flush=True)'
 "$PYTHON" scripts/verify_thinking_cache.py --allow-appends
 "$PYTHON" scripts/run_thinking_pilot.py
