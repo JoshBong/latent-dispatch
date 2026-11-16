@@ -16,7 +16,7 @@ The detached unit is `latent-thinking-50`. The runtime has a GCP-enforced 24-hou
 STOP limit, a guest shutdown fallback, and shutdown ten minutes after job exit.
 
 Existing email alert 8621860823762638783 now monitors this instance and remains
-enabled for elliott.kalt@gmail.com. Local service latent-thinking-publish-50
+enabled for the configured email channel. Local service latent-thinking-publish-50
 collects and pushes results/logs on completion or failure, then stops this VM.
 The publisher runs on the local computer; the VM's email and shutdown paths do
 not require the local publisher to stay connected. Saved responses remain on
@@ -37,4 +37,3 @@ unique IDs. Local simulation using the actual results.run functions verified
 that only missing IDs invoke generation, saved bytes are preserved, and a second
 resume invokes no additional generation. The runtime wrapper requires a working
 CUDA T4 and refuses CPU fallback.
-
