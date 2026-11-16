@@ -4,6 +4,45 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-15, night: attention masking on Qwen3-8B
+
+The masking design from the 4B T4 pilot, run on Qwen3-8B (launcher `colab_mask_8b.ipynb`, code at `f4914e4`, bfloat16, seed 0, thinking off, EM). Worker B is re-encoded from scratch in every condition; the conditions differ only in which of worker A's paragraphs B may attend to: none (`blocked`, the same as B1-mask), one distractor paragraph, everything except A's gold paragraph, only A's gold paragraph, or all of A (`full`, the same as B1). 100 toy_d2 two-fact sources and 79 MuSiQue 2-hop sources, all of them labelled composition-required by Part 0 on this model. The rows are in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` (sha256 `99f93d7d…206bdd35`): 716 rows per mask arm (616 for `distractor`, which has no toy AA rows), one commit, no duplicate ids, 0.3–1.9% of answers at the 256-token cap. The tarball also carries the B1, B1-mask and K0 rows it was started from.
+
+| | blocked | distractor | except gold | gold | full |
+|---|---|---|---|---|---|
+| toy_d2 hop1 AA | 99 | – | 99 | 100 | 100 |
+| toy_d2 hop1 AB | 60 | 82 | 82 | 100 | 100 |
+| toy_d2 hop1 BA | 69 | 60 | 60 | 100 | 100 |
+| toy_d2 hop1 BB | 94 | 100 | 100 | 94 | 100 |
+| MuSiQue 2-hop AA | 33 | 30 | 29 | 33 | 34 |
+| MuSiQue 2-hop AB | 10 | 11 | 15 | 38 | 29 |
+| MuSiQue 2-hop BA | 19 | 16 | 18 | 39 | 29 |
+| MuSiQue 2-hop BB | 33 | 30 | 23 | 33 | 23 |
+
+Paired differences at AB+BA, 95% bootstrap interval over sources:
+
+| | toy_d2 hop1 | MuSiQue 2-hop |
+|---|---|---|
+| gold − blocked | +36 (30, 42) | +24 (15, 34) |
+| gold − distractor | +29 (22, 36) | +25 (16, 34) |
+| gold − full | 0 (0, 0) | +9 (3, 16) |
+| full − blocked | +36 (30, 42) | +15 (7, 23) |
+| distractor − blocked | +6 (−2, 14) | −1 (−5, 4) |
+| except gold − blocked | +6 (−2, 14) | +2 (−4, 8) |
+
+- **Access to A's gold paragraph alone recovers the whole loss on both datasets.** The 4B pilot found the same (gold − blocked: toy +68 (60, 74), MuSiQue +11 (5, 19)).
+- **On MuSiQue, access to everything except the gold paragraph recovers nothing** (+2), and a distractor paragraph recovers nothing (−1). So the gold paragraph is both sufficient and necessary there.
+- **On MuSiQue, gold-only beats full access by 9 points** (38 and 39 against 29 and 29). At 4B this difference was +1 (−5, 6). Not explained. One reading is that A's distractor paragraphs hurt B when it can see them; nothing here tests that. The BB cells point the same way (blocked 33, full 23).
+- **The toy distractor effect is at AB only**: +22 (10, 34) at AB, −9 (−21, 3) at BA. The 4B pilot showed the same split (AB 66 against 34, BA 24 against 29). Not explained.
+
+Endpoints against the 11-14 run, on the 364 questions both hold: `blocked` gives the same EM as B1-mask on 94.5% of them (59.6 against 61.3), `full` the same as B1 on 96.7% (72.3 against 73.4). They should be the same computation. The cause of the 3–5% that differ has not been looked into.
+
+What it changes: the result that one paragraph's access accounts for the loss now holds at two model sizes. The masked conditions re-encode all of B, so this shows which access is sufficient; it is not a repair method and saves no compute as run. The paragraph is chosen with the gold labels.
+
+Checked: rows read with `results.load_all` from the unpacked tarball; intervals from 2,000 bootstrap resamples over source questions. Not checked: the endpoint mismatch, the gold-answer log-probabilities saved in the rows, F1, other seeds. Nothing is corrected for the number of comparisons; gold − full on MuSiQue is the one most exposed to that.
+
+---
+
 ## 2026-11-15: sequential repair on Qwen3-8B
 
 One and two rounds of sequential reading (`scan_1`, `scan_2`, notebook `h5_rounds`) on Qwen3-8B, 50 source questions per cell, seed 0, thinking off, EM. B1 and K0 were loaded from the 11-14 archive, not rerun. The rows are in `archive/Qwen3-8B-bfloat16-2026-11-15.tar.gz`, which holds every 8B row so far: 6,150 rows, 750 for each scan arm, no duplicates. 3.6% of one-round and 3.9% of two-round answers hit the 256-token cap. Real-model tests were skipped again (`RUN_TESTS=False`, same reason as the 11-14 night entry).
