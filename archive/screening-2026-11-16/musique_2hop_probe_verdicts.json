@@ -1,0 +1,1252 @@
+[
+ {
+  "source_id": "2hop__460946_294723",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__252311_366220",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__259228_793698",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 says DLR lander control center is in Cologne, not that HQ is"
+ },
+ {
+  "source_id": "2hop__697790_864352",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__354635_174222",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__635187_861533",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "Nampula also borders Niassa (multi-answer); hop2 only co-locates a reserve in both provinces"
+ },
+ {
+  "source_id": "2hop__166824_185403",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "valid_alt",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "BORDERLINE: time-dependent gold; Benevento has played in Serie B and Serie A since; models flip A/B so likely guessing"
+ },
+ {
+  "source_id": "2hop__698577_851686",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__362107_652514",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__402530_774333",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "multi-answer border question; probe counties do not border Pecos County"
+ },
+ {
+  "source_id": "2hop__195917_575657",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__683835_709167",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__197470_271394",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "same_entity",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "same_entity",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": true,
+  "note": "hop1 alone: Dana (Tyler's son) graduated Blair International Baccalaureate School = Blair High School, Pasadena; hop2 gold sentence is about brother Brandon"
+ },
+ {
+  "source_id": "2hop__299142_347613",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop1 alone says Sigrid is maternal grandmother of Gustav Vasa = a child of her child; valid non-gold answer"
+ },
+ {
+  "source_id": "2hop__528263_865831",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__569582_304416",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop2 alone names Almost Made Ya, Ali & Gipp, and both labels (Derrty Entertainment and Universal Records)"
+ },
+ {
+  "source_id": "2hop__505860_650613",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "Exeter College is a college of Oxford University; closed-book answer correct at coarser grain"
+ },
+ {
+  "source_id": "2hop__554167_451128",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__702496_430061",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__549146_223121",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__647996_551681",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "Nathan the Wise is a notable Lessing work; open multi-answer question"
+ },
+ {
+  "source_id": "2hop__673655_316668",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "BORDERLINE: ambiguous, group has 8 members; saxophone true of Grover Washington Jr./Paquito D'Rivera"
+ },
+ {
+  "source_id": "2hop__574419_270105",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__403712_793210",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__744055_408817",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__726717_610238",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "BORDERLINE: 'cycle network' as the type NCN is an example of; other probes give the bridge (NCN itself)"
+ },
+ {
+  "source_id": "2hop__499577_617190",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__685280_510757",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__341305_332933",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 says a school district is based in Van Horn, county seat not stated"
+ },
+ {
+  "source_id": "2hop__731228_609866",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__693444_220151",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 says 'in collaboration with Joan Erikson', spouse not stated"
+ },
+ {
+  "source_id": "2hop__235471_565925",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "same_entity"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "'Columbia' = Columbia Records; Sundazed Records (hop1 probes) is the compilation's label, judged wrong (borderline)"
+ },
+ {
+  "source_id": "2hop__310456_846599",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 (Saint Sava) never mentions Stefan Nemanja"
+ },
+ {
+  "source_id": "2hop__335418_279684",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__191125_781346",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 only says a swamp lies in both states; multi-answer"
+ },
+ {
+  "source_id": "2hop__475070_532404",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "unsupported: hop2 says Arthur Dickey was born in Amherst, not Charles Tupper"
+ },
+ {
+  "source_id": "2hop__700093_455653",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__512773_346751",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "Prince Edward County is adjacent to Hastings County (multi-answer); hop2 only says a river runs through both"
+ },
+ {
+  "source_id": "2hop__411091_625230",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "same_entity"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "'Hancock' = Hancock County, read off hop2 (Greenfield article) without the Dismore link"
+ },
+ {
+  "source_id": "2hop__423972_540249",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop1 alone states she was the elder sister of Lorenzo de' Medici"
+ },
+ {
+  "source_id": "2hop__765678_310556",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__304852_758385",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "BORDERLINE flag: hop1 says Park Rapids, Minnesota, so 'Minnesota' would answer 'administrative territorial entity'; probes named the town itself (wrong)"
+ },
+ {
+  "source_id": "2hop__661847_288421",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__496732_658428",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": true,
+  "note": "gold_wrong: Panglao is an island within Bohol province, not where the province is; hop1 gives Bohol Island"
+ },
+ {
+  "source_id": "2hop__175175_347233",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__274110_413723",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__231890_595414",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__342746_679190",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 lists Kanin as co-screenwriter, marriage not stated"
+ },
+ {
+  "source_id": "2hop__29368_29376",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "Menzies also became PM via the 1949 election (second term); bare '1949' (4B b0) judged wrong, borderline"
+ },
+ {
+  "source_id": "2hop__29367_29376",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "same as 2hop__29368_29376: 1949 election is a valid cause of Menzies becoming PM"
+ },
+ {
+  "source_id": "2hop__21075_5028",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__677929_696450",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__132909_33564",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold is a Hyderabad-industry text span; DRDO founded 1958. '1958' solid; 'Indian Republic era'/'Post-independence era' BORDERLINE"
+ },
+ {
+  "source_id": "2hop__199216_33564",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold is a Hyderabad-industry text span; '1958','1950s' solid; 'Cold War','Post-Independence Era' BORDERLINE"
+ },
+ {
+  "source_id": "2hop__133241_33564",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold is a Hyderabad-industry text span; '1950s','1958' solid; 'post-independence','post-World War II' BORDERLINE; '20th century' too coarse"
+ },
+ {
+  "source_id": "2hop__636597_480615",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold backwards: Ninghai County is in Ningbo, not Ningbo in the county"
+ },
+ {
+  "source_id": "2hop__373759_136043",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "duo is named after Nicole and Natalie; gold list includes the bridge 'Nina Sky'; hop2 does not state the naming"
+ },
+ {
+  "source_id": "2hop__87589_362941",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "Paulsdale is the birthplace house, in Mount Laurel Township"
+ },
+ {
+  "source_id": "2hop__61318_362941",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "same_entity",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "8B gave gold plus ', New Jersey'; 4B gave Paulsdale (the birthplace)"
+ },
+ {
+  "source_id": "2hop__20268_42004",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "Edinburgh is where the Scottish Parliament is based; BORDERLINE flag: hop2 alone has one parliament and 'since 2004'"
+ },
+ {
+  "source_id": "2hop__159902_362941",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__42027_42004",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "Holyrood, Edinburgh is the location; 'Scottish Parliament' probes are the bridge; BORDERLINE flag as in 2hop__20268_42004"
+ },
+ {
+  "source_id": "2hop__648648_173389",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__477492_240386",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__776377_857193",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__29752_814677",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "vague 'part of' question; probes gave Duat/Osiris, wrong"
+ },
+ {
+  "source_id": "2hop__77601_814677",
+  "probes": {
+   "8B b0": "same_entity",
+   "8B b1_only_hop1": "same_entity",
+   "8B b1_only_hop2": "same_entity",
+   "4B b0": "same_entity",
+   "4B b1_only_hop1": "same_entity",
+   "4B b1_only_hop2": "same_entity"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "'Egyptian' pantheon = ancient Egyptian religion; question nearly answers itself, hop1 says Osiris is an Egyptian god"
+ },
+ {
+  "source_id": "2hop__311694_129669",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "BORDERLINE: 'state' ambiguous, Portugal is the sovereign state and has no states; gold is a district"
+ },
+ {
+  "source_id": "2hop__819974_129669",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "valid_alt",
+   "4B b0": "valid_alt",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": true,
+  "note": "BORDERLINE: 'state' ambiguous; Portugal stated in hop1; gold is a district"
+ },
+ {
+  "source_id": "2hop__199513_13732",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "same_entity",
+   "4B b0": "valid_alt",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "valid_alt"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "8B hop2 '12-14' = gold (hyphen vs en dash); single ages 12/13/14 inside gold range BORDERLINE; hop2 alone states the betrothal age"
+ },
+ {
+  "source_id": "2hop__13731_801817",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold dubious: hop2 is 'Sisters of St Joseph of Nazareth', no birthplace stated"
+ },
+ {
+  "source_id": "2hop__865961_159109",
+  "probes": {
+   "8B b0": "valid_alt",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "same_entity",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "8B hop2 contains gold with extra words; 'Africa' is a defensible location for Cabo Verde"
+ },
+ {
+  "source_id": "2hop__728887_159109",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__827995_159109",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "valid_alt",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop1 alone: airport is on Sal Island, Cabo Verde"
+ },
+ {
+  "source_id": "2hop__159215_779396",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold dubious: Watt worked at Glasgow as instrument maker, not educated there"
+ },
+ {
+  "source_id": "2hop__119423_779396",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold dubious: Watt worked at Glasgow, not educated there"
+ },
+ {
+  "source_id": "2hop__115515_779396",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold dubious: Watt worked at Glasgow, not educated there"
+ },
+ {
+  "source_id": "2hop__495316_660579",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong",
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 mentions Starkville City School District only, county seat not stated"
+ },
+ {
+  "source_id": "2hop__478978_124498",
+  "probes": {
+   "8B b0": "wrong",
+   "8B b1_only_hop1": "wrong",
+   "8B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__701895_752697",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__481349_302087",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "probe 'Bombardier Aerospace' is the manufacturer (bridge), not the owner Bombardier Inc.; judged wrong, borderline"
+ },
+ {
+  "source_id": "2hop__207476_625987",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__390947_232243",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "same_entity"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop2 probe is gold plus extra words; hop1 probe 'European unity and integration' from model knowledge; BORDERLINE flag: hop2 names only EMI, link by name"
+ },
+ {
+  "source_id": "2hop__458131_174974",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "weak_support: hop2 merely lists Kidman and Keith Urban as cake clients"
+ },
+ {
+  "source_id": "2hop__821197_368148",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__832795_350510",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__455158_247871",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "same_entity"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "'Waseca' = Waseca County; hop2 itself mentions NRHEG High School in New Richland"
+ },
+ {
+  "source_id": "2hop__189094_612080",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "valid_alt",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "BORDERLINE: time-dependent; Rabat Ajax spent seasons in the Maltese First Division"
+ },
+ {
+  "source_id": "2hop__628752_538661",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__557411_652060",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__32254_84601",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": true,
+  "single_paragraph_sufficient": false,
+  "note": "gold wrong: Aug 30 2007 is the termination-shock crossing, not leaving the solar system; 'Never' (4B b0) judged wrong, borderline"
+ },
+ {
+  "source_id": "2hop__497191_129669",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": true,
+  "note": "hop1 says 'born in Vila Franca de Xira, Lisbon', which contains gold alias 'Lisbon'; probe gave the municipality"
+ },
+ {
+  "source_id": "2hop__201704_135481",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ },
+ {
+  "source_id": "2hop__861157_135481",
+  "probes": {
+   "4B b0": "wrong",
+   "4B b1_only_hop1": "wrong",
+   "4B b1_only_hop2": "wrong"
+  },
+  "gold_issue": false,
+  "single_paragraph_sufficient": false,
+  "note": "all probes wrong (abstention, bridge, or wrong entity)"
+ }
+]

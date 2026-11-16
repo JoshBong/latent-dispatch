@@ -4,6 +4,40 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16, evening: MuSiQue masking tables re-scored and re-screened (F1, stricter composition filter)
+
+Two problems found by reading answers (entries below) were checked against the main masking result, using only saved rows: the 8B run in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` and Elliott's 4B float16 run on branch `results/t4-masking-2026-11-15`. No new inference.
+
+**Scoring.** Exact match marks "Kenton" wrong against "Kenton County". Token F1 is already saved in every row; report it next to exact match from now on. F1 is not a complete fix: it forgives a dropped suffix but does not judge whether an answer is right.
+
+**Screening.** A question is labelled composition-required when the closed-book probe and both single-supporting-paragraph probes fail exact match. Since exact match under-scores, some kept questions are answerable without combining paragraphs. All probe answers of the 94 questions kept by either model were read once and labelled `same_entity`, `valid_alt` or `wrong`, with two per-question flags, `gold_issue` and `single_paragraph_sufficient`. The labels and a reason for each are in `archive/screening-2026-11-16/musique_2hop_probe_verdicts.json`. Counts: at least one non-wrong probe in 24 of 79 questions at 8B and 26 of 87 at 4B; `gold_issue` 28; `single_paragraph_sufficient` 15; 44 of 94 with nothing flagged. The screening is retrospective, done after the results were seen, by one reader, with about ten borderline calls and some judgments from memory. It needs a second reader before it is used as more than a sensitivity check.
+
+MuSiQue 2-hop, AB+BA, paired differences in F1 points. Intervals: 4,000-resample bootstrap, 95%, resampling groups of source questions that share a supporting paragraph.
+
+| Qwen3-8B | as labelled (79) | non-wrong probes dropped (55) | also no flag (37) |
+|---|---|---|---|
+| gold − blocked | +23 (16, 32) | +29 (19, 38) | +28 (17, 40) |
+| gold − distractor | +23 (16, 32) | +29 (19, 39) | +30 (19, 42) |
+| gold − full | +8 (3, 14) | +12 (5, 19) | +10 (2, 18) |
+| full − blocked | +15 (8, 23) | +17 (8, 26) | +18 (6, 30) |
+
+| Qwen3-4B | as labelled (87) | non-wrong probes dropped (61) | also no flag (43) |
+|---|---|---|---|
+| gold − blocked | +14 (7, 21) | +18 (8, 27) | +18 (7, 30) |
+| gold − distractor | +16 (10, 23) | +22 (14, 31) | +23 (14, 34) |
+| gold − full | 0 (−4, 5) | +2 (−5, 8) | +2 (−7, 11) |
+| full − blocked | +13 (6, 21) | +16 (7, 26) | +17 (5, 29) |
+
+Mean F1 by condition on the middle set (blocked, distractor, all-but-gold, gold, full): 8B 30, 30, 32, 59, 47; 4B 20, 16, 16, 38, 36. Exact match on the same set: 8B 20, 19, 22, 51, 37; 4B 16, 10, 7, 30, 29. Exact-match differences move the same way (8B gold − blocked +24 as labelled, +31 on both screened sets).
+
+A cruder automatic filter (drop questions whose best probe has F1 of 0.5 or more; 61 questions at 8B, 65 at 4B) leaves the differences where they were: 8B gold − blocked +25 (16, 34), gold − full +10 (3, 18); 4B +15 (7, 23) and +1 (−5, 7).
+
+**Reading.** The earlier tables are not wrong as computed; they are diluted by questions that do not need both paragraphs or have a bad gold answer. Removing those raises every difference by 4 to 7 points. Access to the supporting paragraph beats blocked and distractor-only access at both sizes on every version of the question set. Supporting-paragraph-only access beats full access at 8B on every version. At 4B that difference is unresolved, which is not the same as zero, and the two models were screened on different question sets, so no size trend is claimed.
+
+**Thinking run under F1** (25 MuSiQue sources, AB+BA): blocked 22 off, 48 forced; gold 54, 57; full 43, 57. Gain from thinking: blocked +26 (10, 42), gold +3 (−10, 18), full +14 (−3, 31). Whether thinking helps once the supporting paragraph is visible is unresolved at this sample size.
+
+**Toy layout finding, qualification.** In the toy layouts, the two "Cities" paragraphs are in different workers exactly when the two "People" paragraphs are, so the layout split reported below cannot be attributed to the Cities paragraphs specifically.
+
 ## 2026-11-16, later still: reading the answers of the Qwen3-4B thinking pilot
 
 Same exercise on the 1,050 selected answers of the 4B thinking pilot (branch `codex/results-t4-thinking-25-2026-11-16`; joint reading B1, separate caches K0, text reports T1; thinking off or forced at 1,024). "Checked" and "read" as in the entry below.
