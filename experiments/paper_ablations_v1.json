@@ -1,0 +1,2779 @@
+{
+  "protocol": "paper_ablations_v1",
+  "selection_seed": 20261116,
+  "source_archive": "archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz",
+  "source_archive_sha256": "99f93d7dbc22c24768c9aec7c669b45e96a513722c314e0f941fd71a206bdd35",
+  "benchmark_sha256": {
+    "toy.jsonl": "994fab4ab8ea56b540b0bb1e4526c9ddd9d395185ca971b85e86036ccb5874a3",
+    "musique.jsonl": "e81dc6e884979e3e35c5f43b1a5f1fb41e5c09aceb74e7797106513739d18e8b"
+  },
+  "model": "Qwen/Qwen3-8B",
+  "dtype": "bfloat16",
+  "question_sha256": {
+    "2hop__115515_779396:AB:s0": "a9dd0e37aaff93a94af80657f210ab0e4565e0526a0371539d280a2282d561e5",
+    "2hop__115515_779396:BA:s0": "07ab1733cf875eb80c12febe1bd287f423f4802f57f180bfb8c1d10d0712d5a9",
+    "2hop__119423_779396:AB:s0": "ddd9cb29731a86f7b7db0a6b93f23eaf960bf7f06c515b1c1f2305f551593fb5",
+    "2hop__119423_779396:BA:s0": "3bcbfd71c100ac1149e4d8eb104045f9dc5c225ecda27bfc04a8051067e53d13",
+    "2hop__159215_779396:AB:s0": "a0b6a2f740af18182d49d9bdba40c08045cc54db7ed883a1e8d4adbc3a84fdd0",
+    "2hop__159215_779396:BA:s0": "6d75cdd3efb2c5af65973c04582bc08c75abf23a6335f4e873ca30782c4bfa7f",
+    "2hop__175175_347233:AB:s0": "2466f96d02fa8938799ee7d9fdf5879236131805450b360b268c24694d85cb42",
+    "2hop__175175_347233:BA:s0": "ab42ff9906cf53bd9e8609b2c5e5620063c2e38d050c89c3df19d7ea9aa91d09",
+    "2hop__191125_781346:AB:s0": "de3348d6a100165e6f9dd4f629c2362e91a1763bae0ba8e57666fe9a504dbc59",
+    "2hop__20268_42004:AB:s0": "9f9fba04a8d8108a584e217db95e7ba8deea19f97bca6e5fa4f0afd7ddcb636c",
+    "2hop__20268_42004:BA:s0": "111e85613218b0b84f546781c881e15ff591d6c941043001263b442e4fcff644",
+    "2hop__235471_565925:AB:s0": "df4d62092ccceb313a9d0ba734043be3235d3e6af4c7f480fcf38b00c44b4019",
+    "2hop__235471_565925:BA:s0": "8906526d12127498d684d28d80aa852082b125a0645a26219ea3aef0650cfbfb",
+    "2hop__259228_793698:AB:s0": "268a7e805c8f5b0cec943794d7577956cd710de57f6ab501305c0d56397c34c2",
+    "2hop__259228_793698:BA:s0": "2e42afdf482d2087a06943eb907c3f0398dbced436a21612feb7b830939273ea",
+    "2hop__304852_758385:AB:s0": "d3f8be0432eb7dde79ed74f0071e893c682a224a577323a5b691d9a4ede54e48",
+    "2hop__304852_758385:BA:s0": "ea76dae26a49cc748ab1f37c6738cda81f75e47f6cc41b26a03a030288db41ef",
+    "2hop__310456_846599:AB:s0": "efa00f68d2efd4a5db969b697fbf2581f703286d31129a09d2e488a20f50f07e",
+    "2hop__335418_279684:AB:s0": "5e5794236e97dc7274cdc19470867018e668188fe9e8e9e99cbc5177e8d47d94",
+    "2hop__335418_279684:BA:s0": "6bdcb41751855bfe5f1d1291e109549d36aff5f8d5e197c17326097df54b2fc0",
+    "2hop__341305_332933:AB:s0": "869282e3adfa35a39929183f32e4fe8fd1b08435d02dac09b83eae8d752cef3d",
+    "2hop__341305_332933:BA:s0": "d60936ab0346aa00e9295474a43954d66a65972745475ca2a70a95794bf6d1d5",
+    "2hop__354635_174222:AB:s0": "d7a21678bb25e4e62808ccf2ddab69616dc3f1147c0b264bad6e8875f19e5bb7",
+    "2hop__354635_174222:BA:s0": "36df8373d00bcad40ce67cb2534c8cf0d05a45cde70388af5b063f14f4d381e6",
+    "2hop__362107_652514:AB:s0": "fb2c014625c7c318c6a0b8ac7f9e41ab849ce3cddefeea46b40978f9543ca050",
+    "2hop__362107_652514:BA:s0": "83e343f526a7bad245d4d1e45c12967b8408ec3a86abddc11c29ffc6dee3ab37",
+    "2hop__402530_774333:AB:s0": "85ca48437cedff08bbd5f7260162f8ae56125b3fe2b53a9876e28458495aa985",
+    "2hop__402530_774333:BA:s0": "dffa93aba76815bbfab5d360ed5b49df6b479c5f8c04bbdd886b52382f5f1de1",
+    "2hop__403712_793210:BA:s0": "0a2aae9d7b71e8e3270c3551d04c6b57c0f1da8af75e0ed11f8cff58a00da0a1",
+    "2hop__411091_625230:AB:s0": "d77f1aa4069e17a7378c6c07d112363bdf0b73755939f323b62846d82b7b16cf",
+    "2hop__411091_625230:BA:s0": "5e341d2fbe64ff6f723543bbed0a0f1d6d554cbee91db27477ce2150d244d61c",
+    "2hop__42027_42004:AB:s0": "99949f256967383a402f8d4fb6943fcc05fe8511c6a248221a560a1b9f7cddee",
+    "2hop__42027_42004:BA:s0": "2366da8d7ec79f435c615a0d4b4e44fdcb7a38d2646cd7cf5b9f42e43faa5904",
+    "2hop__499577_617190:AB:s0": "df2a7c1769d265036754908760f22100d922d7738796e76120dbe7a2e58320dc",
+    "2hop__499577_617190:BA:s0": "457512cede71b60eb82f31f3904cf16f328181ce65f59c0e41293bebbbb41319",
+    "2hop__505860_650613:AB:s0": "69a2acb8596629597133be057f4ef8a3b568a4216cf1508630c5180607f0e2f9",
+    "2hop__505860_650613:BA:s0": "21799b244642ca262b87d6046ab6225e9bb20b0d4fa2fe39a3ac536b45e7d57e",
+    "2hop__528263_865831:BA:s0": "6677dbbed42b8d37bca8e93cd4c3dcd7b06a58f24f08c413476734d64e2851ae",
+    "2hop__554167_451128:AB:s0": "002af7a58261661405dffbf43c5b26b49454af063afcf7b80257bc206acd0626",
+    "2hop__554167_451128:BA:s0": "cd359f87edf89ed44002f9d495b82b4afd62b18f0229e1402fe4e0467de10e72",
+    "2hop__569582_304416:AB:s0": "043b089aa21f812bc7cf1d150ab84d8da31b5de763a364e79e5543fd9a1b4ae5",
+    "2hop__569582_304416:BA:s0": "aaeaf4c5297a6532b019fa3f728f1677981d11f515226e7284090d7ca321c2d6",
+    "2hop__635187_861533:AB:s0": "ccb56d8457b87503eadc0104a22113620096fd52224cfcbf659b5054da4f064f",
+    "2hop__635187_861533:BA:s0": "c9c600e5b64056e33990c67c9908a9963e9ec2762f402add0d2b4f0173a6cf7b",
+    "2hop__647996_551681:AB:s0": "96945e54c3d066a25b688ff5651de944390bd796d50b12f97b3c83eb37bd0cf6",
+    "2hop__647996_551681:BA:s0": "84d197bf057f3ef27489169ba58e974f305f4384959bcacc033b4028afd4679e",
+    "2hop__673655_316668:BA:s0": "dcd2779e0e38de45959e9cc1dbb74072e3cfe371e498db11469e5efbdeb1b16f",
+    "2hop__677929_696450:AB:s0": "af23415e69c9b32482d551b479f5a959ecd46e7b906b5ccf2f146bcab1bae7e4",
+    "2hop__677929_696450:BA:s0": "68b784ade1478f9b6c8d5b947aa1d82c6c4e136682383f68f8d38e5086080877",
+    "2hop__683835_709167:AB:s0": "cedf6ff51869048adf7de8d1b5193b5ad5cc3a7c7e19da05f03ecc7998c1dc5c",
+    "2hop__683835_709167:BA:s0": "694149182ac3aa4d2830869536fccdf6d1342678bd48706bdc430157b517b7f2",
+    "2hop__697790_864352:AB:s0": "66543b00f6d397139d81fcaf9bd4af9c55c218d9af80a9d0a02a4f3f041204ec",
+    "2hop__697790_864352:BA:s0": "e18c6fbed0abbd33c148263ee73bf241ffcb9b113cc382cf4ce82f9fafa7d918",
+    "2hop__698577_851686:AB:s0": "52c1bb239e7e30367100b0b8ac21622fa2857899515d97dbb0488f79438d0da6",
+    "2hop__698577_851686:BA:s0": "56f7c7486cfa91278af5f9b60f0d8b2a14f3f9fb302b0115bb287073a7d52e0e",
+    "2hop__728887_159109:AB:s0": "20bc1430a2184791da651d1e49e30cb4be42e9a42869064c07f4b21148123fa8",
+    "2hop__728887_159109:BA:s0": "592791bada10cc14f416bfaa0082835b734780601fc256c20a2c2a77ed07d132",
+    "2hop__827995_159109:AB:s0": "0e629fa7e9c57582da6bbc774b6bc937286c3e15d592a7f06639b65288909353",
+    "2hop__827995_159109:BA:s0": "b2d363455c4287f6dd45ad7058af82150d4a1d485bab693e9520e235bf32fc58",
+    "toy-d2-h1-s0-i0:AB": "3318fdc6450e7d87cef81e7240fcf8a1031dec858db7b7c996fd52037dbe6b5e",
+    "toy-d2-h1-s0-i0:BA": "3c6a97e3357aae79cb3de5a5f3cc77d3c13b7ba09bd012b2aabfa25e12e18c16",
+    "toy-d2-h1-s0-i10:AB": "92f53567322abedc4f913b43b7f1acc62ad49c45f1d32db8f317e3efb0ffa043",
+    "toy-d2-h1-s0-i12:AB": "7add83eb847735ec48d5bf18a55cb30aebe945955c09bf62850e57d3766e4026",
+    "toy-d2-h1-s0-i12:BA": "cbd4d94a68e4715b6424978b43f6ddae2a9092745d035190556833949eeafbc5",
+    "toy-d2-h1-s0-i13:BA": "df623b09e8f231487f346f39a1d263b22af35b2b103b5753f11cc15515db9d63",
+    "toy-d2-h1-s0-i14:AB": "3cbc144848ef6bcd4a11c1b79f464eb2982005be89283a62e15e87297aab4cf5",
+    "toy-d2-h1-s0-i14:BA": "3402e7ecf0a3cffde391adc2b9ba763c46c173f7ac2afe6298286abb827d0060",
+    "toy-d2-h1-s0-i15:AB": "2bc97adc191c98d447ff4d439c51c43c4ff4e14c5410381c58f95f13340e4d2b",
+    "toy-d2-h1-s0-i17:BA": "d38538b8df55ef293527a9900f590457d20422f15d29a8c91cf4a5d6f544b4f8",
+    "toy-d2-h1-s0-i18:BA": "063036ae87f80abbd853a8a5eab0c60a3cf79990303f927c391e548f293949ce",
+    "toy-d2-h1-s0-i19:AB": "ee17c4349529ba91e6b22414ea2e512bcaba1fe3cfeefd1654e9743ac7d75ba5",
+    "toy-d2-h1-s0-i19:BA": "fa3da00e716d2f6b2fd7a387e07bd71d0a3720978a2341bfd5d278f08c4be00c",
+    "toy-d2-h1-s0-i1:BA": "93a5ab2c3377005ce0e99e71e1ccf9db2f27c7b635bc4ae92c50e62a51f0379b",
+    "toy-d2-h1-s0-i20:AB": "02d2c337518ee3f19d5102483dff44fc5cfd8d0083297ca1cd8b3ea75d57b2de",
+    "toy-d2-h1-s0-i20:BA": "6d412a4264c2130d8051e01a59886174306ceb3c923798ac7be6ce268dfde49f",
+    "toy-d2-h1-s0-i21:AB": "7f4608ce77c863120da64f6e6424c1ff4d85a2d08cbee72b2e2adff2f001b0bb",
+    "toy-d2-h1-s0-i21:BA": "a09aae258088b465ee68a89ad385657a4607776eaac427c4b5c6c6a81eff4876",
+    "toy-d2-h1-s0-i22:AB": "3cfb3c3ec5ddebfc556c16d9e7581a6c15fa4eccebbd6bd1f86394c18bad8b44",
+    "toy-d2-h1-s0-i22:BA": "ee7b451f2215c8e64e4d9f526a464b3a1bd76b1c0c510f33a2994eecaa1a4de9",
+    "toy-d2-h1-s0-i23:AB": "ce948de9abc28ff95cf4c1ab78e121e3fa7e8a15a71b918344c2334e408362ed",
+    "toy-d2-h1-s0-i23:BA": "0b907daf60a450d4f615b775b8244f4c23335b55e3e812653275b8f28dc6882d",
+    "toy-d2-h1-s0-i24:AB": "4caa4e27c6009ab139dc7fa6fb55a5e931196c91f7c647ca619b3e7599aceda6",
+    "toy-d2-h1-s0-i24:BA": "9ed8258fdea3aa43a90403ccd9b392c9282fe8a6d47215b6a8a706ec0f82a42c",
+    "toy-d2-h1-s0-i25:AB": "6231c4317b6369a816ba2de0c0981c1f5ed931b770d480f6f594ddeb49b98b8f",
+    "toy-d2-h1-s0-i25:BA": "3c818f40da0ef8c871a5ce82083b08c4b3bf4168b90c4d4ad7261d5883d231d5",
+    "toy-d2-h1-s0-i26:BA": "72275984e2d00b7b9b1f7814713dfd48502ba835440c8e4c8d636e62429230e8",
+    "toy-d2-h1-s0-i27:BA": "64bbe4a57f860dce152ae961b48e7f4632c186fe9cd13a71b6366b4ad6b18616",
+    "toy-d2-h1-s0-i29:AB": "e72cd9c849ad2da7e0144215ef42e9219b75aa3f6b7b466fb82882580d18349e",
+    "toy-d2-h1-s0-i31:BA": "a1f6a8394e1e1850943b5290b7bd8e4ba175bd554abf26498ee54e60b6b4c0a1",
+    "toy-d2-h1-s0-i33:AB": "c2484a96a706a4c46f69604c763b2184f97e510093d292608d1892ee3c35a93f",
+    "toy-d2-h1-s0-i33:BA": "a196d770272787f33322662c1268fcb7b4136e41c3a5034855a5810b15150a54",
+    "toy-d2-h1-s0-i34:AB": "3cbcceed355a56f15816e8fe8c73d880350e086a82028406b40e1038564881b1",
+    "toy-d2-h1-s0-i34:BA": "3e369d8ba573fe7eaf1fbee84494df14c3e6685e9e17f157fc83c969cede5014",
+    "toy-d2-h1-s0-i35:AB": "e4ee0308076587000fa9b071fb9c6981892e732b8aa0444d3a4d6151f1f818e1",
+    "toy-d2-h1-s0-i35:BA": "236ce10182b00b1f7989a1270b87c2bc4d854450c3d4f0d774001691806a0e3c",
+    "toy-d2-h1-s0-i36:AB": "11b5d14bf510e0280a51627948965469243c625ea972debf178b78ae7be8cda0",
+    "toy-d2-h1-s0-i36:BA": "7725ffc65b7f7c0ceebf7638f92b135b270f60ee3a99109f121a6f1f54270266",
+    "toy-d2-h1-s0-i38:AB": "dc0b20e4f52cb83799b8dc20e280a05ab394da6cca2efddbb3d85efc7133c41b",
+    "toy-d2-h1-s0-i38:BA": "031110dae592e865423aa168c9709216efd85e34e5abccc3a813969fe331962f",
+    "toy-d2-h1-s0-i39:AB": "dbeaff2522d0e12941d76245f5eefb4305d484efd3fd6ad083d4c85b2b64f37e",
+    "toy-d2-h1-s0-i39:BA": "e933409b0252cb3d7a80cce3b54c814269798209d339f417432f3977c8a042a8",
+    "toy-d2-h1-s0-i3:AB": "11fe105a935baf3dc1a558f7b74c2785aaa8e39cd9963d5a6e23ac901733f218",
+    "toy-d2-h1-s0-i41:AB": "4e025f00d6e27775176ee9dd555d63bee648e5df6d5d0af0e1aede2ee360338c",
+    "toy-d2-h1-s0-i41:BA": "11e5c15382280f72b696348d342dc959eec93eb96bfaa986c6039a374005d5b5",
+    "toy-d2-h1-s0-i42:BA": "c3ea6358bca9190691d669514b03755ace64b4175dae84e84725abd89659f50f",
+    "toy-d2-h1-s0-i45:AB": "39d6d53e3595120dbe0fd3e1627f192cee60b4645566d6ef86c419fa223b10e7",
+    "toy-d2-h1-s0-i45:BA": "3918611d780416e34bca6ad232df8a432d9da65a65f0ebaae16118284842a8af",
+    "toy-d2-h1-s0-i46:AB": "55667f75ef1c9891ad8e840314064c725614bc10cdb546c7aa43703f36029cec",
+    "toy-d2-h1-s0-i46:BA": "1bd0909b5a4f91492eb3607159a37cc1508d7fb1563e9620b09b32ce162c1e3a",
+    "toy-d2-h1-s0-i47:AB": "41be4fdc6ccde5adcb6cba77a684f3cc5c57b5e90b74e905108bd44ef8e8b1f5",
+    "toy-d2-h1-s0-i48:BA": "6ee9b404369674ff32da97d5c8f643568d867b4c449b31fd284fc1f355104c19",
+    "toy-d2-h1-s0-i49:BA": "1160f58a066fd8f22c50db909e161ab79d86533e9daa3ff9dc219ee01c01b03a",
+    "toy-d2-h1-s0-i4:AB": "64d5658927aa214324688dc614e7fb19c72b086ccb707d5d957f47bccc8e8949",
+    "toy-d2-h1-s0-i4:BA": "534db75b9bf54aea8f8268072397dd1bbc6e4bd687a2bec84dff9906f765abc2",
+    "toy-d2-h1-s0-i50:AB": "1d27a12a5293f12ce6ec3558c0fc35fdd1e8b77bf799c6e570769fb37d097d7f",
+    "toy-d2-h1-s0-i50:BA": "a82e00630c6e3f8efb0f34622d8c7b7119f0fed6814bd836b03cf7dcf8959fb3",
+    "toy-d2-h1-s0-i51:AB": "5c8c7abd82c543f17bcb2ae1b4026cf1d410d3465082d2aea38d6145641f01c5",
+    "toy-d2-h1-s0-i51:BA": "285652ab9473703642acb6a78017a0c9ff131b35a3ebe1922350c770f28ed43b",
+    "toy-d2-h1-s0-i52:AB": "c493fafcb01f29fb2a83dd4e87b18871212edd4ad3aa3df6683d13618c44239b",
+    "toy-d2-h1-s0-i52:BA": "2e2732c38714febfb862b3300d8ec4c2d17de588031631188fa01e95f0428d22",
+    "toy-d2-h1-s0-i53:AB": "928777ea9904b2d68c295744176b27519c8f5c49ed85434ddcdeaa9903136a13",
+    "toy-d2-h1-s0-i53:BA": "b35a579630fc3e1bf722057f46d05e92506fa8f037c7906f08ed3a78167dff14",
+    "toy-d2-h1-s0-i54:AB": "6a8782981a8de69b1c447e5a6188bf669af27f26d94de7a9a6ba43166f4923bb",
+    "toy-d2-h1-s0-i54:BA": "8c6de47142670ff11a7bd7da9b876ffb8d7e54dbdfdfd48f2c74965f45b8e29d",
+    "toy-d2-h1-s0-i55:AB": "d1ac0fbc58b4992538b08de36c62fccae2942baf91ee9ace9c66d07545171d2f",
+    "toy-d2-h1-s0-i55:BA": "099a44323b038fc4f105aefe1a17057e84cb797e8d33488c38e292f279caddf4",
+    "toy-d2-h1-s0-i56:AB": "c9a8e1eb499dba61f6f73047ae5252730395a6da254c28eedfd38231f58d6c58",
+    "toy-d2-h1-s0-i56:BA": "f6c15ebadcae66fb10df79f71ccc1bab569ac23ee2d320702c5db38cbe37b9fc",
+    "toy-d2-h1-s0-i57:AB": "cc0a79f9d598a3815c88a79b0c6f450a124fdccc595e0d64de09e5ca80fb9fff",
+    "toy-d2-h1-s0-i57:BA": "546ababba25db1eb2b1ad074faf7d68265f73b88b517ba465b15f2915d522c74",
+    "toy-d2-h1-s0-i58:BA": "188cb9b7c85559635a409dca926eff60dbf4b37620c0fb69b86c79a2cc278eb8",
+    "toy-d2-h1-s0-i59:AB": "51f04a3c2922ca900512409b752db2a70e7f76260c47825a2fb7404ee0ca2c2a",
+    "toy-d2-h1-s0-i59:BA": "b717a698856d02d7b0bf9d07079038976424a0405b02e4713dea0ff43c8ddba4",
+    "toy-d2-h1-s0-i5:AB": "9e50fe3814dd54f7b6df96991e0afde34bbf809d741db83154bf7f12c8fec367",
+    "toy-d2-h1-s0-i60:AB": "7c6c7413c852e21448d462afbf3936ca14881977c3f9403643512cca06dac14d",
+    "toy-d2-h1-s0-i61:AB": "d02dd5ff504c0d2b2a848b4a13e991d104cd02bf85694d1ec95c57dd51dd1d7e",
+    "toy-d2-h1-s0-i66:AB": "919b73a423baa3c59a0a11de47df93355c65ff9ac62d694d1f02e15b3c066e45",
+    "toy-d2-h1-s0-i66:BA": "40b33abe8c6f36090aa7554f3e3ff4bfbe28c4d980407660c8707f753d2626ad",
+    "toy-d2-h1-s0-i67:AB": "e798eb1c209e360a2e08bb79cf64fc9e106720eed1474d0d092ae0f62fa3e363",
+    "toy-d2-h1-s0-i68:AB": "f66e314ad715be0c1b2c5fb7373b0807064e037b380f8cc7569e03ece9c8db35",
+    "toy-d2-h1-s0-i72:AB": "0f9afbe5a7f1f59305b7dbd6ad218557b5da5ad7c5b9777d634c1e4b6678df85",
+    "toy-d2-h1-s0-i72:BA": "b5c045c36e6a405bd1c14f041130d583da21cc37bff14b80382e3ca3ff71d7a8",
+    "toy-d2-h1-s0-i73:AB": "fad258f6a617c75c93aafba2ba1bd0bf8d2070bff8d7231a543d1a5b4d83b1ed",
+    "toy-d2-h1-s0-i73:BA": "64a0d08d1b4e1667f1a8a20ecc136b4e41d09a597015af2a3ebaa75cafd93710",
+    "toy-d2-h1-s0-i74:AB": "f21b33f1065e4a17ddedc99e1eea9c5d26ca85ea4f90bd893f992b0c55687ba2",
+    "toy-d2-h1-s0-i74:BA": "16e9f2ee08864661387dee6eefabc9fd82a4ec9800245f0ad2455c04f50c345a",
+    "toy-d2-h1-s0-i77:AB": "b8cf71600f6bf5ee314f6cd175d6081b10c930ea07ff302b080306c99af4ce69",
+    "toy-d2-h1-s0-i77:BA": "d4f492429f447deb8d29cfb6df2aadce415af129472ae5c4fdc95cadf69389cf",
+    "toy-d2-h1-s0-i79:AB": "8cc5bdc132ffa170147f83c02fdff44745d44f97456e2d414d6b57d6ce1f13a3",
+    "toy-d2-h1-s0-i7:AB": "cf84a7a24b6c3c0f71710753615c3224343324a5448a3a20976392a2da2a7887",
+    "toy-d2-h1-s0-i80:AB": "ccf6392d25e9679bc7728d45ce5762c4764f8fc21e5eb5d184a20ab140678fab",
+    "toy-d2-h1-s0-i83:AB": "98c536b2a6b6da80cb0fba01213cf5c9b70abce133f877e11e83a38782e63600",
+    "toy-d2-h1-s0-i83:BA": "e43ff988df6c8bfe99405702596b81c8b3953f032beb62dca647dd258aef905f",
+    "toy-d2-h1-s0-i84:AB": "a2c5bf476ec0dd284dcdf1cf19b947fdebc86f1f8882d9766ffba97a38b1d1e0",
+    "toy-d2-h1-s0-i84:BA": "df4f436bd370dff52f157d1d32ea0f44f3f1b1a66e3f3b4181ead957e1ec23a7",
+    "toy-d2-h1-s0-i85:BA": "9589d4e28aa9fc66eede16d078e6456761ecd8ef134075d05abbd67d1192b0ab",
+    "toy-d2-h1-s0-i86:AB": "ec5be7839d73f28180a0c35d5c018188d79f96b745ba9341d54bfc4a82526cc5",
+    "toy-d2-h1-s0-i86:BA": "b70fadeed4073700ec357b8acc398d4e0434334462ed5fd82d27bb626d10d019",
+    "toy-d2-h1-s0-i88:BA": "071797dcce94a12417b043c1ddd67656f49cabdfef1f5a963b933e29adeec4a1",
+    "toy-d2-h1-s0-i89:AB": "6e131f1860bfc131dd983eea1854670dde90957a5f15d3fe04920d5adbaad9e4",
+    "toy-d2-h1-s0-i89:BA": "7f196b05c63ec9dde8208de9ae94fb13689e6a5d864fc13b679b1e37861d6b35",
+    "toy-d2-h1-s0-i8:AB": "5c20180cd5aa96ff8fc288a155e9e048efc6806b25f0fc63380bd1ab37bca744",
+    "toy-d2-h1-s0-i92:AB": "5bd45cc678d0c0f7e8146c970c6d2170e2c1a56847b3d9c57d8031754a8e83e9",
+    "toy-d2-h1-s0-i92:BA": "51c27534b550c7b5219e485b1d44f11032d7ce715d897ce0abc3299bba18747a",
+    "toy-d2-h1-s0-i93:AB": "d8aea8b4554cdd0d502ba1726e9e300fbc622f06f853eb2c572ae5aedc9fe001",
+    "toy-d2-h1-s0-i93:BA": "019411530f08557fce4b39279ffb735875b41b8214c95afc5e70a17c2981e8b0",
+    "toy-d2-h1-s0-i94:AB": "6374cbacebd726c670e15676581500049445283750aca8b5ad0f761a882561d8",
+    "toy-d2-h1-s0-i94:BA": "cb2525de0b218df461484820b99029eec397c2b7a25633e632594821ef91d8a9",
+    "toy-d2-h1-s0-i95:AB": "4676235c8414104177b217796672f117f08f575d18d697092aec7214d96ccb25",
+    "toy-d2-h1-s0-i95:BA": "d9f863de9a03ff03e6f5b99b610f590e7b57c6f5067c9284cf9ef592b4394685",
+    "toy-d2-h1-s0-i97:AB": "ef003db8b2df915568eded624e54c0ff005e05077c189f77c458d4476959b4cf",
+    "toy-d2-h1-s0-i97:BA": "13e657f9765d11164269bdcea72bfb9798e9def462358e775c562f2a4edc607e",
+    "toy-d2-h1-s0-i9:BA": "6b2f887fa4380162127a9c4184fb52d9e30f4a4b0211455850d37135d528a7cf"
+  },
+  "validation": {
+    "ids": [
+      "2hop__411091_625230:AB:s0",
+      "2hop__673655_316668:BA:s0",
+      "toy-d2-h1-s0-i41:AB",
+      "toy-d2-h1-s0-i19:BA",
+      "2hop__191125_781346:AB:s0",
+      "2hop__528263_865831:BA:s0",
+      "toy-d2-h1-s0-i39:AB",
+      "toy-d2-h1-s0-i33:BA",
+      "2hop__310456_846599:AB:s0",
+      "2hop__362107_652514:BA:s0",
+      "toy-d2-h1-s0-i10:AB",
+      "toy-d2-h1-s0-i42:BA",
+      "2hop__505860_650613:AB:s0",
+      "2hop__569582_304416:BA:s0",
+      "toy-d2-h1-s0-i47:AB",
+      "toy-d2-h1-s0-i24:BA",
+      "2hop__362107_652514:AB:s0",
+      "2hop__403712_793210:BA:s0",
+      "toy-d2-h1-s0-i46:AB",
+      "toy-d2-h1-s0-i45:BA",
+      "2hop__698577_851686:AB:s0",
+      "2hop__505860_650613:BA:s0",
+      "toy-d2-h1-s0-i8:AB",
+      "toy-d2-h1-s0-i0:BA"
+    ],
+    "selection": {
+      "2hop__411091_625230:AB:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__673655_316668:BA:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i41:AB": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i19:BA": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "2hop__191125_781346:AB:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__528263_865831:BA:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i39:AB": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i33:BA": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__310456_846599:AB:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__362107_652514:BA:s0": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": true
+        }
+      },
+      "toy-d2-h1-s0-i10:AB": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i42:BA": {
+        "archived_group": "mismatch",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "2hop__505860_650613:AB:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__569582_304416:BA:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i47:AB": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i24:BA": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "2hop__362107_652514:AB:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": false
+        }
+      },
+      "2hop__403712_793210:BA:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": true,
+          "mask_a_full": false,
+          "mask_a_blocked": true
+        }
+      },
+      "toy-d2-h1-s0-i46:AB": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "toy-d2-h1-s0-i45:BA": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "2hop__698577_851686:AB:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "2hop__505860_650613:BA:s0": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": false,
+          "b1_mask": false,
+          "mask_a_full": false,
+          "mask_a_blocked": false
+        }
+      },
+      "toy-d2-h1-s0-i8:AB": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": true,
+          "mask_a_full": true,
+          "mask_a_blocked": true
+        }
+      },
+      "toy-d2-h1-s0-i0:BA": {
+        "archived_group": "agreement",
+        "archived_em": {
+          "b1": true,
+          "b1_mask": false,
+          "mask_a_full": true,
+          "mask_a_blocked": false
+        }
+      }
+    },
+    "arms": [
+      "b1",
+      "masked_full",
+      "b1_mask",
+      "masked_blocked"
+    ],
+    "answer_tokens": 256,
+    "expected_rows": 96
+  },
+  "thinking": {
+    "ids": [
+      "toy-d2-h1-s0-i77:AB",
+      "toy-d2-h1-s0-i77:BA",
+      "toy-d2-h1-s0-i51:AB",
+      "toy-d2-h1-s0-i51:BA",
+      "toy-d2-h1-s0-i20:AB",
+      "toy-d2-h1-s0-i20:BA",
+      "toy-d2-h1-s0-i45:AB",
+      "toy-d2-h1-s0-i45:BA",
+      "toy-d2-h1-s0-i56:AB",
+      "toy-d2-h1-s0-i56:BA",
+      "toy-d2-h1-s0-i93:AB",
+      "toy-d2-h1-s0-i93:BA",
+      "toy-d2-h1-s0-i34:AB",
+      "toy-d2-h1-s0-i34:BA",
+      "toy-d2-h1-s0-i92:AB",
+      "toy-d2-h1-s0-i92:BA",
+      "toy-d2-h1-s0-i50:AB",
+      "toy-d2-h1-s0-i50:BA",
+      "toy-d2-h1-s0-i52:AB",
+      "toy-d2-h1-s0-i52:BA",
+      "toy-d2-h1-s0-i4:AB",
+      "toy-d2-h1-s0-i4:BA",
+      "toy-d2-h1-s0-i83:AB",
+      "toy-d2-h1-s0-i83:BA",
+      "toy-d2-h1-s0-i24:AB",
+      "toy-d2-h1-s0-i24:BA",
+      "toy-d2-h1-s0-i19:AB",
+      "toy-d2-h1-s0-i19:BA",
+      "toy-d2-h1-s0-i57:AB",
+      "toy-d2-h1-s0-i57:BA",
+      "toy-d2-h1-s0-i55:AB",
+      "toy-d2-h1-s0-i55:BA",
+      "toy-d2-h1-s0-i89:AB",
+      "toy-d2-h1-s0-i89:BA",
+      "toy-d2-h1-s0-i46:AB",
+      "toy-d2-h1-s0-i46:BA",
+      "toy-d2-h1-s0-i95:AB",
+      "toy-d2-h1-s0-i95:BA",
+      "toy-d2-h1-s0-i25:AB",
+      "toy-d2-h1-s0-i25:BA",
+      "toy-d2-h1-s0-i23:AB",
+      "toy-d2-h1-s0-i23:BA",
+      "toy-d2-h1-s0-i94:AB",
+      "toy-d2-h1-s0-i94:BA",
+      "toy-d2-h1-s0-i12:AB",
+      "toy-d2-h1-s0-i12:BA",
+      "toy-d2-h1-s0-i38:AB",
+      "toy-d2-h1-s0-i38:BA",
+      "toy-d2-h1-s0-i36:AB",
+      "toy-d2-h1-s0-i36:BA",
+      "2hop__341305_332933:AB:s0",
+      "2hop__341305_332933:BA:s0",
+      "2hop__304852_758385:AB:s0",
+      "2hop__304852_758385:BA:s0",
+      "2hop__647996_551681:AB:s0",
+      "2hop__647996_551681:BA:s0",
+      "2hop__402530_774333:AB:s0",
+      "2hop__402530_774333:BA:s0",
+      "2hop__119423_779396:AB:s0",
+      "2hop__119423_779396:BA:s0",
+      "2hop__683835_709167:AB:s0",
+      "2hop__683835_709167:BA:s0",
+      "2hop__42027_42004:AB:s0",
+      "2hop__42027_42004:BA:s0",
+      "2hop__728887_159109:AB:s0",
+      "2hop__728887_159109:BA:s0",
+      "2hop__554167_451128:AB:s0",
+      "2hop__554167_451128:BA:s0",
+      "2hop__569582_304416:AB:s0",
+      "2hop__569582_304416:BA:s0",
+      "2hop__259228_793698:AB:s0",
+      "2hop__259228_793698:BA:s0",
+      "2hop__159215_779396:AB:s0",
+      "2hop__159215_779396:BA:s0",
+      "2hop__635187_861533:AB:s0",
+      "2hop__635187_861533:BA:s0",
+      "2hop__698577_851686:AB:s0",
+      "2hop__698577_851686:BA:s0",
+      "2hop__175175_347233:AB:s0",
+      "2hop__175175_347233:BA:s0",
+      "2hop__235471_565925:AB:s0",
+      "2hop__235471_565925:BA:s0",
+      "2hop__677929_696450:AB:s0",
+      "2hop__677929_696450:BA:s0",
+      "2hop__335418_279684:AB:s0",
+      "2hop__335418_279684:BA:s0",
+      "2hop__115515_779396:AB:s0",
+      "2hop__115515_779396:BA:s0",
+      "2hop__499577_617190:AB:s0",
+      "2hop__499577_617190:BA:s0",
+      "2hop__354635_174222:AB:s0",
+      "2hop__354635_174222:BA:s0",
+      "2hop__827995_159109:AB:s0",
+      "2hop__827995_159109:BA:s0",
+      "2hop__20268_42004:AB:s0",
+      "2hop__20268_42004:BA:s0",
+      "2hop__697790_864352:AB:s0",
+      "2hop__697790_864352:BA:s0",
+      "2hop__411091_625230:AB:s0",
+      "2hop__411091_625230:BA:s0"
+    ],
+    "conditions": [
+      "blocked",
+      "gold",
+      "full"
+    ],
+    "modes": [
+      "off",
+      "forced"
+    ],
+    "think_budget": 1024,
+    "answer_tokens": 1024,
+    "expected_rows": 600
+  },
+  "likelihood": {
+    "ids": [
+      "toy-d2-h1-s0-i0:AB",
+      "toy-d2-h1-s0-i0:BA",
+      "toy-d2-h1-s0-i12:AB",
+      "toy-d2-h1-s0-i13:BA",
+      "toy-d2-h1-s0-i14:AB",
+      "toy-d2-h1-s0-i14:BA",
+      "toy-d2-h1-s0-i15:AB",
+      "toy-d2-h1-s0-i17:BA",
+      "toy-d2-h1-s0-i18:BA",
+      "toy-d2-h1-s0-i19:AB",
+      "toy-d2-h1-s0-i19:BA",
+      "toy-d2-h1-s0-i1:BA",
+      "toy-d2-h1-s0-i21:AB",
+      "toy-d2-h1-s0-i21:BA",
+      "toy-d2-h1-s0-i22:AB",
+      "toy-d2-h1-s0-i22:BA",
+      "toy-d2-h1-s0-i23:AB",
+      "toy-d2-h1-s0-i23:BA",
+      "toy-d2-h1-s0-i24:BA",
+      "toy-d2-h1-s0-i26:BA",
+      "toy-d2-h1-s0-i27:BA",
+      "toy-d2-h1-s0-i29:AB",
+      "toy-d2-h1-s0-i31:BA",
+      "toy-d2-h1-s0-i33:AB",
+      "toy-d2-h1-s0-i33:BA",
+      "toy-d2-h1-s0-i34:AB",
+      "toy-d2-h1-s0-i34:BA",
+      "toy-d2-h1-s0-i35:AB",
+      "toy-d2-h1-s0-i35:BA",
+      "toy-d2-h1-s0-i38:AB",
+      "toy-d2-h1-s0-i39:AB",
+      "toy-d2-h1-s0-i39:BA",
+      "toy-d2-h1-s0-i3:AB",
+      "toy-d2-h1-s0-i41:AB",
+      "toy-d2-h1-s0-i41:BA",
+      "toy-d2-h1-s0-i45:BA",
+      "toy-d2-h1-s0-i48:BA",
+      "toy-d2-h1-s0-i49:BA",
+      "toy-d2-h1-s0-i50:AB",
+      "toy-d2-h1-s0-i51:BA",
+      "toy-d2-h1-s0-i52:AB",
+      "toy-d2-h1-s0-i53:AB",
+      "toy-d2-h1-s0-i53:BA",
+      "toy-d2-h1-s0-i54:AB",
+      "toy-d2-h1-s0-i54:BA",
+      "toy-d2-h1-s0-i55:AB",
+      "toy-d2-h1-s0-i56:AB",
+      "toy-d2-h1-s0-i56:BA",
+      "toy-d2-h1-s0-i58:BA",
+      "toy-d2-h1-s0-i59:AB",
+      "toy-d2-h1-s0-i59:BA",
+      "toy-d2-h1-s0-i5:AB",
+      "toy-d2-h1-s0-i60:AB",
+      "toy-d2-h1-s0-i61:AB",
+      "toy-d2-h1-s0-i66:AB",
+      "toy-d2-h1-s0-i66:BA",
+      "toy-d2-h1-s0-i67:AB",
+      "toy-d2-h1-s0-i68:AB",
+      "toy-d2-h1-s0-i72:AB",
+      "toy-d2-h1-s0-i72:BA",
+      "toy-d2-h1-s0-i73:AB",
+      "toy-d2-h1-s0-i73:BA",
+      "toy-d2-h1-s0-i74:AB",
+      "toy-d2-h1-s0-i74:BA",
+      "toy-d2-h1-s0-i77:AB",
+      "toy-d2-h1-s0-i79:AB",
+      "toy-d2-h1-s0-i7:AB",
+      "toy-d2-h1-s0-i80:AB",
+      "toy-d2-h1-s0-i83:AB",
+      "toy-d2-h1-s0-i83:BA",
+      "toy-d2-h1-s0-i84:AB",
+      "toy-d2-h1-s0-i84:BA",
+      "toy-d2-h1-s0-i85:BA",
+      "toy-d2-h1-s0-i86:AB",
+      "toy-d2-h1-s0-i86:BA",
+      "toy-d2-h1-s0-i88:BA",
+      "toy-d2-h1-s0-i89:AB",
+      "toy-d2-h1-s0-i89:BA",
+      "toy-d2-h1-s0-i92:BA",
+      "toy-d2-h1-s0-i93:AB",
+      "toy-d2-h1-s0-i93:BA",
+      "toy-d2-h1-s0-i95:BA",
+      "toy-d2-h1-s0-i97:AB",
+      "toy-d2-h1-s0-i97:BA",
+      "toy-d2-h1-s0-i9:BA"
+    ],
+    "conditions": [
+      "blocked",
+      "distractor",
+      "gold"
+    ],
+    "candidates": {
+      "toy-d2-h1-s0-i0:AB": {
+        "answers": [
+          "Elin Ruud",
+          "Celia Vance",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.415520668029785,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -23.241334915161133,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.3205647468566895,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i0:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Celia Vance",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -14.199082374572754,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -23.03577423095703,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.335683345794678,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i12:AB": {
+        "answers": [
+          "Ivo Petrov",
+          "Farah Nasser",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.159374237060547,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -22.271392822265625,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.384395122528076,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i13:BA": {
+        "answers": [
+          "Mira Solano",
+          "Elin Ruud",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -26.896690368652344,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.592309951782227,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.214919090270996,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i14:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -3.8028903007507324,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -5.032596588134766,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.408364295959473,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i14:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -16.17426109313965,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -14.193346977233887,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.855494022369385,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i15:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -22.03922462463379,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.390514373779297,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.26900863647461,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i17:BA": {
+        "answers": [
+          "Jora Lind",
+          "Dario Okafor",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -12.883393287658691,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -19.45221519470215,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.388075351715088,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i18:BA": {
+        "answers": [
+          "Jora Lind",
+          "Dario Okafor",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -10.866781234741211,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -10.710265159606934,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.015873908996582,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i19:AB": {
+        "answers": [
+          "Bram Holt",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.338096618652344,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -29.915878295898438,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.7254557609558105,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i19:BA": {
+        "answers": [
+          "Bram Holt",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.994043350219727,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -27.290130615234375,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.46787691116333,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i1:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Hana Kimura",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -8.43628215789795,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -6.921962738037109,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -4.626247406005859,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i21:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -20.378677368164062,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -27.51437759399414,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -10.752774238586426,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i21:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -9.428288459777832,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -10.76309585571289,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -10.374703407287598,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i22:AB": {
+        "answers": [
+          "Elin Ruud",
+          "Celia Vance",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -13.563491821289062,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -37.98107147216797,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.649890422821045,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i22:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Celia Vance",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.038366317749023,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -13.331254005432129,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -3.9326374530792236,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i23:AB": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -17.513553619384766,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -24.59856605529785,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -9.056451797485352,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i23:BA": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -19.538166046142578,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.73394203186035,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.600156307220459,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i24:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -4.6993255615234375,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -10.832809448242188,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -8.049839973449707,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i26:BA": {
+        "answers": [
+          "Jora Lind",
+          "Bram Holt",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -34.425296783447266,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -20.832595825195312,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.230013370513916,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i27:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Hana Kimura",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -23.942859649658203,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.187143325805664,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.196680068969727,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i29:AB": {
+        "answers": [
+          "Kip Alvarez",
+          "Elin Ruud",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -6.909482955932617,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -15.874946594238281,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.625240802764893,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i31:BA": {
+        "answers": [
+          "Lior Adler",
+          "Bram Holt",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -22.449039459228516,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -25.785430908203125,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.956718444824219,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i33:AB": {
+        "answers": [
+          "Hana Kimura",
+          "Bram Holt",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -21.41652488708496,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -30.134288787841797,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.882114887237549,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i33:BA": {
+        "answers": [
+          "Hana Kimura",
+          "Bram Holt",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -28.930866241455078,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -23.099529266357422,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.642652988433838,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i34:AB": {
+        "answers": [
+          "Ivo Petrov",
+          "Gideon Pike",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -17.862545013427734,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -16.67945098876953,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -10.047510147094727,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i34:BA": {
+        "answers": [
+          "Ivo Petrov",
+          "Gideon Pike",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -15.523641586303711,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -12.185842514038086,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.196130752563477,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i35:AB": {
+        "answers": [
+          "Hana Kimura",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -17.47260093688965,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -25.935054779052734,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.449582576751709,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i35:BA": {
+        "answers": [
+          "Hana Kimura",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -23.646495819091797,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -24.643596649169922,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.63199520111084,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i38:AB": {
+        "answers": [
+          "Jora Lind",
+          "Dario Okafor",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -16.885501861572266,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -16.997478485107422,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.803900718688965,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i39:AB": {
+        "answers": [
+          "Lior Adler",
+          "Bram Holt",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -8.295785903930664,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -4.9568963050842285,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.834344387054443,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i39:BA": {
+        "answers": [
+          "Lior Adler",
+          "Bram Holt",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.72873306274414,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -11.266732215881348,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.499199867248535,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i3:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Ivo Petrov",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -27.27988052368164,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -29.622997283935547,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.594907760620117,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i41:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -25.023128509521484,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -29.086666107177734,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.599914073944092,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i41:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -28.094825744628906,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -25.677534103393555,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.801053524017334,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i45:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.972561836242676,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -12.421821594238281,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.341972351074219,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i48:BA": {
+        "answers": [
+          "Ivo Petrov",
+          "Gideon Pike",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -26.598129272460938,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -25.022144317626953,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.850960731506348,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i49:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Farah Nasser",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.389333724975586,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -16.18391227722168,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.93837833404541,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i50:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Hana Kimura",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -3.430785894393921,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -6.198294162750244,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.616662979125977,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i51:BA": {
+        "answers": [
+          "Kip Alvarez",
+          "Elin Ruud",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -13.17601203918457,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -14.691374778747559,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.675660133361816,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i52:AB": {
+        "answers": [
+          "Jora Lind",
+          "Celia Vance",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.538193702697754,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -21.971134185791016,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.448880195617676,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i53:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Hana Kimura",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.803709030151367,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -16.36957359313965,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.640676498413086,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i53:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Hana Kimura",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -5.67950439453125,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -7.94416618347168,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.4734601974487305,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i54:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Bram Holt",
+          "Celia Vance"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -17.297870635986328,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -21.080921173095703,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -10.253813743591309,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i54:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Bram Holt",
+          "Celia Vance"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -8.657841682434082,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -11.447831153869629,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.68309211730957,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i55:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Dario Okafor",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -4.7795000076293945,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -3.1264612674713135,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -4.8561553955078125,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i56:AB": {
+        "answers": [
+          "Celia Vance",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -8.662967681884766,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -11.610447883605957,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.204939842224121,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i56:BA": {
+        "answers": [
+          "Celia Vance",
+          "Dario Okafor",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -21.892147064208984,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -8.988186836242676,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -5.1843743324279785,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i58:BA": {
+        "answers": [
+          "Celia Vance",
+          "Dario Okafor",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -13.114425659179688,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -13.63504695892334,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.202653408050537,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i59:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -21.771995544433594,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -23.39360809326172,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -9.629751205444336,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i59:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -15.779729843139648,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -20.115129470825195,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -6.173539638519287,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i5:AB": {
+        "answers": [
+          "Kip Alvarez",
+          "Celia Vance",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.99322509765625,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -30.020177841186523,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -10.879194259643555,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i60:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Gideon Pike",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -22.452756881713867,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -12.24781322479248,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -4.533438205718994,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i61:AB": {
+        "answers": [
+          "Bram Holt",
+          "Celia Vance",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -19.250816345214844,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -29.520036697387695,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.87188720703125,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i66:AB": {
+        "answers": [
+          "Mira Solano",
+          "Gideon Pike",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.047042846679688,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -21.382211685180664,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.881705284118652,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i66:BA": {
+        "answers": [
+          "Mira Solano",
+          "Gideon Pike",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -12.867855072021484,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -21.26108169555664,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.342023849487305,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i67:AB": {
+        "answers": [
+          "Bram Holt",
+          "Dario Okafor",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -2.249955415725708,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -3.206677198410034,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -4.774195671081543,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i68:AB": {
+        "answers": [
+          "Lior Adler",
+          "Hana Kimura",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -16.905853271484375,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -27.48007583618164,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.501363754272461,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i72:AB": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.359102725982666,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -9.358573913574219,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -11.019987106323242,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i72:BA": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -31.03897476196289,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -7.893514633178711,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.3010663986206055,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i73:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Hana Kimura",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -9.786860466003418,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -27.194517135620117,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.925660133361816,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i73:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Hana Kimura",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -21.217296600341797,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -22.88324546813965,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -5.80504035949707,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i74:AB": {
+        "answers": [
+          "Lior Adler",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.711450576782227,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -19.45742416381836,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.594882011413574,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i74:BA": {
+        "answers": [
+          "Lior Adler",
+          "Celia Vance",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -9.365026473999023,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -11.278202056884766,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.69555950164795,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i77:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Hana Kimura",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -7.728569984436035,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.569778442382812,
+            "em": false,
+            "cut": true
+          },
+          "gold": {
+            "gold_logprob": -5.242370128631592,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i79:AB": {
+        "answers": [
+          "Bram Holt",
+          "Farah Nasser",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -10.763518333435059,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -4.824692249298096,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.366564750671387,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i7:AB": {
+        "answers": [
+          "Mira Solano",
+          "Jora Lind",
+          "Kip Alvarez"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -10.777868270874023,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -22.938072204589844,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.081465721130371,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i80:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Jora Lind",
+          "Mira Solano"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -25.169803619384766,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -28.64421844482422,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.632869720458984,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i83:AB": {
+        "answers": [
+          "Elin Ruud",
+          "Farah Nasser",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -22.079072952270508,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -27.361961364746094,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.26077651977539,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i83:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Farah Nasser",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -8.509720802307129,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -17.386255264282227,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.339763164520264,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i84:AB": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.16451644897461,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -22.9269962310791,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -9.77303409576416,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i84:BA": {
+        "answers": [
+          "Gideon Pike",
+          "Elin Ruud",
+          "Hana Kimura"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -17.792707443237305,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -15.169575691223145,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -9.275052070617676,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i85:BA": {
+        "answers": [
+          "Bram Holt",
+          "Gideon Pike",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -14.828049659729004,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -14.90328598022461,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.540776252746582,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i86:AB": {
+        "answers": [
+          "Bram Holt",
+          "Dario Okafor",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -16.888992309570312,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -28.151094436645508,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.589042663574219,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i86:BA": {
+        "answers": [
+          "Bram Holt",
+          "Dario Okafor",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -19.83987808227539,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -13.894044876098633,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.1668219566345215,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i88:BA": {
+        "answers": [
+          "Lior Adler",
+          "Ivo Petrov",
+          "Jora Lind"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -24.724525451660156,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -24.85280990600586,
+            "em": false,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.4255595207214355,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i89:AB": {
+        "answers": [
+          "Dario Okafor",
+          "Elin Ruud",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -13.423269271850586,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -23.262073516845703,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -9.280455589294434,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i89:BA": {
+        "answers": [
+          "Dario Okafor",
+          "Elin Ruud",
+          "Gideon Pike"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -11.190393447875977,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -20.882123947143555,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -8.746244430541992,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i92:BA": {
+        "answers": [
+          "Celia Vance",
+          "Dario Okafor",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.323841094970703,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -18.545629501342773,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -4.648377418518066,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i93:AB": {
+        "answers": [
+          "Farah Nasser",
+          "Bram Holt",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -28.794235229492188,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -28.437522888183594,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.198098659515381,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i93:BA": {
+        "answers": [
+          "Farah Nasser",
+          "Bram Holt",
+          "Elin Ruud"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -9.655017852783203,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -15.194454193115234,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.114142894744873,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i95:BA": {
+        "answers": [
+          "Lior Adler",
+          "Hana Kimura",
+          "Ivo Petrov"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -6.201809406280518,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -7.5618510246276855,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -5.746516227722168,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i97:AB": {
+        "answers": [
+          "Elin Ruud",
+          "Hana Kimura",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -18.336986541748047,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -24.37077522277832,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -6.510133266448975,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i97:BA": {
+        "answers": [
+          "Elin Ruud",
+          "Hana Kimura",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -9.0060396194458,
+            "em": false,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -12.590703010559082,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.365490913391113,
+            "em": true,
+            "cut": false
+          }
+        }
+      },
+      "toy-d2-h1-s0-i9:BA": {
+        "answers": [
+          "Mira Solano",
+          "Hana Kimura",
+          "Lior Adler"
+        ],
+        "a_distractor_index": 0,
+        "archived": {
+          "blocked": {
+            "gold_logprob": -12.903767585754395,
+            "em": true,
+            "cut": false
+          },
+          "distractor": {
+            "gold_logprob": -9.782090187072754,
+            "em": true,
+            "cut": false
+          },
+          "gold": {
+            "gold_logprob": -7.43030309677124,
+            "em": true,
+            "cut": false
+          }
+        }
+      }
+    },
+    "expected_rows": 255
+  }
+}

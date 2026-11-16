@@ -5,6 +5,11 @@ Josh Huang, Elliott Kalt, Ajit Mallavarapu.
 
 Research journal (what is running, what was decided, dead ends, open questions): [`JOURNAL.md`](JOURNAL.md). People and agents reviewing or extending this repo: read its newest entry first.
 
+The three paper-completion experiments (baseline diagnostics, masked thinking,
+and answer-format-controlled likelihood) have a [run guide](scripts/README_paper_ablations.md).
+Their fixed samples total 96 + 600 + 255 main evaluations; `--plan-only` previews
+each job without loading a model.
+
 ## The question
 
 An orchestrator model splits a multi-hop question's paragraphs across N parallel workers (copies of the same model). Each worker reads only its share and sends something back: its KV cache, a compressed latent payload, or text. The orchestrator answers.

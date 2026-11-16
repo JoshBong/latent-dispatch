@@ -4,6 +4,44 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16: three paper-completion runners prepared (code only)
+
+`scripts/run_paper_ablations.py` implements the agreed 8B follow-ups. The
+[run guide](scripts/README_paper_ablations.md) lists commands, budgets, output
+fields, and interpretation limits. No new pretrained-model inference was run
+while preparing this change.
+
+- Endpoint diagnostics: 24 archived mismatch/agreement layouts, four paths,
+  thinking off, 256 answer tokens; 96 main generations. Saves first-token
+  distributions and generation traces for the first-divergence comparison.
+- Masked thinking: 25 toy + 25 MuSiQue sources, AB/BA, blocked/gold/full,
+  off/forced; 600 generations. Thinking and answer budgets are each 1,024.
+  This is separate from Elliott's existing 4B B1/K0/T1 pilot.
+- Likelihood: the exact 42 AB + 43 BA pre-gold toy controls, three masks;
+  255 evaluations. Each scores the correct mayor and two fixed wrong mayors,
+  separating boxed-prefix, answer-only, and closing-brace log probabilities.
+
+The frozen selection and its input hashes are committed in
+`experiments/paper_ablations_v1.json`. It rebuilds identically from the reviewed
+8B archive and checksum-verified benchmarks. The runners import the masking
+implementation used at `f4914e4` and the EOS-inside-thinking repair from
+`c9f2038`, with new protocol/runtime checks and independent result files.
+
+Checked: all three model-free plan previews; the CPU suite (142 passed, 85
+skipped, 21 slow tests deselected); final focused runner tests (20 passed after
+adding validation-cap and saved-settings checks). CPU tests use tiny random
+models and an existing cached tokenizer, not pretrained model weights.
+Not checked: 8B GPU smoke or full runs. Baseline cap hits remain diagnostic;
+thinking smoke must finish its boxed answer. Existing work-in-progress edits
+in the original checkout were not changed.
+
+The journal's earlier claim that the gold paragraph is "necessary" remains
+unestablished: non-gold states can relay earlier gold information, and the
+answer stage can still read all evidence. These follow-ups do not assume that
+interpretation or dismiss the endpoint disagreement as numerical noise.
+
+---
+
 ## 2026-11-15, night: attention masking on Qwen3-8B
 
 The masking design from the 4B T4 pilot, run on Qwen3-8B (launcher `colab_mask_8b.ipynb`, code at `f4914e4`, bfloat16, seed 0, thinking off, EM). Worker B is re-encoded from scratch in every condition; the conditions differ only in which of worker A's paragraphs B may attend to: none (`blocked`, the same as B1-mask), one distractor paragraph, everything except A's gold paragraph, only A's gold paragraph, or all of A (`full`, the same as B1). 100 toy_d2 two-fact sources and 79 MuSiQue 2-hop sources, all of them labelled composition-required by Part 0 on this model. The rows are in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` (sha256 `99f93d7d…206bdd35`): 716 rows per mask arm (616 for `distractor`, which has no toy AA rows), one commit, no duplicate ids, 0.3–1.9% of answers at the 256-token cap. The tarball also carries the B1, B1-mask and K0 rows it was started from.
