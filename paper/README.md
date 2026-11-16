@@ -1,8 +1,10 @@
 # Milestone paper
 
-ACM two-column milestone scaffold: `main.tex` is the shared source and
-`references.bib` is the bibliography. Fill in the red TODOs and the three net
-IDs; confirm author order. This is not a completed milestone submission.
+ACM two-column milestone draft: `main.tex` is the shared source and
+`references.bib` is the bibliography. The draft compiles to three pages.
+Before submission, confirm team responsibilities and author order, fill Josh
+and Ajit's net IDs, and review the scientific claims and planned work.
+Elliott's net ID is filled in as `esk226`.
 
 ## Compile locally
 
@@ -37,9 +39,9 @@ A full TeX Live or MiKTeX installation is also supported:
 Edit the source on your own branch and open a pull request. Commit `.tex`, `.bib`,
 and figure sources; build files and the local compiler are ignored. Before
 submission, finish/remove TODOs and change `\drafttrue` to `\draftfalse`.
-The bibliography includes the three starting papers; add actual in-text
-citations when writing the related-work section. The existing results table is preliminary and
-uses the automatic scorer; keep its limitations explicit.
+The bibliography includes LatentMAS, Parallel Context Windows, Masking in
+Multi-hop QA, and MuSiQue, with in-text citations. The tables are preliminary;
+keep the scoring and screening limitations explicit.
 
 ## Overleaf
 
@@ -56,3 +58,20 @@ The class was generated from the unmodified `vendor/acmart/acmart.dtx` using
 `acmart.ins` with LaTeX. Original source/install files and `ACM-LICENSE.txt`
 are included for provenance and redistribution under LPPL 1.3c.
 Do not change margins or fonts to force a page count.
+
+## Result provenance
+
+The draft uses the repository journal through `cb1e31c` (November 16):
+- Main EM table and original source-level intervals: 8B masking archive,
+  `Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz`.
+- Small thinking EM/F1 table: 25 sources per dataset from the paper_v1 run,
+  commit `116151f`; no independent-replication claim.
+- F1 and screening sensitivity: the November 16 evening journal entry,
+  grouped bootstrap over sources sharing a supporting paragraph. Screening
+  is retrospective and single-reader, so it is presented as sensitivity analysis.
+- 4B text-report observation: the completed thinking-25 branch and latest
+  journal analysis. No claim of a controlled model-size trend.
+
+No new inference was run while writing the milestone. Future experiments are
+proposals for team review, not completed work. Two other authors' net IDs and
+the team-contribution paragraph remain unverified.

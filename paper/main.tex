@@ -47,10 +47,16 @@
 Our working hypothesis is that reasoning begins during reading: models
 form relationships between evidence while encoding it, and independently
 encoding related documents can make these relationships harder to recover
-during answer generation. We investigate this hypothesis using controlled
-attention interventions in a two-worker question-answering system.
-\todo{Add 2--3 sentences describing the datasets, strongest verified
-result, and principal limitation. Keep the abstract around 100--150 words.}
+during answer generation. We evaluate this hypothesis on synthetic fact chains
+and two-hop MuSiQue using attention masks that control which evidence one
+worker can access from another. In preliminary Qwen3-8B experiments, exposing
+only the other worker's supporting paragraph raises exact-match accuracy from
+64.5\% to 100\% on synthetic questions and from 14.5\% to 38.5\% on MuSiQue.
+Answer-time reasoning also improves performance, with gains varying across
+tasks and encoding conditions. These results suggest that preserving source
+tokens alone does not ensure successful evidence composition. However, the
+interventions use gold supporting-paragraph labels, and the precise mechanism
+remains unresolved.
 \end{abstract}
 
 \keywords{multi-hop question answering, multi-agent systems, KV cache,
@@ -62,104 +68,131 @@ attention masking}
 \end{center}
 
 \section{Introduction}
-\label{sec:intro}
-% Target: 2--3 paragraphs, about 0.4 page.
-\todo{Explain the setting: an orchestrator splits evidence across parallel
-workers and answers using their outputs. Why is this useful? Why might
-independent encoding make composition difficult even without token loss?}
+An orchestrator can distribute a question's documents across parallel workers,
+then answer using their outputs. This creates an opportunity to parallelize
+reading, but also changes how the model represents evidence. Even when workers
+return every document token's key--value (KV) cache, their representations were
+computed without access to one another's documents. Retaining the tokens may
+therefore be different from retaining the relationships needed to answer.
 
-\paragraph{Working hypothesis.}
-Reading conditions shape later reasoning. We hypothesize that joint
-encoding builds relationships between evidence that are harder to
+Consider a question asking for the mayor of a person's favorite city. One
+worker reads the person's preferred city; another reads the city's mayor.
+The answerer receives both caches, yet must connect facts that were encoded
+independently. Our working hypothesis is that reasoning begins during reading:
+joint encoding builds relationships between evidence that can be harder to
 reconstruct during answer generation.
 
-\paragraph{Research questions.}
-\todo{State two questions: (1) Does independent encoding impair composition
-when all source tokens are retained? (2) Which cross-worker evidence
-access recovers performance, and how does answer-time reasoning interact
-with that access?}
-
-\paragraph{Milestone contributions.}
-\todo{List only completed contributions: controlled encoding comparison,
-paragraph-level attention interventions, and preliminary results.
-Distinguish observations from proposed mechanisms.}
+We ask two questions: (1) Does independent encoding impair multi-hop answering
+when all source tokens are retained? (2) Which cross-worker evidence access
+recovers performance, and how does answer-time reasoning interact with that
+access? At this milestone, we have implemented controlled encoding comparisons,
+paragraph-level attention interventions, and preliminary evaluations on
+synthetic chains and MuSiQue. These establish behavioral effects of encoding
+conditions; they do not yet isolate the internal operation that causes them.
 
 \section{Background and Related Work}
-\label{sec:related}
-% Target: one compact paragraph, about 0.2 page.
-\todo{Position the project relative to LatentMAS, Parallel Context Windows,
-and Masking in Multi-hop QA. Cite the papers from references.bib after
-checking their full text. Explain that your focus is a controlled diagnosis
-of evidence access, rather than a demonstrated efficient repair algorithm.}
-% Example citation syntax: \cite{pcw2023,masking2025,latentmas2025}.
+LatentMAS motivates communication through latent states and shared working
+memory rather than generated text~\cite{latentmas2025}. We study a particular
+setting within that broader design space: combining evidence from parallel
+readers. Parallel Context Windows restricts attention between context windows
+while allowing generated tokens to access them~\cite{pcw2023}. Our blocked
+condition uses a related separation, with positions controlled to distinguish
+attention access from cache-position handling. Huang et al.~\cite{masking2025}
+study document order and attention masking in multi-hop QA. We focus on
+selectively restoring access to a supporting paragraph. The present
+contribution is a controlled diagnosis, rather than an efficient cache-repair
+algorithm or a general comparison of latent and textual communication.
 
 \section{Problem Formulation and Evaluation}
-\label{sec:problem}
-% Target: about 0.4 page.
 \subsection{Task and Data}
-Let an instance be $x=(q,D,y^*)$, where $q$ is a question,
-$D=\{d_1,\ldots,d_m\}$ is a set of evidence paragraphs, and $y^*$
-is a reference answer. A placement $\pi$ partitions $D$ between two
-workers, producing blocks $D_A$ and $D_B$. The orchestrator predicts
-$\hat y$ using their encoded evidence.
+Let an instance be $x=(q,D,Y)$, where $q$ is a question,
+$D=\{d_1,\ldots,d_m\}$ is a set of paragraphs, and $Y$ is the set of
+reference answer aliases. A placement $\pi$ partitions $D$ between two
+workers, producing ordered blocks $D_A,D_B$. The orchestrator predicts
+$\hat y$ from their encoded evidence. Block A precedes B in the combined
+sequence, regardless of which reasoning hop each contains.
 
-\todo{Describe synthetic two-fact chains and two-hop MuSiQue, sample
-sizes, distractors, and seed. Define AB/BA and co-located placements (AA and BB).
-Explain the composition filter and report which
-tables use it. Avoid treating mirrored layouts as independent questions.}
+Our synthetic task uses two-fact chains, such as person $\rightarrow$ city
+$\rightarrow$ mayor, with same-relation distractors. MuSiQue-Ans combines
+single-hop questions into connected multi-hop questions~\cite{musique2022};
+we use its two-hop development questions with supplied paragraphs.
+AB places the first supporting fact on A and the second on B; BA reverses
+that assignment. AA and BB co-locate the supporting facts and serve as
+controls. We hold each source's evidence fixed across paired conditions.
+
+A model-dependent screen retains sources answered incorrectly both
+closed-book and in each single-supporting-paragraph probe, with distractors
+retained. We call these \emph{composition-required} candidates, although
+probe failure is not proof that composition is necessary. The main 8B
+masking sample contains 100 toy and 79 MuSiQue sources after screening,
+using data seed 0. The thinking experiment uses 25 sources from each
+dataset and both AB/BA layouts; it overlaps the larger masking sample
+and is not an independent replication.
 
 \subsection{Metrics and Statistical Analysis}
-Our primary metric is normalized exact match:
+We extract the short answer after thinking, preferring a boxed answer.
+Normalization lowercases text, removes punctuation and articles, converts
+recognized number words to digits, and collapses whitespace. Exact match
+and token F1 take the best score over the supplied aliases:
 \begin{equation}
-\EM(\hat y,y^*) =
-\mathbf{1}\!\left[\operatorname{norm}(\hat y)
-=\operatorname{norm}(y^*)\right].
+\EM(\hat y,Y)=\max_{y\in Y}
+\mathbf{1}[\operatorname{norm}(\hat y)=\operatorname{norm}(y)].
 \end{equation}
-\todo{Specify normalization, aliases if used, and token F1 if reported.
-Average layouts within each source before paired bootstrap confidence
-intervals. Separate official scores from exploratory manual same-entity
-judgments. State the bootstrap count for each reported experiment.}
+F1 is the harmonic mean of normalized token precision and recall. Neither
+metric fully captures semantic equivalence, so manual same-entity judgments
+are exploratory and kept separate from automatic scores.
+
+For paired comparisons, we average AB/BA layouts within each source before
+resampling. The original masking EM intervals use 2,000 source-level bootstrap
+resamples; thinking intervals use 4,000. A later F1 sensitivity analysis uses
+4,000 resamples of groups sharing a supporting paragraph, accounting for
+this additional dependence. We report 95\% intervals in percentage points;
+these exploratory comparisons are not corrected for multiple testing.
 
 \section{Method}
-\label{sec:method}
-% Target: about 0.5 page.
 \subsection{Joint and Independent Encoding}
-\todo{Define B1 (joint text encoding), B1-mask (blocked cross-worker
-attention at true positions), and K0 (independently encoded, stitched KV
-caches). Explain the shared question prefix and position handling.}
+All workers receive a shared system-and-question prefix $S$. B1 jointly
+encodes $[S,D_A,D_B]$ with causal attention. B1-mask preserves these token
+positions but blocks B from attending to A during encoding. K0 encodes each
+worker's block independently after $S$, then concatenates their KV caches,
+shifting rotary-position keys to their combined positions. Every answerer
+can attend to both evidence blocks. Thus B1 versus B1-mask measures the
+effect of cross-block attention, while B1-mask versus K0 checks the
+additional effects of separate encoding and position handling.
 
 \subsection{Controlled Evidence Access}
-For a token $i$ in block $B$ and token $j$ in block $A$, define
+We recompute the joint sequence while changing only B's access to A.
+For query token $i$ in B and key token $j$ in A, the additive attention mask is
 \begin{equation}
-M^{(V)}_{ij} =
-\begin{cases}
-0, & j\in V,\\
--\infty, & j\notin V,
-\end{cases}
+M^{(V)}_{ij}=\begin{cases}0,&j\in V,\\-\infty,&j\notin V,\end{cases}
 \end{equation}
-where $M$ is added to attention logits and $V$ is the set of
-accessible tokens in $A$. Other attention edges follow the common
-causal layout. We vary $V$ between no tokens, the gold supporting
-paragraph, a distractor paragraph, all non-gold paragraphs, and all
-of $A$. The answer tokens can attend to both blocks in every condition.
+where $V$ is the accessible set of A tokens. Prefix access, causal
+attention within blocks, and answer access remain unchanged. Conditions are
+\emph{blocked} ($V=\varnothing$), \emph{gold} (A's supporting paragraph),
+\emph{distractor} (one non-supporting paragraph), \emph{except-gold}
+(all non-supporting paragraphs), and \emph{full} (all of A).
 
-\todo{State that the masked runs re-encode B, use oracle paragraph labels,
-and do not establish compute savings. Discuss indirect gold-information
-relay through A's later tokens when interpreting non-gold controls.}
+The intervention uses gold labels and recomputes the sequence, including B;
+it does not demonstrate reduced computation. Non-gold access is also not a
+perfect information-removal control: later A tokens can encode information
+from an earlier supporting paragraph and relay it to B. Restricting controls
+to paragraphs preceding A's gold paragraph is a planned cleaner test.
 
 \subsection{Answer-Time Reasoning}
-\todo{Describe thinking-off and forced-thinking conditions, the 1,024-token
-thinking budget, answer caps, and recorded cap rates. Thinking-off does
-not necessarily mean an absence of reasoning in generated answer text.}
+The main masking run uses Qwen3-8B, bfloat16, greedy decoding, thinking off,
+and a 256-token answer cap. A separate experiment crosses blocked/gold/full
+with thinking off or forced, using a 1,024-token thinking budget and a
+1,024-token answer cap. Forced thinking prefills the thinking delimiter;
+at its budget, decoding transitions to the answer. We record thinking tokens
+and cap hits. Thinking off can still produce reasoning in ordinary answer
+text, so these conditions compare decoding protocols rather than reasoning
+versus its complete absence.
 
 \section{Preliminary Results}
-\label{sec:results}
-% Target: about 0.6 page. Prefer one primary table and a compact discussion.
 \begin{table}[t]
 \centering
-\caption{Qwen3-8B preliminary masking results, thinking off.
-EM (\%), AB/BA pooled, composition-required sources, seed 0.
-Values use the existing automatic scorer; scoring limitations remain.}
+\caption{Qwen3-8B masking EM (\%), thinking off, seed 0.
+AB/BA pooled on the originally screened sources.}
 \label{tab:masking}
 \begin{tabular}{lrrrr}
 \toprule
@@ -172,35 +205,79 @@ MuSiQue & 79 & 14.5 & 38.5 & 29.0 \\
 \end{table}
 
 \paragraph{Encoding-time access.}
-\todo{Interpret Table~\ref{tab:masking}. Report paired differences and
-source-level confidence intervals from the larger masking run. State that
-supporting-paragraph access substantially improves accuracy; avoid claiming
-that an exact bridge mechanism has been isolated.}
+Table~\ref{tab:masking} shows that gold-paragraph access substantially
+improves answering. Gold minus blocked is +36 points on the toy (rounded;
+95\% CI [30,42]) and +24 on MuSiQue [15,34]. On MuSiQue, full access
+improves over blocked by +15 [7,23], but gold exceeds full by +9 [3,16].
+Distractor-only and except-gold gains are small: $-1$ [$-5$,4] and
++2 [$-4$,8]. These results support the importance of supporting-paragraph
+access, without establishing that one particular bridge mention is the
+mechanism. Gold exceeding full also shows that more access need not help.
 
-\paragraph{Interaction with answer-time reasoning.}
-\todo{Summarize the separate 25-source-per-dataset experiment. Do not merge
-its sample with the larger masking table. Discuss cap rates and the latest
-scoring audit; do not claim that reasoning adds nothing under gold access.}
+\paragraph{Scoring and screening sensitivity.}
+A later analysis found acceptable answer variants missed by EM and possible
+shortcuts or gold-answer problems. With the original 79 MuSiQue sources,
+gold minus blocked is +23 F1 points [16,32] under shared-paragraph grouped
+bootstrap. Retrospective screening removes 24 sources with a manually
+acceptable probe answer, leaving 55; removing additional flagged cases
+leaves 37. The corresponding F1 gains are +29 [19,38] and +28 [17,40].
+This supports the qualitative finding, but the retrospective screening was
+done by one reader after observing results and requires independent review.
 
-\paragraph{Qualitative observations.}
-\todo{Optionally give one short example of evidence confusion or report
-failure. Label exploratory trace interpretations as hypotheses.}
+\begin{table}[t]
+\centering
+\caption{MuSiQue thinking experiment: 25 sources, AB/BA pooled.
+Entries are automatic EM / token F1 (\%).}
+\label{tab:thinking}
+\begin{tabular}{lrrr}
+\toprule
+Condition & Blocked & Gold & Full \\
+\midrule
+Thinking off & 6 / 22 & 44 / 54 & 30 / 43 \\
+Forced thinking & 36 / 48 & 42 / 57 & 42 / 57 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Interaction with reasoning.}
+Under blocked access, forced thinking raises MuSiQue F1 by +26 points
+[10,42] (Table~\ref{tab:thinking}). Under gold access, the gain is +3
+[$-10$,18], so whether thinking adds a benefit there remains unresolved.
+On the toy, blocked EM rises from 64 to 72, while gold/full remain 98--100.
+Thinking reaches its cap in 44\% of blocked MuSiQue answers and 34\% of
+blocked toy answers. Capped answers perform worse, but question difficulty
+can drive both outcomes; this does not identify a causal budget effect.
+
+\paragraph{Failure observations and validation.}
+Exploratory trace reading found answers that identify a bridge entity but
+then assert its associated fact is absent, sometimes confusing similar
+paragraphs. This motivates tests of evidence binding and discrimination,
+rather than proving either mechanism. Separate 4B text-report experiments
+also caution against a general claim that text communication fails: thinking
+raises two-fact toy EM from 40 to 94. Endpoint checks on 24 selected layouts
+find first-token argmax agreement in 46/48 masked/reference pairs.
+Near-tie divergences are consistent with numerical sensitivity, but require
+higher-precision checks before dismissing implementation differences.
 
 \section{Limitations and Remaining Work}
-\label{sec:next}
-% Target: about 0.3 page.
-\todo{Cover oracle paragraph selection, one model family, limited seeds,
-small/reused samples, shared evidence across sources, scorer sensitivity,
-finite generation budgets, and unresolved numerical endpoint differences.}
+Our evidence is preliminary: one model family, limited seeds, oracle
+paragraph selection, overlapping samples, imperfect answer metrics, and
+finite decoding budgets. Full-context answering is itself imperfect.
+The 4B and 8B runs differ in dtype and screened samples, preventing a clean
+size-trend claim. The masks identify a behavioral effect of access, not
+whether models internally connect facts, distinguish passages, or use
+another computation.
 
-\todo{Prioritize: verify scoring with a second reader; evaluate a fresh,
-checked MuSiQue sample; run clean pre-gold non-gold controls; test a selector
-without gold labels. Describe future experiments as planned work.}
+Next, we will independently audit scoring and screening, evaluate a fresh
+MuSiQue sample checked for answerability and shared evidence, and run
+pre-gold distractor controls. We will then test paragraph selection without
+gold labels and compare encoding-time access with answer-time reasoning at
+matched quality and measured end-to-end cost. Until those tests, we treat
+``reasoning begins during reading'' as a working hypothesis.
 
 \paragraph{Team responsibilities.}
-\todo{Assign a concrete completed or planned component to each author.}
+\todo{Confirm each author's completed contribution and remaining responsibility.}
 
-\nocite{latentmas2025,pcw2023,masking2025}
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{references}
 \end{document}

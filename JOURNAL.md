@@ -4,6 +4,16 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16: milestone paper draft
+
+Added a three-page ACM v2.20 draft in `paper/`, with the working hypothesis
+"reasoning begins during reading," formal attention interventions, main 8B
+masking EM results, small-sample thinking EM/F1, and the later screening/F1
+sensitivity analysis. The latter is explicitly retrospective and single-reader.
+No new inference. Remaining factual placeholders: Josh and Ajit's net IDs
+and confirmed individual responsibilities. Compiled with Tectonic 0.17.0 and
+visually checked all three pages; build output is ignored by Git.
+
 ## 2026-11-16, evening: MuSiQue masking tables re-scored and re-screened (F1, stricter composition filter)
 
 Two problems found by reading answers (entries below) were checked against the main masking result, using only saved rows: the 8B run in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` and Elliott's 4B float16 run on branch `results/t4-masking-2026-11-15`. No new inference.
