@@ -10,7 +10,7 @@ The latent-step code follows ModelWrapper.generate_latent_batch_hidden_state and
 JoshBong/LatentMAS models.py (fork of Gen-Verse/LatentMAS, Apache-2.0):
 https://github.com/JoshBong/LatentMAS/blob/main/models.py
 """
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, DynamicCache, PretrainedConfig
@@ -71,6 +71,9 @@ class Gen:
     answer_tokens: int
     cut: bool = False         # stopped by a token cap (max_new or hard_cap), not by the model's own end token
     think_cut: bool = False   # thinking ran to think_budget and "</think>" was forced
+    think_eos: bool = False   # the model emitted its end token inside thinking; "</think>" was forced there
+    token_ids: list[int] = field(default_factory=list)
+    trace: list[dict] = field(default_factory=list)
 
 
 def _auto_device() -> str:
@@ -127,7 +130,8 @@ class Model:
 
     @classmethod
     def load(cls, name: str, device: str | None = None, dtype: str | torch.dtype = "bfloat16",
-             fmt: str | None = None) -> "Model":
+             fmt: str | None = None, revision: str | None = None,
+             attn_implementation: str | None = None) -> "Model":
         """A model from the matrix (MODELS), or any HF repo with fmt= given. The architecture is checked from
         config.json before any weights download. dtype is part of the results folder name, so bf16 and fp32 runs
         never mix."""
@@ -138,12 +142,16 @@ class Model:
             raise ValueError(f"unknown chat format {fmt!r}; known: {sorted(prompts.FORMATS)}")
         if name in MODELS and fmt != MODELS[name]:
             raise ValueError(f"{name} uses the {MODELS[name]} chat format, not {fmt}")
-        check_architecture(PretrainedConfig.get_config_dict(name)[0])
-        tok = load_tokenizer(name, fmt)
+        revision_kw = {"revision": revision} if revision else {}
+        check_architecture(PretrainedConfig.get_config_dict(name, **revision_kw)[0])
+        tok = (AutoTokenizer.from_pretrained(name, **revision_kw,
+               **({"fix_mistral_regex": True} if fmt == "mistral" else {})) if revision else load_tokenizer(name, fmt))
         check_format(tok, prompts.FORMATS[fmt])             # all before the weights download
         device = device or _auto_device()
         dtype = DTYPES[dtype] if isinstance(dtype, str) else dtype
-        hf = AutoModelForCausalLM.from_pretrained(name, dtype=dtype, low_cpu_mem_usage=True).to(device)
+        attention_kw = {"attn_implementation": attn_implementation} if attn_implementation else {}
+        hf = AutoModelForCausalLM.from_pretrained(name, dtype=dtype, low_cpu_mem_usage=True,
+                                                 **revision_kw, **attention_kw).to(device)
         return cls(hf, tok, name, fmt)
 
     # ---------------------------------------------------------------- tokens
@@ -157,7 +165,7 @@ class Model:
     # --------------------------------------------------------------- forward
     @torch.no_grad()
     def forward(self, ids: list[int] | None, cache=None, start_pos: int | None = None, embeds=None,
-                hidden: bool = False):
+                hidden: bool = False, attention_mask=None):
         """Run `ids` (or input `embeds` [1, L, d]) on top of `cache`, mutating it. RoPE positions start at
         `start_pos` (default: the cache length, i.e. a normal continuation)."""
         if cache is None:
@@ -170,15 +178,17 @@ class Model:
             cache_position=torch.arange(past, past + n, device=self.device),
             past_key_values=cache, use_cache=True, output_hidden_states=hidden,
         )
+        if attention_mask is not None:
+            kw["attention_mask"] = attention_mask
         if ids is not None:
             return self.hf(input_ids=torch.tensor([ids], device=self.device), **kw)
         return self.hf(inputs_embeds=embeds, **kw)
 
-    def prefill(self, ids: list[int], cache=None, start_pos: int | None = None):
+    def prefill(self, ids: list[int], cache=None, start_pos: int | None = None, attention_mask=None):
         """-> (cache, last hidden state [1, d])."""
         if cache is None:
             cache = DynamicCache()
-        out = self.forward(ids, cache, start_pos, hidden=True)
+        out = self.forward(ids, cache, start_pos, hidden=True, attention_mask=attention_mask)
         return out.past_key_values, out.hidden_states[-1][:, -1, :]
 
     # ----------------------------------------------------------- latent steps
@@ -210,12 +220,13 @@ class Model:
     # ---------------------------------------------------------------- decode
     @torch.no_grad()
     def greedy(self, tail: list[int], cache=None, start_pos: int | None = None, max_new: int = 64,
-               think_budget: int | None = None, hard_cap: int = 8192) -> Gen:
+               think_budget: int | None = None, hard_cap: int = 8192, trace_topk: int = 0) -> Gen:
         """Feed `tail` on top of `cache`, then decode greedily until EOS.
 
         think_budget=None: the tail already closed thinking (or there is none); decode up to max_new tokens.
         think_budget=k: the tail ends inside an open <think>; allow k thinking tokens, then force "</think>", then
-        up to max_new answer tokens.
+        up to max_new answer tokens. An end token inside thinking also forces "</think>" and decoding goes on to
+        the answer: stopping there would leave a row with no answer, and the scorer would read the thinking text.
         """
         if cache is None:
             cache = DynamicCache()
@@ -223,16 +234,23 @@ class Model:
         out = self.forward(tail, cache, pos)
         pos += len(tail)
         gen: list[int] = []
+        trace = []
         think = answer = 0
         thinking = think_budget is not None
-        cut = think_cut = False
+        cut = think_cut = think_eos = False
         force_close = self.ids(prompts.THINK_CLOSE)
         while len(gen) < hard_cap:
             nxt = int(out.logits[0, -1].argmax())
+            if trace_topk:
+                values, indices = out.logits[0, -1].float().topk(min(trace_topk, out.logits.shape[-1]))
+                trace.append({"token_index": len(gen), "argmax": nxt,
+                              "top_ids": indices.cpu().tolist(), "top_logits": values.cpu().tolist()})
             if thinking and think >= think_budget and nxt != self.think_end_id:
                 feed, thinking, think_cut = force_close, False, True
             elif nxt in self.eos_ids:
-                break
+                if not thinking:
+                    break
+                feed, thinking, think_eos = force_close, False, True
             elif thinking:
                 feed = [nxt]
                 if nxt == self.think_end_id:
@@ -250,4 +268,4 @@ class Model:
             pos += len(feed)
         else:
             cut = True                                    # hit hard_cap
-        return Gen(self.decode(gen), len(gen), think, answer, cut, think_cut)
+        return Gen(self.decode(gen), len(gen), think, answer, cut, think_cut, think_eos, gen, trace)

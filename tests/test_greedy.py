@@ -59,3 +59,17 @@ def test_cut_flags(tiny):
     assert g.think_cut and not g.cut
     _scripted(m, [100, m.think_end_id, 200, eos])
     assert not m.greedy([1], think_budget=10, max_new=10).think_cut
+
+
+def test_eos_inside_thinking_closes_it_and_still_answers(tiny):
+    """An end token before "</think>" must not end the row: the close is forced and the answer is decoded."""
+    m = copy.deepcopy(tiny)
+    eos = m.tok.convert_tokens_to_ids("<|im_end|>")
+    n_force = len(m.ids("\n</think>\n\n"))
+    _scripted(m, [100, 100, eos] + [200] * n_force + [200, 200, eos])
+    g = m.greedy([1], think_budget=10, max_new=10)
+    assert g.think_eos and not g.think_cut and not g.cut
+    assert g.think_tokens == 2 and g.answer_tokens >= 1
+    assert "</think>" in g.text
+    _scripted(m, [100, m.think_end_id, 200, eos])
+    assert not m.greedy([1], think_budget=10, max_new=10).think_eos
