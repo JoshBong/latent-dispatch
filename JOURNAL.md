@@ -4,6 +4,44 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16: three paper ablations on Qwen3-8B (masked thinking, likelihood, endpoint validation)
+
+The three runners from PR #2 (`codex/paper-completion-ablations`, every row stamped `116151f`), run on a Colab A100-40GB, bfloat16, sdpa, seed 0. All three finished: validation 96/96, likelihood 255/255, thinking 600/600, no duplicate ids. Archives: `archive/Qwen3-8B-bfloat16-paper_v1-{thinking,likelihood,validation}-2026-11-16.tar.gz`. The validation archive leaves out the 112 saved first-token logit files (32 MB); the rows keep the top-5 trace per token and the summary keeps the per-pair logit comparisons. Numbers below were recomputed from the rows with the repo's `score`, paired by source question, 4,000-resample bootstrap, 95% intervals, unadjusted.
+
+**Masked thinking.** 25 toy two-fact and 25 MuSiQue 2-hop composition-required sources, AB and BA, so 50 layouts per cell. Thinking off or forced with a 1,024-token thinking budget and a 1,024-token answer cap. EM %:
+
+| | blocked | gold | full |
+|---|---|---|---|
+| toy, thinking off | 64 | 100 | 100 |
+| toy, forced | 72 | 98 | 100 |
+| MuSiQue, thinking off | 6 | 44 | 30 |
+| MuSiQue, forced | 36 | 42 | 42 |
+
+| paired difference | toy | MuSiQue |
+|---|---|---|
+| full − blocked, off | +36 (24, 48) | +24 (8, 42) |
+| full − blocked, forced | +28 (18, 38) | +6 (−6, 18) |
+| gold − blocked, off | +36 (24, 48) | +38 (18, 58) |
+| gold − blocked, forced | +26 (16, 36) | +6 (−4, 18) |
+| gold − full, off | 0 (0, 0) | +14 (4, 26) |
+| gold − full, forced | −2 (−6, 0) | 0 (−10, 12) |
+| blocked, forced − off | +8 (−10, 24) | +30 (12, 48) |
+| gold, forced − off | −2 (−6, 0) | −2 (−16, 12) |
+| thinking gain under blocked − gain under gold | +10 (−6, 26) | +32 (14, 50) |
+| gold/off − blocked/forced | +28 (18, 38) | +8 (−12, 26) |
+
+Mean generated tokens and seconds per answer on MuSiQue: gold/off 38 tokens, 2.4 s; blocked/forced 744 tokens, 40.8 s. Mean thinking tokens: MuSiQue blocked 681, gold 618, full 607; toy 609, 313, 292.
+
+**The thinking cap confounds every forced number.** Share of forced answers that used the whole 1,024-token thinking budget: toy blocked 34%, gold 4%, full 0%; MuSiQue blocked 44%, gold 36%, full 38%. For blocked + forced, EM is 24 (n=17) when the cap was hit and 97 (n=33) when not on the toy, and 18 (n=22) against 50 (n=28) on MuSiQue. This split is not causal: the capped answers may be the hard questions. It does mean no claim about a gap that survives thinking can be made at this budget. Next run: blocked and full, forced, 4,096-token budget, same sources.
+
+**Likelihood** (toy, 85 questions, three candidates each, thinking off). At AB, distractor − blocked: gold boxed log-probability −5.69 nats (−7.77, −3.68), gold minus best wrong candidate +1.78 (−0.12, 3.63), while archived EM on those 42 questions is 50 against 86. At BA the boxed change is −0.31 (−2.16, 1.69). Gold − blocked on the gold-minus-best-wrong margin: +27.6 (24.9, 30.2) at AB, +23.8 (21.7, 26.1) at BA. So the distractor's accuracy bump at toy AB is not matched by a clear gain in preference for the right answer; the boxed-probability drop may include a format effect and has not been decomposed further.
+
+**Endpoint validation** (24 layouts picked for diagnosis, not a random sample; `masked_full` against `b1` and `masked_blocked` against `b1_mask` in one session). First-token argmax agrees in 46 of 48 pairs; the largest first-token logit difference is 1.59. Generated tokens are identical in 17 of 24 full pairs and 10 of 24 blocked pairs, and at every first divergence the top two logits are within 0.75 of each other. Consistent with numerical sensitivity under bfloat16; not resolved until the divergent cases are repeated at higher precision.
+
+**Reading.** On MuSiQue, answer-time reasoning recovers most of what blocked encoding loses, and no improvement from reasoning is observed once the supporting paragraph is visible. On the toy it recovers little at this budget. Gold-only access again scores above full access on MuSiQue with thinking off, on a 25-source subset of the earlier 79, so this is not an independent replication. Elliott's Qwen3-4B thinking pilot (branch `codex/results-t4-thinking-25-2026-11-16`) shows the same cap pattern: toy K0 with forced thinking scores 100 when the cap is not hit (n=36 and n=29) and 7 and 29 when it is; on that branch text reports go 40 to 94 on the two-fact toy with thinking and 18 to 12 on split MuSiQue with 29 of 50 at the cap, so "text passing fails" does not stand as a general claim.
+
+**Correction to the 2026-11-15 night entry.** It called access to the gold paragraph "both sufficient and necessary" on MuSiQue. That is too strong. What the rows show is that access to the supporting paragraph recovers the loss and that the distractor and all-but-gold conditions do not; the paragraph was chosen with gold labels, the intervention is at paragraph level, and full access scoring below gold-only means other cross-block access also matters.
+
 ## 2026-11-15, night: attention masking on Qwen3-8B
 
 The masking design from the 4B T4 pilot, run on Qwen3-8B (launcher `colab_mask_8b.ipynb`, code at `f4914e4`, bfloat16, seed 0, thinking off, EM). Worker B is re-encoded from scratch in every condition; the conditions differ only in which of worker A's paragraphs B may attend to: none (`blocked`, the same as B1-mask), one distractor paragraph, everything except A's gold paragraph, only A's gold paragraph, or all of A (`full`, the same as B1). 100 toy_d2 two-fact sources and 79 MuSiQue 2-hop sources, all of them labelled composition-required by Part 0 on this model. The rows are in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` (sha256 `99f93d7d…206bdd35`): 716 rows per mask arm (616 for `distractor`, which has no toy AA rows), one commit, no duplicate ids, 0.3–1.9% of answers at the 256-token cap. The tarball also carries the B1, B1-mask and K0 rows it was started from.
