@@ -1,0 +1,13 @@
+{
+  "name": "latent-thinking-t4-50",
+  "zone": "us-east1-c",
+  "id": "7396938339717671203",
+  "machine_type": "n1-standard-4",
+  "gpu": "nvidia-tesla-t4",
+  "runtime_commit": "133b213",
+  "unit": "latent-thinking-50",
+  "target_per_cell": 50,
+  "target_main_rows": 2100,
+  "initial_cached_main_rows": 1150,
+  "initial_new_main_rows": 950
+}
