@@ -4,6 +4,38 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16, later: reading the answers of the 8B masked-thinking run (corrections to the entry below)
+
+The entry below reported exact match, intervals and cap rates without anyone reading the generated answers. All 600 answers of the thinking run have now been read (most in full, capped traces by head and tail). "Checked" means recomputed from the rows by script; "read" means from reading the texts and not yet confirmed by a second reader.
+
+**1. Exact match under-scores MuSiQue, most with thinking on.** The model writes "Kenton County" in its reasoning and boxes "Kenton", which EM marks wrong (checked on the Kenton and Crockett questions). Recount treating same-entity answers as correct (read, all 300 MuSiQue answers, EM %):
+
+| | blocked | gold | full |
+|---|---|---|---|
+| thinking off, as scored | 6 | 44 | 30 |
+| thinking off, same-entity | 12 | 48 | 36 |
+| forced, as scored | 36 | 42 | 42 |
+| forced, same-entity | 46 | 60 | 58 |
+
+Gold above full with thinking off survives (12 points). **The claim below that no improvement from reasoning is observed once the supporting paragraph is visible is withdrawn:** gold goes 48 to 60 under the recount. The 4B and 8B masking tables in earlier entries use the same scorer and have not been re-scored; quote them with that caveat until they are.
+
+**2. The thinking cap is hit because of the question, not the condition.** Five MuSiQue questions hit the 1,024-token cap in all six forced runs (checked). In the 59 capped MuSiQue traces there are no repetition loops (read): in 29 the model finds the evidence early and will not accept it, in 22 it has the right paragraph and wavers over the form of the answer, in 8 it never finds the second paragraph. Three of the 25 questions ask where James Watt was educated and share one supporting paragraph that says only that he worked at the University of Glasgow; with thinking off the model asserts it and scores, with thinking on it notices the gap. A 4,096-token budget is therefore not expected to change much, and the "next run" named below is dropped.
+
+**3. The 25-question MuSiQue sample.** One question cannot be answered from its context: "Assomada" appears in no paragraph (checked). Three questions share one hop-2 paragraph and two share another, so there are fewer independent questions than 25. Several gold answers are debatable (read). A fresh sample should screen for both.
+
+**4. Toy: with thinking on, the blocked failures are one layout.** Each toy layout holds two "Cities" paragraphs, one from the question's own facts and one distractor. EM for the blocked condition (checked):
+
+| blocked, 8B | both Cities paragraphs in one worker | Cities paragraphs in different workers |
+|---|---|---|
+| forced thinking | 100 (n=25) | 44 (n=25) |
+| thinking off, full masking run | 64 (n=100) | 65 (n=100) |
+
+Gold and full access remove the effect (96 to 100). In 12 of the 17 capped traces the model finds the bridge city, then lists only the distractor Cities paragraph, refers to "the Cities section" as one section, and re-scans until the cap; a few traces quote a paragraph spliced from both (read). In BA layouts the fact that is not found sits in worker A, whose encoding is the same in every condition. Reading, not a test: two similar paragraphs encoded without seeing each other are treated as one. A positional cause has not been ruled out; the position ids of worker B under blocked against gold and full have not been compared. Thinking's +8 on toy blocked is churn: it fixed 13 failures and broke 9 answers that were right without it (read). Toy scoring is clean: no mis-scored answers in 300 rows (read, with a script check that the prediction equals the last boxed answer).
+
+**5. Full access against gold-only access.** In the 7 layouts where gold-only is right and full is wrong with thinking off, none of full's answers comes from one of worker A's distractor paragraphs, and in 6 of 7 full gives the same wrong answer as blocked (read). So full access fails to help there; the texts do not show A's distractors leaking into answers.
+
+Not yet explained: in the full masking run the distractor condition scores 81 when both Cities paragraphs are in one worker and 61 when they are split (checked, n=100 each).
+
 ## 2026-11-16: three paper ablations on Qwen3-8B (masked thinking, likelihood, endpoint validation)
 
 The three runners from PR #2 (`codex/paper-completion-ablations`, every row stamped `116151f`), run on a Colab A100-40GB, bfloat16, sdpa, seed 0. All three finished: validation 96/96, likelihood 255/255, thinking 600/600, no duplicate ids. Archives: `archive/Qwen3-8B-bfloat16-paper_v1-{thinking,likelihood,validation}-2026-11-16.tar.gz`. The validation archive leaves out the 112 saved first-token logit files (32 MB); the rows keep the top-5 trace per token and the summary keeps the per-pair logit comparisons. Numbers below were recomputed from the rows with the repo's `score`, paired by source question, 4,000-resample bootstrap, 95% intervals, unadjusted.
