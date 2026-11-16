@@ -1,0 +1,345 @@
+{
+  "status": "exit_code=0\nfinished_at=2026-11-16T10:38:27+00:00\n",
+  "model": "Qwen/Qwen3-4B",
+  "dtype": "float16",
+  "per_cell": 25,
+  "total_selected": 1050,
+  "accuracy": [
+    {
+      "group": "Toy two-fact AB+BA",
+      "layouts": 50,
+      "sources": 25,
+      "b1_off": 100.0,
+      "b1_forced": 100.0,
+      "k0_off": 28.0,
+      "k0_forced": 74.0,
+      "t1_off": 40.0,
+      "t1_forced": 94.0
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "layouts": 50,
+      "sources": 25,
+      "b1_off": 100.0,
+      "b1_forced": 100.0,
+      "k0_off": 26.0,
+      "k0_forced": 70.0,
+      "t1_off": 52.0,
+      "t1_forced": 70.0
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "layouts": 50,
+      "sources": 25,
+      "b1_off": 30.0,
+      "b1_forced": 38.0,
+      "k0_off": 12.0,
+      "k0_forced": 32.0,
+      "t1_off": 18.0,
+      "t1_forced": 12.0
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "layouts": 25,
+      "sources": 25,
+      "b1_off": 20.0,
+      "b1_forced": 32.0,
+      "k0_off": 28.0,
+      "k0_forced": 40.0,
+      "t1_off": 28.0,
+      "t1_forced": 40.0
+    }
+  ],
+  "audits": {
+    "thinking_pilot_v2_b1_forced": {
+      "selected": 175,
+      "all_saved": 275,
+      "outside_sample": 100,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 22,
+      "mean_think_tokens": 408.21714285714285,
+      "mean_seconds": 39.397468571428576,
+      "report_cuts": 0,
+      "think_eos": 0
+    },
+    "thinking_pilot_v2_k0_forced": {
+      "selected": 175,
+      "all_saved": 175,
+      "outside_sample": 0,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 63,
+      "mean_think_tokens": 663.3714285714286,
+      "mean_seconds": 57.46696571428572,
+      "report_cuts": 0,
+      "think_eos": 0
+    },
+    "thinking_pilot_v2_t1_forced": {
+      "selected": 175,
+      "all_saved": 175,
+      "outside_sample": 0,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 78,
+      "mean_think_tokens": 716.6,
+      "mean_seconds": 76.94246285714286,
+      "report_cuts": 0,
+      "think_eos": 0
+    },
+    "thinking_pilot_v2_b1_off": {
+      "selected": 175,
+      "all_saved": 175,
+      "outside_sample": 0,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 0,
+      "mean_think_tokens": 0.0,
+      "mean_seconds": 5.095485714285714,
+      "report_cuts": 0,
+      "think_eos": 0
+    },
+    "thinking_pilot_v2_k0_off": {
+      "selected": 175,
+      "all_saved": 175,
+      "outside_sample": 0,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 0,
+      "mean_think_tokens": 0.0,
+      "mean_seconds": 6.540405714285714,
+      "report_cuts": 0,
+      "think_eos": 0
+    },
+    "thinking_pilot_v2_t1_off": {
+      "selected": 175,
+      "all_saved": 175,
+      "outside_sample": 0,
+      "answer_cuts": 0,
+      "unboxed": 0,
+      "thinking_cap": 0,
+      "mean_think_tokens": 0.0,
+      "mean_seconds": 29.126759999999994,
+      "report_cuts": 0,
+      "think_eos": 0
+    }
+  },
+  "paired_bootstrap": [
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "B1 thinking gain",
+      "points": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "K0 thinking gain",
+      "points": 46.0,
+      "ci95": [
+        28.0,
+        64.0
+      ]
+    },
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "T1 thinking gain",
+      "points": 54.0,
+      "ci95": [
+        40.0,
+        68.0
+      ]
+    },
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "B1-K0 off",
+      "points": 72.0,
+      "ci95": [
+        58.0,
+        86.0
+      ]
+    },
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "B1-K0 on",
+      "points": 26.0,
+      "ci95": [
+        16.0,
+        36.0
+      ]
+    },
+    {
+      "group": "Toy two-fact AB+BA",
+      "comparison": "gap closure with thinking",
+      "points": 46.0,
+      "ci95": [
+        28.0,
+        64.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "B1 thinking gain",
+      "points": 0.0,
+      "ci95": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "K0 thinking gain",
+      "points": 44.0,
+      "ci95": [
+        28.0,
+        60.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "T1 thinking gain",
+      "points": 18.0,
+      "ci95": [
+        8.0,
+        32.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "B1-K0 off",
+      "points": 74.0,
+      "ci95": [
+        60.0,
+        86.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "B1-K0 on",
+      "points": 30.0,
+      "ci95": [
+        18.0,
+        42.0
+      ]
+    },
+    {
+      "group": "Toy three-fact AB+BA",
+      "comparison": "gap closure with thinking",
+      "points": 44.0,
+      "ci95": [
+        28.0,
+        60.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "B1 thinking gain",
+      "points": 8.0,
+      "ci95": [
+        -8.0,
+        24.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "K0 thinking gain",
+      "points": 20.0,
+      "ci95": [
+        6.0,
+        36.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "T1 thinking gain",
+      "points": -6.0,
+      "ci95": [
+        -14.0,
+        2.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "B1-K0 off",
+      "points": 18.0,
+      "ci95": [
+        8.0,
+        32.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "B1-K0 on",
+      "points": 6.0,
+      "ci95": [
+        -4.0,
+        16.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop AB+BA",
+      "comparison": "gap closure with thinking",
+      "points": 12.0,
+      "ci95": [
+        -2.0,
+        26.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "B1 thinking gain",
+      "points": 12.0,
+      "ci95": [
+        0.0,
+        24.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "K0 thinking gain",
+      "points": 12.0,
+      "ci95": [
+        -12.0,
+        36.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "T1 thinking gain",
+      "points": 12.0,
+      "ci95": [
+        -4.0,
+        28.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "B1-K0 off",
+      "points": -8.0,
+      "ci95": [
+        -20.0,
+        0.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "B1-K0 on",
+      "points": -8.0,
+      "ci95": [
+        -32.0,
+        12.0
+      ]
+    },
+    {
+      "group": "MuSiQue 2-hop BB control",
+      "comparison": "gap closure with thinking",
+      "points": 0.0,
+      "ci95": [
+        -24.0,
+        24.0
+      ]
+    }
+  ]
+}

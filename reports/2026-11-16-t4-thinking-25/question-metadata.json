@@ -1,0 +1,5551 @@
+[
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i0:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i0"
+  },
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i0:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i0"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Velmora"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i1:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i1"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Velmora"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i1:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i1"
+  },
+  {
+    "answers": [
+      "Bram Holt"
+    ],
+    "bridges": [
+      "Lorwick"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i2:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i2"
+  },
+  {
+    "answers": [
+      "Bram Holt"
+    ],
+    "bridges": [
+      "Lorwick"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i2:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i2"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i3:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i3"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i3:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i3"
+  },
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Velmora"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i4:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Lena Okonkwo's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i4"
+  },
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Velmora"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i4:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Lena Okonkwo's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i4"
+  },
+  {
+    "answers": [
+      "Kip Alvarez"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i5:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i5"
+  },
+  {
+    "answers": [
+      "Kip Alvarez"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i5:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i5"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Peldane"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i6:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i6"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Peldane"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i6:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i6"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Orinth"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i7:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i7"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Orinth"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i7:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i7"
+  },
+  {
+    "answers": [
+      "Ivo Petrov"
+    ],
+    "bridges": [
+      "Quillford"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i8:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ines Farrow's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i8"
+  },
+  {
+    "answers": [
+      "Ivo Petrov"
+    ],
+    "bridges": [
+      "Quillford"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i8:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ines Farrow's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i8"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i9:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i9"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i9:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Tomas Reddy's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i9"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Orinth"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i10:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i10"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Orinth"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i10:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i10"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i11:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i11"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i11:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i11"
+  },
+  {
+    "answers": [
+      "Ivo Petrov"
+    ],
+    "bridges": [
+      "Quillford"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i12:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i12"
+  },
+  {
+    "answers": [
+      "Ivo Petrov"
+    ],
+    "bridges": [
+      "Quillford"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i12:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i12"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Sundmark"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i13:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i13"
+  },
+  {
+    "answers": [
+      "Mira Solano"
+    ],
+    "bridges": [
+      "Sundmark"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i13:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Dev Anand's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i13"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i14:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Lena Okonkwo's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i14"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i14:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Lena Okonkwo's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i14"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Tarnova"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i15:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Felix Brandt's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i15"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Tarnova"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i15:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Felix Brandt's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i15"
+  },
+  {
+    "answers": [
+      "Gideon Pike"
+    ],
+    "bridges": [
+      "Ny Havn"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i16:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Marco Duval's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i16"
+  },
+  {
+    "answers": [
+      "Gideon Pike"
+    ],
+    "bridges": [
+      "Ny Havn"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i16:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Marco Duval's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i16"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i17:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i17"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i17:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i17"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i18:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ada Lindqvist's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i18"
+  },
+  {
+    "answers": [
+      "Jora Lind"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i18:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ada Lindqvist's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i18"
+  },
+  {
+    "answers": [
+      "Bram Holt"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i19:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Sana Ilori's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i19"
+  },
+  {
+    "answers": [
+      "Bram Holt"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i19:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Sana Ilori's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i19"
+  },
+  {
+    "answers": [
+      "Celia Vance"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i20:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i20"
+  },
+  {
+    "answers": [
+      "Celia Vance"
+    ],
+    "bridges": [
+      "Marisol"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i20:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Nora Halvorsen's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i20"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Ashgrove"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i21:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Owen Mbeki's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i21"
+  },
+  {
+    "answers": [
+      "Farah Nasser"
+    ],
+    "bridges": [
+      "Ashgrove"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i21:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Owen Mbeki's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i21"
+  },
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i22:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ines Farrow's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i22"
+  },
+  {
+    "answers": [
+      "Elin Ruud"
+    ],
+    "bridges": [
+      "Kastrel"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i22:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Ines Farrow's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i22"
+  },
+  {
+    "answers": [
+      "Gideon Pike"
+    ],
+    "bridges": [
+      "Ny Havn"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i23:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Felix Brandt's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i23"
+  },
+  {
+    "answers": [
+      "Gideon Pike"
+    ],
+    "bridges": [
+      "Ny Havn"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i23:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Felix Brandt's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i23"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i24:AB",
+    "placement": "AB",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i24"
+  },
+  {
+    "answers": [
+      "Dario Okafor"
+    ],
+    "bridges": [
+      "Bellhaven"
+    ],
+    "crossings": 1,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h1-s0-i24:BA",
+    "placement": "BA",
+    "qtype": "hop1",
+    "question": "Who is the mayor of Yuki Sato's favorite city?",
+    "seed": 0,
+    "source_id": "toy-d2-h1-s0-i24"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Orinth",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i0:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Tomas Reddy's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i0"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Orinth",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i0:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Tomas Reddy's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i0"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i1:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i1"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i1:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i1"
+  },
+  {
+    "answers": [
+      "Marisol"
+    ],
+    "bridges": [
+      "Velmora",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i2:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ines Farrow's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i2"
+  },
+  {
+    "answers": [
+      "Marisol"
+    ],
+    "bridges": [
+      "Velmora",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i2:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ines Farrow's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i2"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Lior Adler"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i3:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i3"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Lior Adler"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i3:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i3"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Kastrel",
+      "Ivo Petrov"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i4:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i4"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Kastrel",
+      "Ivo Petrov"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i4:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i4"
+  },
+  {
+    "answers": [
+      "Ashgrove"
+    ],
+    "bridges": [
+      "Tarnova",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i5:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Felix Brandt's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i5"
+  },
+  {
+    "answers": [
+      "Ashgrove"
+    ],
+    "bridges": [
+      "Tarnova",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i5:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Felix Brandt's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i5"
+  },
+  {
+    "answers": [
+      "Peldane"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Celia Vance"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i6:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i6"
+  },
+  {
+    "answers": [
+      "Peldane"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Celia Vance"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i6:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i6"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i7:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i7"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i7:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i7"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i8:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Felix Brandt's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i8"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i8:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Felix Brandt's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i8"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ny Havn",
+      "Bram Holt"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i9:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i9"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ny Havn",
+      "Bram Holt"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i9:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i9"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i10:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Owen Mbeki's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i10"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i10:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Owen Mbeki's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i10"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Quillford",
+      "Elin Ruud"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i11:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i11"
+  },
+  {
+    "answers": [
+      "Kastrel"
+    ],
+    "bridges": [
+      "Quillford",
+      "Elin Ruud"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i11:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ada Lindqvist's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i11"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i12:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ines Farrow's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i12"
+  },
+  {
+    "answers": [
+      "Bellhaven"
+    ],
+    "bridges": [
+      "Ashgrove",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i12:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Ines Farrow's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i12"
+  },
+  {
+    "answers": [
+      "Orinth"
+    ],
+    "bridges": [
+      "Quillford",
+      "Lior Adler"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i13:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Owen Mbeki's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i13"
+  },
+  {
+    "answers": [
+      "Orinth"
+    ],
+    "bridges": [
+      "Quillford",
+      "Lior Adler"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i13:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Owen Mbeki's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i13"
+  },
+  {
+    "answers": [
+      "Velmora"
+    ],
+    "bridges": [
+      "Marisol",
+      "Elin Ruud"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i14:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Nora Halvorsen's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i14"
+  },
+  {
+    "answers": [
+      "Velmora"
+    ],
+    "bridges": [
+      "Marisol",
+      "Elin Ruud"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i14:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Nora Halvorsen's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i14"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i15:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i15"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Lorwick",
+      "Hana Kimura"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i15:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i15"
+  },
+  {
+    "answers": [
+      "Tarnova"
+    ],
+    "bridges": [
+      "Bellhaven",
+      "Celia Vance"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i16:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i16"
+  },
+  {
+    "answers": [
+      "Tarnova"
+    ],
+    "bridges": [
+      "Bellhaven",
+      "Celia Vance"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i16:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i16"
+  },
+  {
+    "answers": [
+      "Ny Havn"
+    ],
+    "bridges": [
+      "Velmora",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i17:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i17"
+  },
+  {
+    "answers": [
+      "Ny Havn"
+    ],
+    "bridges": [
+      "Velmora",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i17:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Lena Okonkwo's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i17"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i18:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i18"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i18:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i18"
+  },
+  {
+    "answers": [
+      "Marisol"
+    ],
+    "bridges": [
+      "Peldane",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i19:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Tomas Reddy's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i19"
+  },
+  {
+    "answers": [
+      "Marisol"
+    ],
+    "bridges": [
+      "Peldane",
+      "Dario Okafor"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i19:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Tomas Reddy's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i19"
+  },
+  {
+    "answers": [
+      "Lorwick"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i20:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Priya Castellan's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i20"
+  },
+  {
+    "answers": [
+      "Lorwick"
+    ],
+    "bridges": [
+      "Sundmark",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i20:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Priya Castellan's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i20"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ny Havn",
+      "Farah Nasser"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i21:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Nora Halvorsen's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i21"
+  },
+  {
+    "answers": [
+      "Quillford"
+    ],
+    "bridges": [
+      "Ny Havn",
+      "Farah Nasser"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i21:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Nora Halvorsen's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i21"
+  },
+  {
+    "answers": [
+      "Tarnova"
+    ],
+    "bridges": [
+      "Bellhaven",
+      "Gideon Pike"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i22:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i22"
+  },
+  {
+    "answers": [
+      "Tarnova"
+    ],
+    "bridges": [
+      "Bellhaven",
+      "Gideon Pike"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i22:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Marco Duval's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i22"
+  },
+  {
+    "answers": [
+      "Lorwick"
+    ],
+    "bridges": [
+      "Orinth",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i23:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Sana Ilori's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i23"
+  },
+  {
+    "answers": [
+      "Lorwick"
+    ],
+    "bridges": [
+      "Orinth",
+      "Jora Lind"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i23:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Sana Ilori's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i23"
+  },
+  {
+    "answers": [
+      "Sundmark"
+    ],
+    "bridges": [
+      "Peldane",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i24:AB",
+    "placement": "AB",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Sana Ilori's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i24"
+  },
+  {
+    "answers": [
+      "Sundmark"
+    ],
+    "bridges": [
+      "Peldane",
+      "Kip Alvarez"
+    ],
+    "crossings": 2,
+    "dataset": "toy_d2",
+    "decomposition": [],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "toy-d2-h2-s0-i24:BA",
+    "placement": "BA",
+    "qtype": "hop2",
+    "question": "In which city was the mayor of Sana Ilori's favorite city born?",
+    "seed": 0,
+    "source_id": "toy-d2-h2-s0-i24"
+  },
+  {
+    "answers": [
+      "Miquette Giraudy"
+    ],
+    "bridges": [
+      "Steve Hillage"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Green >> performer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__460946_294723:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Green performer?",
+    "seed": 0,
+    "source_id": "2hop__460946_294723"
+  },
+  {
+    "answers": [
+      "Miquette Giraudy"
+    ],
+    "bridges": [
+      "Steve Hillage"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Green >> performer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__460946_294723:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Green performer?",
+    "seed": 0,
+    "source_id": "2hop__460946_294723"
+  },
+  {
+    "answers": [
+      "Miquette Giraudy"
+    ],
+    "bridges": [
+      "Steve Hillage"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Green >> performer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__460946_294723:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Green performer?",
+    "seed": 0,
+    "source_id": "2hop__460946_294723"
+  },
+  {
+    "answers": [
+      "Mike Medavoy"
+    ],
+    "bridges": [
+      "Orion Pictures"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "UHF >> distributed by",
+      "#1 >> founded by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 6,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__252311_366220:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who founded the company that distributed the film UHF?",
+    "seed": 0,
+    "source_id": "2hop__252311_366220"
+  },
+  {
+    "answers": [
+      "Mike Medavoy"
+    ],
+    "bridges": [
+      "Orion Pictures"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "UHF >> distributed by",
+      "#1 >> founded by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__252311_366220:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who founded the company that distributed the film UHF?",
+    "seed": 0,
+    "source_id": "2hop__252311_366220"
+  },
+  {
+    "answers": [
+      "Mike Medavoy"
+    ],
+    "bridges": [
+      "Orion Pictures"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "UHF >> distributed by",
+      "#1 >> founded by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__252311_366220:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who founded the company that distributed the film UHF?",
+    "seed": 0,
+    "source_id": "2hop__252311_366220"
+  },
+  {
+    "answers": [
+      "Tamaulipas"
+    ],
+    "bridges": [
+      "Nuevo Laredo"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Ciudad Deportiva >> owned by",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 6,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__701895_752697:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What administrative territorial entity is the owner of Ciudad Deportiva located?",
+    "seed": 0,
+    "source_id": "2hop__701895_752697"
+  },
+  {
+    "answers": [
+      "Tamaulipas"
+    ],
+    "bridges": [
+      "Nuevo Laredo"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Ciudad Deportiva >> owned by",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__701895_752697:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What administrative territorial entity is the owner of Ciudad Deportiva located?",
+    "seed": 0,
+    "source_id": "2hop__701895_752697"
+  },
+  {
+    "answers": [
+      "Tamaulipas"
+    ],
+    "bridges": [
+      "Nuevo Laredo"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Ciudad Deportiva >> owned by",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__701895_752697:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What administrative territorial entity is the owner of Ciudad Deportiva located?",
+    "seed": 0,
+    "source_id": "2hop__701895_752697"
+  },
+  {
+    "answers": [
+      "Cologne"
+    ],
+    "bridges": [
+      "German Aerospace Center"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Ulrich Walter >> employer",
+      "#1 >> headquarters location"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__259228_793698:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Where is Ulrich Walter's employer headquartered?",
+    "seed": 0,
+    "source_id": "2hop__259228_793698"
+  },
+  {
+    "answers": [
+      "Cologne"
+    ],
+    "bridges": [
+      "German Aerospace Center"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Ulrich Walter >> employer",
+      "#1 >> headquarters location"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__259228_793698:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Where is Ulrich Walter's employer headquartered?",
+    "seed": 0,
+    "source_id": "2hop__259228_793698"
+  },
+  {
+    "answers": [
+      "Cologne"
+    ],
+    "bridges": [
+      "German Aerospace Center"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Ulrich Walter >> employer",
+      "#1 >> headquarters location"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__259228_793698:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Where is Ulrich Walter's employer headquartered?",
+    "seed": 0,
+    "source_id": "2hop__259228_793698"
+  },
+  {
+    "answers": [
+      "Bombardier Inc.",
+      "Bombardier"
+    ],
+    "bridges": [
+      "Bombardier Aerospace"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Learjet 60 >> manufacturer",
+      "#1 >> owned by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__481349_302087:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Which company owns the manufacturer of Learjet 60?",
+    "seed": 0,
+    "source_id": "2hop__481349_302087"
+  },
+  {
+    "answers": [
+      "Bombardier Inc.",
+      "Bombardier"
+    ],
+    "bridges": [
+      "Bombardier Aerospace"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Learjet 60 >> manufacturer",
+      "#1 >> owned by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__481349_302087:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Which company owns the manufacturer of Learjet 60?",
+    "seed": 0,
+    "source_id": "2hop__481349_302087"
+  },
+  {
+    "answers": [
+      "Bombardier Inc.",
+      "Bombardier"
+    ],
+    "bridges": [
+      "Bombardier Aerospace"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Learjet 60 >> manufacturer",
+      "#1 >> owned by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__481349_302087:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Which company owns the manufacturer of Learjet 60?",
+    "seed": 0,
+    "source_id": "2hop__481349_302087"
+  },
+  {
+    "answers": [
+      "Fletcher Webster"
+    ],
+    "bridges": [
+      "Daniel Webster"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Caroline LeRoy >> spouse",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 6,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__697790_864352:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the child of Caroline LeRoy's spouse?",
+    "seed": 0,
+    "source_id": "2hop__697790_864352"
+  },
+  {
+    "answers": [
+      "Fletcher Webster"
+    ],
+    "bridges": [
+      "Daniel Webster"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Caroline LeRoy >> spouse",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__697790_864352:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the child of Caroline LeRoy's spouse?",
+    "seed": 0,
+    "source_id": "2hop__697790_864352"
+  },
+  {
+    "answers": [
+      "Fletcher Webster"
+    ],
+    "bridges": [
+      "Daniel Webster"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Caroline LeRoy >> spouse",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 6,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__697790_864352:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the child of Caroline LeRoy's spouse?",
+    "seed": 0,
+    "source_id": "2hop__697790_864352"
+  },
+  {
+    "answers": [
+      "Marie de' Medici"
+    ],
+    "bridges": [
+      "Louis XIII"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Philippe, Duke of Orl\u00e9ans >> father",
+      "#1 of France >> mother"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 4,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__207476_625987:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the grandmother of Philippe, Duke of Orl\u00e9ans?",
+    "seed": 0,
+    "source_id": "2hop__207476_625987"
+  },
+  {
+    "answers": [
+      "Marie de' Medici"
+    ],
+    "bridges": [
+      "Louis XIII"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Philippe, Duke of Orl\u00e9ans >> father",
+      "#1 of France >> mother"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 5,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__207476_625987:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the grandmother of Philippe, Duke of Orl\u00e9ans?",
+    "seed": 0,
+    "source_id": "2hop__207476_625987"
+  },
+  {
+    "answers": [
+      "Marie de' Medici"
+    ],
+    "bridges": [
+      "Louis XIII"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Philippe, Duke of Orl\u00e9ans >> father",
+      "#1 of France >> mother"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 6,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__207476_625987:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the grandmother of Philippe, Duke of Orl\u00e9ans?",
+    "seed": 0,
+    "source_id": "2hop__207476_625987"
+  },
+  {
+    "answers": [
+      "European integration"
+    ],
+    "bridges": [
+      "European Movement International"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "European Movement Germany >> member of",
+      "#1 >> movement"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__390947_232243:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What is the goal of the group that European Movement Germany is a member of?",
+    "seed": 0,
+    "source_id": "2hop__390947_232243"
+  },
+  {
+    "answers": [
+      "European integration"
+    ],
+    "bridges": [
+      "European Movement International"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "European Movement Germany >> member of",
+      "#1 >> movement"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__390947_232243:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What is the goal of the group that European Movement Germany is a member of?",
+    "seed": 0,
+    "source_id": "2hop__390947_232243"
+  },
+  {
+    "answers": [
+      "European integration"
+    ],
+    "bridges": [
+      "European Movement International"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "European Movement Germany >> member of",
+      "#1 >> movement"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 4,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__390947_232243:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What is the goal of the group that European Movement Germany is a member of?",
+    "seed": 0,
+    "source_id": "2hop__390947_232243"
+  },
+  {
+    "answers": [
+      "Time Warner Cable",
+      "Time Warner"
+    ],
+    "bridges": [
+      "Adelphia Communications Corporation"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Empire Sports Network >> owned by",
+      "#1 >> followed by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 4,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__354635_174222:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What company succeeded the owner of Empire Sports Network?",
+    "seed": 0,
+    "source_id": "2hop__354635_174222"
+  },
+  {
+    "answers": [
+      "Time Warner Cable",
+      "Time Warner"
+    ],
+    "bridges": [
+      "Adelphia Communications Corporation"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Empire Sports Network >> owned by",
+      "#1 >> followed by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__354635_174222:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What company succeeded the owner of Empire Sports Network?",
+    "seed": 0,
+    "source_id": "2hop__354635_174222"
+  },
+  {
+    "answers": [
+      "Time Warner Cable",
+      "Time Warner"
+    ],
+    "bridges": [
+      "Adelphia Communications Corporation"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Empire Sports Network >> owned by",
+      "#1 >> followed by"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__354635_174222:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What company succeeded the owner of Empire Sports Network?",
+    "seed": 0,
+    "source_id": "2hop__354635_174222"
+  },
+  {
+    "answers": [
+      "Cabo Delgado Province"
+    ],
+    "bridges": [
+      "Niassa Province"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Lago District >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 4,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__635187_861533:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What province shares a border with the province where Lago District is located?",
+    "seed": 0,
+    "source_id": "2hop__635187_861533"
+  },
+  {
+    "answers": [
+      "Cabo Delgado Province"
+    ],
+    "bridges": [
+      "Niassa Province"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Lago District >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 5,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__635187_861533:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What province shares a border with the province where Lago District is located?",
+    "seed": 0,
+    "source_id": "2hop__635187_861533"
+  },
+  {
+    "answers": [
+      "Cabo Delgado Province"
+    ],
+    "bridges": [
+      "Niassa Province"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Lago District >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__635187_861533:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What province shares a border with the province where Lago District is located?",
+    "seed": 0,
+    "source_id": "2hop__635187_861533"
+  },
+  {
+    "answers": [
+      "Lega Pro Prima Divisione"
+    ],
+    "bridges": [
+      "Benevento Calcio"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Stadio Ciro Vigorito >> occupant",
+      "#1 >> league"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__166824_185403:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What league does the team that plays in Stadio Ciro Vigorito play for?",
+    "seed": 0,
+    "source_id": "2hop__166824_185403"
+  },
+  {
+    "answers": [
+      "Lega Pro Prima Divisione"
+    ],
+    "bridges": [
+      "Benevento Calcio"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Stadio Ciro Vigorito >> occupant",
+      "#1 >> league"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__166824_185403:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What league does the team that plays in Stadio Ciro Vigorito play for?",
+    "seed": 0,
+    "source_id": "2hop__166824_185403"
+  },
+  {
+    "answers": [
+      "Lega Pro Prima Divisione"
+    ],
+    "bridges": [
+      "Benevento Calcio"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Stadio Ciro Vigorito >> occupant",
+      "#1 >> league"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__166824_185403:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What league does the team that plays in Stadio Ciro Vigorito play for?",
+    "seed": 0,
+    "source_id": "2hop__166824_185403"
+  },
+  {
+    "answers": [
+      "Anderson Tapes",
+      "The Anderson Tapes"
+    ],
+    "bridges": [
+      "Lawrence Sanders"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "The Timothy Files >> author",
+      "#1 >> notable work"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__698577_851686:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What is a notable work written by the author of The Timothy files?",
+    "seed": 0,
+    "source_id": "2hop__698577_851686"
+  },
+  {
+    "answers": [
+      "Anderson Tapes",
+      "The Anderson Tapes"
+    ],
+    "bridges": [
+      "Lawrence Sanders"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "The Timothy Files >> author",
+      "#1 >> notable work"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__698577_851686:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What is a notable work written by the author of The Timothy files?",
+    "seed": 0,
+    "source_id": "2hop__698577_851686"
+  },
+  {
+    "answers": [
+      "Anderson Tapes",
+      "The Anderson Tapes"
+    ],
+    "bridges": [
+      "Lawrence Sanders"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "The Timothy Files >> author",
+      "#1 >> notable work"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__698577_851686:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What is a notable work written by the author of The Timothy files?",
+    "seed": 0,
+    "source_id": "2hop__698577_851686"
+  },
+  {
+    "answers": [
+      "Knowsley",
+      "Metropolitan Borough of Knowsley"
+    ],
+    "bridges": [
+      "Whiston"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Callum McManaman >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__362107_652514:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "In which borough was Callum McManaman born?",
+    "seed": 0,
+    "source_id": "2hop__362107_652514"
+  },
+  {
+    "answers": [
+      "Knowsley",
+      "Metropolitan Borough of Knowsley"
+    ],
+    "bridges": [
+      "Whiston"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Callum McManaman >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__362107_652514:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "In which borough was Callum McManaman born?",
+    "seed": 0,
+    "source_id": "2hop__362107_652514"
+  },
+  {
+    "answers": [
+      "Knowsley",
+      "Metropolitan Borough of Knowsley"
+    ],
+    "bridges": [
+      "Whiston"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Callum McManaman >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__362107_652514:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "In which borough was Callum McManaman born?",
+    "seed": 0,
+    "source_id": "2hop__362107_652514"
+  },
+  {
+    "answers": [
+      "Crockett County"
+    ],
+    "bridges": [
+      "Pecos County"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Imperial >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__402530_774333:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What other county does the county where Imperial is located share a border with?",
+    "seed": 0,
+    "source_id": "2hop__402530_774333"
+  },
+  {
+    "answers": [
+      "Crockett County"
+    ],
+    "bridges": [
+      "Pecos County"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Imperial >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__402530_774333:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What other county does the county where Imperial is located share a border with?",
+    "seed": 0,
+    "source_id": "2hop__402530_774333"
+  },
+  {
+    "answers": [
+      "Crockett County"
+    ],
+    "bridges": [
+      "Pecos County"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Imperial >> located in the administrative territorial entity",
+      "#1 >> shares border with"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__402530_774333:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What other county does the county where Imperial is located share a border with?",
+    "seed": 0,
+    "source_id": "2hop__402530_774333"
+  },
+  {
+    "answers": [
+      "Orleans County",
+      "Orleans County, New York"
+    ],
+    "bridges": [
+      "Holley"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "William W. Blair >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__195917_575657:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "In what county is William W. Blair's birthplace located?",
+    "seed": 0,
+    "source_id": "2hop__195917_575657"
+  },
+  {
+    "answers": [
+      "Orleans County",
+      "Orleans County, New York"
+    ],
+    "bridges": [
+      "Holley"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "William W. Blair >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__195917_575657:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "In what county is William W. Blair's birthplace located?",
+    "seed": 0,
+    "source_id": "2hop__195917_575657"
+  },
+  {
+    "answers": [
+      "Orleans County",
+      "Orleans County, New York"
+    ],
+    "bridges": [
+      "Holley"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "William W. Blair >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__195917_575657:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "In what county is William W. Blair's birthplace located?",
+    "seed": 0,
+    "source_id": "2hop__195917_575657"
+  },
+  {
+    "answers": [
+      "Academy Award for Best Animated Short Film"
+    ],
+    "bridges": [
+      "Shaun Tan"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "The Red Tree >> author",
+      "#1 >> award received"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__683835_709167:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What award did the author of The Red Tree receive?",
+    "seed": 0,
+    "source_id": "2hop__683835_709167"
+  },
+  {
+    "answers": [
+      "Academy Award for Best Animated Short Film"
+    ],
+    "bridges": [
+      "Shaun Tan"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "The Red Tree >> author",
+      "#1 >> award received"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__683835_709167:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What award did the author of The Red Tree receive?",
+    "seed": 0,
+    "source_id": "2hop__683835_709167"
+  },
+  {
+    "answers": [
+      "Academy Award for Best Animated Short Film"
+    ],
+    "bridges": [
+      "Shaun Tan"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "The Red Tree >> author",
+      "#1 >> award received"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 9,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__683835_709167:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What award did the author of The Red Tree receive?",
+    "seed": 0,
+    "source_id": "2hop__683835_709167"
+  },
+  {
+    "answers": [
+      "Blair High School"
+    ],
+    "bridges": [
+      "Dana MacDuff"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Tyler MacDuff >> child",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 6,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__197470_271394:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Where was Tyler MacDuff's child educated?",
+    "seed": 0,
+    "source_id": "2hop__197470_271394"
+  },
+  {
+    "answers": [
+      "Blair High School"
+    ],
+    "bridges": [
+      "Dana MacDuff"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Tyler MacDuff >> child",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__197470_271394:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Where was Tyler MacDuff's child educated?",
+    "seed": 0,
+    "source_id": "2hop__197470_271394"
+  },
+  {
+    "answers": [
+      "Blair High School"
+    ],
+    "bridges": [
+      "Dana MacDuff"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Tyler MacDuff >> child",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__197470_271394:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Where was Tyler MacDuff's child educated?",
+    "seed": 0,
+    "source_id": "2hop__197470_271394"
+  },
+  {
+    "answers": [
+      "Keith Urban"
+    ],
+    "bridges": [
+      "Nicole Kidman"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Rabbit Hole >> producer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 4,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 6,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__458131_174974:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Rabbit Hole's producer?",
+    "seed": 0,
+    "source_id": "2hop__458131_174974"
+  },
+  {
+    "answers": [
+      "Keith Urban"
+    ],
+    "bridges": [
+      "Nicole Kidman"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Rabbit Hole >> producer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 6,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__458131_174974:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Rabbit Hole's producer?",
+    "seed": 0,
+    "source_id": "2hop__458131_174974"
+  },
+  {
+    "answers": [
+      "Keith Urban"
+    ],
+    "bridges": [
+      "Nicole Kidman"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Rabbit Hole >> producer",
+      "#1 >> spouse"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 5,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__458131_174974:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the spouse of the Rabbit Hole's producer?",
+    "seed": 0,
+    "source_id": "2hop__458131_174974"
+  },
+  {
+    "answers": [
+      "Svante Stensson Sture"
+    ],
+    "bridges": [
+      "Christina Gyllenstierna"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Sigrid Eskilsdotter >> child",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__299142_347613:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the child of Sigrid Eskilsdotter's child?",
+    "seed": 0,
+    "source_id": "2hop__299142_347613"
+  },
+  {
+    "answers": [
+      "Svante Stensson Sture"
+    ],
+    "bridges": [
+      "Christina Gyllenstierna"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Sigrid Eskilsdotter >> child",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__299142_347613:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the child of Sigrid Eskilsdotter's child?",
+    "seed": 0,
+    "source_id": "2hop__299142_347613"
+  },
+  {
+    "answers": [
+      "Svante Stensson Sture"
+    ],
+    "bridges": [
+      "Christina Gyllenstierna"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Sigrid Eskilsdotter >> child",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 3,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__299142_347613:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the child of Sigrid Eskilsdotter's child?",
+    "seed": 0,
+    "source_id": "2hop__299142_347613"
+  },
+  {
+    "answers": [
+      "Randall County",
+      "Randall County, Texas"
+    ],
+    "bridges": [
+      "Canyon"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Kimbrough Memorial Stadium >> located in the administrative territorial entity",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__528263_865831:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "In which county is Kimbrough Memorial Stadium located?",
+    "seed": 0,
+    "source_id": "2hop__528263_865831"
+  },
+  {
+    "answers": [
+      "Randall County",
+      "Randall County, Texas"
+    ],
+    "bridges": [
+      "Canyon"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Kimbrough Memorial Stadium >> located in the administrative territorial entity",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 2,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__528263_865831:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "In which county is Kimbrough Memorial Stadium located?",
+    "seed": 0,
+    "source_id": "2hop__528263_865831"
+  },
+  {
+    "answers": [
+      "Randall County",
+      "Randall County, Texas"
+    ],
+    "bridges": [
+      "Canyon"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Kimbrough Memorial Stadium >> located in the administrative territorial entity",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 5,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__528263_865831:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "In which county is Kimbrough Memorial Stadium located?",
+    "seed": 0,
+    "source_id": "2hop__528263_865831"
+  },
+  {
+    "answers": [
+      "Derrty Entertainment"
+    ],
+    "bridges": [
+      "Ali & Gipp"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Almost Made Ya >> performer",
+      "#1 >> record label"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__569582_304416:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What record label is the performer of Almost Made Ya signed to?",
+    "seed": 0,
+    "source_id": "2hop__569582_304416"
+  },
+  {
+    "answers": [
+      "Derrty Entertainment"
+    ],
+    "bridges": [
+      "Ali & Gipp"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Almost Made Ya >> performer",
+      "#1 >> record label"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__569582_304416:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What record label is the performer of Almost Made Ya signed to?",
+    "seed": 0,
+    "source_id": "2hop__569582_304416"
+  },
+  {
+    "answers": [
+      "Derrty Entertainment"
+    ],
+    "bridges": [
+      "Ali & Gipp"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Almost Made Ya >> performer",
+      "#1 >> record label"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 0,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__569582_304416:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What record label is the performer of Almost Made Ya signed to?",
+    "seed": 0,
+    "source_id": "2hop__569582_304416"
+  },
+  {
+    "answers": [
+      "Exeter College"
+    ],
+    "bridges": [
+      "Thomas Nabbes"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Hannibal and Scipio >> author",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 7,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__505860_650613:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Where was the author of Hannibal and Scipio educated at?",
+    "seed": 0,
+    "source_id": "2hop__505860_650613"
+  },
+  {
+    "answers": [
+      "Exeter College"
+    ],
+    "bridges": [
+      "Thomas Nabbes"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Hannibal and Scipio >> author",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 9,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__505860_650613:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Where was the author of Hannibal and Scipio educated at?",
+    "seed": 0,
+    "source_id": "2hop__505860_650613"
+  },
+  {
+    "answers": [
+      "Exeter College"
+    ],
+    "bridges": [
+      "Thomas Nabbes"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Hannibal and Scipio >> author",
+      "#1 >> educated at"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 8,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 8,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__505860_650613:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Where was the author of Hannibal and Scipio educated at?",
+    "seed": 0,
+    "source_id": "2hop__505860_650613"
+  },
+  {
+    "answers": [
+      "Charles County",
+      "Charles County, Maryland"
+    ],
+    "bridges": [
+      "Hughesville"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Southern Maryland Electric Cooperative >> headquarters location",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 3,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__821197_368148:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "In which county is Southern Maryland Electric Cooperative headquartered?",
+    "seed": 0,
+    "source_id": "2hop__821197_368148"
+  },
+  {
+    "answers": [
+      "Charles County",
+      "Charles County, Maryland"
+    ],
+    "bridges": [
+      "Hughesville"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Southern Maryland Electric Cooperative >> headquarters location",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__821197_368148:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "In which county is Southern Maryland Electric Cooperative headquartered?",
+    "seed": 0,
+    "source_id": "2hop__821197_368148"
+  },
+  {
+    "answers": [
+      "Charles County",
+      "Charles County, Maryland"
+    ],
+    "bridges": [
+      "Hughesville"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Southern Maryland Electric Cooperative >> headquarters location",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 4,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__821197_368148:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "In which county is Southern Maryland Electric Cooperative headquartered?",
+    "seed": 0,
+    "source_id": "2hop__821197_368148"
+  },
+  {
+    "answers": [
+      "Chynna Phillips"
+    ],
+    "bridges": [
+      "Michelle Phillips"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Victim of Romance >> performer",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__554167_451128:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "Who is the child of the Victim of Romance performer?",
+    "seed": 0,
+    "source_id": "2hop__554167_451128"
+  },
+  {
+    "answers": [
+      "Chynna Phillips"
+    ],
+    "bridges": [
+      "Michelle Phillips"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Victim of Romance >> performer",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 2,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__554167_451128:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "Who is the child of the Victim of Romance performer?",
+    "seed": 0,
+    "source_id": "2hop__554167_451128"
+  },
+  {
+    "answers": [
+      "Chynna Phillips"
+    ],
+    "bridges": [
+      "Michelle Phillips"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Victim of Romance >> performer",
+      "#1 >> child"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 1,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 1,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__554167_451128:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "Who is the child of the Victim of Romance performer?",
+    "seed": 0,
+    "source_id": "2hop__554167_451128"
+  },
+  {
+    "answers": [
+      "McDonald County",
+      "McDonald County, Missouri"
+    ],
+    "bridges": [
+      "Southwest City"
+    ],
+    "crossings": 0,
+    "dataset": "musique",
+    "decomposition": [
+      "Tim DuBois >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__702496_430061:BB:s0",
+    "placement": "BB",
+    "qtype": "2hop",
+    "question": "What county was Tim Dubois born in?",
+    "seed": 0,
+    "source_id": "2hop__702496_430061"
+  },
+  {
+    "answers": [
+      "McDonald County",
+      "McDonald County, Missouri"
+    ],
+    "bridges": [
+      "Southwest City"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Tim DuBois >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 7,
+        "worker": 0
+      },
+      {
+        "hop": 1,
+        "index": 0,
+        "worker": 1
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__702496_430061:AB:s0",
+    "placement": "AB",
+    "qtype": "2hop",
+    "question": "What county was Tim Dubois born in?",
+    "seed": 0,
+    "source_id": "2hop__702496_430061"
+  },
+  {
+    "answers": [
+      "McDonald County",
+      "McDonald County, Missouri"
+    ],
+    "bridges": [
+      "Southwest City"
+    ],
+    "crossings": 1,
+    "dataset": "musique",
+    "decomposition": [
+      "Tim DuBois >> place of birth",
+      "#1 >> located in the administrative territorial entity"
+    ],
+    "gold": [
+      {
+        "hop": 0,
+        "index": 5,
+        "worker": 1
+      },
+      {
+        "hop": 1,
+        "index": 6,
+        "worker": 0
+      }
+    ],
+    "hops": 2,
+    "id": "2hop__702496_430061:BA:s0",
+    "placement": "BA",
+    "qtype": "2hop",
+    "question": "What county was Tim Dubois born in?",
+    "seed": 0,
+    "source_id": "2hop__702496_430061"
+  }
+]
