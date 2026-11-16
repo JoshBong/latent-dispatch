@@ -4,6 +4,37 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-16, later still: reading the answers of the Qwen3-4B thinking pilot
+
+Same exercise on the 1,050 selected answers of the 4B thinking pilot (branch `codex/results-t4-thinking-25-2026-11-16`; joint reading B1, separate caches K0, text reports T1; thinking off or forced at 1,024). "Checked" and "read" as in the entry below.
+
+**1. "Thinking off" is not the same condition for the text-report arm.** With thinking off, the answering model writes visible step-by-step reasoning under B1 and K0 but a bare boxed answer under T1 (checked):
+
+| thinking off | B1 | K0 | T1 |
+|---|---|---|---|
+| toy: bare boxed answers of 100, median generated tokens | 1, 71 | 5, 81 | 97, 7 |
+| MuSiQue: bare boxed answers of 75, median generated tokens | 42, 13 | 37, 25 | 71, 7 |
+
+So the toy gain from thinking is "no reasoning to reasoning" for T1 and "untagged reasoning to tagged reasoning" for K0. The two gains are not comparable as they stand.
+
+**2. Toy text reports fail in the answering model, not in the reports, on two-fact chains.** Both facts are in the reports in 50 of 50 two-fact layouts (read, by a name-proximity check plus four report pairs in full). The 30 failures are abstentions ("Unknown", "Cannot be determined"; checked). Each worker sees half the chain and, despite being told not to answer, writes a verdict that the question cannot be answered; the answering model repeats it (read).
+
+**3. Three-fact text reports stay at 70 with thinking because a worker drops a fact.** In 14 of 50 layouts the report omits the mayor's birthplace, since the worker holding it does not know who the mayor is: 0 of 14 correct there, 35 of 36 when all three facts are reported (read; 2 of the 14 reports read in full).
+
+**4. MuSiQue text reports, 18 to 12 with thinking, is noise plus scoring.** Counting same-entity answers it is 38 to 34 (read, all 50 split layouts). The gold answer string is absent from the reports in 19 of 50 layouts. Some reports state things the paragraphs do not say.
+
+**5. Exact match under-scores MuSiQue here too** (read; no answer was wrongly marked correct in 118 EM-true rows):
+
+| split placements, as scored → same-entity | off | forced |
+|---|---|---|
+| B1 | 30 → 38 | 38 → 58 |
+| K0 | 12 → 14 | 32 → 48 |
+| T1 | 18 → 38 | 12 → 34 |
+
+**6. Toy K0 at the cap looks like the 8B blocked failures.** Every K0 failure names the right bridge city (read, all 73 thinking-off failures). At the cap there are no literal loops: in 23 of 28 failures the model re-lists the distractor "Cities" paragraph and insists the fact is absent, in 5 it states the right fact and then retracts it (read, all 35 capped traces). Statements that mix the two workers' same-template paragraphs appear only under K0: 0 of 200 B1 rows, 0 of 200 T1 rows, 5 of 100 K0 off, 15 of 100 K0 forced (read, by pattern match). None of the capped failures looks like steady progress cut short.
+
+**7. The toy "three-fact" task is A, B, A:** the third fact sits in the same paragraph as the first, so it adds a lookup in an already-read paragraph and not a second crossing between workers.
+
 ## 2026-11-16, later: reading the answers of the 8B masked-thinking run (corrections to the entry below)
 
 The entry below reported exact match, intervals and cap rates without anyone reading the generated answers. All 600 answers of the thinking run have now been read (most in full, capped traces by head and tail). "Checked" means recomputed from the rows by script; "read" means from reading the texts and not yet confirmed by a second reader.
