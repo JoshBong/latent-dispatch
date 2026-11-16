@@ -54,13 +54,24 @@ def free_cidr(subnets, pool):
 
 
 def ensure_subnet(args, region):
-    subnets = [s for s in cloud(args.project, "compute", "networks", "subnets", "list")
-               if basename(s["network"]) == args.network]
-    candidates = [s for s in subnets if basename(s["region"]) == region
-                  and s.get("purpose", "PRIVATE") == "PRIVATE"
-                  and s.get("ipCidrRange")]
+    # Use the VPC's authoritative links and explicit regional reads. An
+    # aggregated subnet list can be incomplete; missing ranges must not be
+    # interpreted as free address space.
+    network = cloud(args.project, "compute", "networks", "describe", args.network)
+    links = network.get("subnetworks", [])
+    def read(link):
+        return cloud(args.project, "compute", "networks", "subnets", "describe",
+                     basename(link), f"--region={link.split('/regions/')[1].split('/')[0]}")
+    regional = [link for link in links if f"/regions/{region}/" in link]
+    loaded = {link: read(link) for link in regional}
+    candidates = [s for s in loaded.values()
+                  if s.get("purpose", "PRIVATE") == "PRIVATE" and s.get("ipCidrRange")]
     if candidates:
         return sorted(candidates, key=lambda s: s["name"])[0]["name"]
+    for link in links:
+        if link not in loaded:
+            loaded[link] = read(link)
+    subnets = list(loaded.values())
     name = f"{args.subnet_prefix}-{region}"
     cidr = free_cidr(subnets, args.subnet_pool)
     print(f"Creating subnet {name}: {cidr}", flush=True)

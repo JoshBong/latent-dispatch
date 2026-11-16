@@ -118,20 +118,23 @@ class SearchTests(unittest.TestCase):
 
     def test_existing_subnet_reused(self):
         args = self.args()
-        with patch.object(gpu, "cloud", return_value=[{
-            "name": "existing", "network": "networks/network", "region": "regions/us-east1",
-            "ipCidrRange": "10.0.0.0/24"}]) as cloud:
+        with patch.object(gpu, "cloud", side_effect=[
+            {"subnetworks": ["regions/us-east1/subnetworks/existing"]},
+            {"name": "existing", "network": "networks/network", "region": "regions/us-east1",
+             "ipCidrRange": "10.0.0.0/24"}]) as cloud:
             self.assertEqual(gpu.ensure_subnet(args, "us-east1"), "existing")
-            self.assertEqual(cloud.call_count, 1)
+            self.assertEqual(cloud.call_count, 2)
+            self.assertIn("--region=us-east1", cloud.call_args.args)
 
     def test_missing_subnet_created_with_unused_range(self):
         args = self.args()
         args.subnet_prefix = "gpu-search"
         args.subnet_pool = "10.200.0.0/16"
-        with patch.object(gpu, "cloud", side_effect=[[
+        with patch.object(gpu, "cloud", side_effect=[
+            {"subnetworks": ["regions/us-west1/subnetworks/other-region"]},
             {"name": "other-region", "network": "networks/network",
-             "region": "regions/us-west1", "ipCidrRange": "10.200.0.0/24"}
-        ], {}]) as cloud, patch("builtins.print"):
+             "region": "regions/us-west1", "ipCidrRange": "10.200.0.0/24"},
+            {}]) as cloud, patch("builtins.print"):
             self.assertEqual(gpu.ensure_subnet(args, "us-east1"), "gpu-search-us-east1")
             self.assertIn("--range=10.200.1.0/24", cloud.call_args.args)
             self.assertIn("--region=us-east1", cloud.call_args.args)
