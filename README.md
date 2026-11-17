@@ -8,8 +8,8 @@ Research journal (what is running, what was decided, dead ends, open questions):
 The three paper-completion experiments (baseline diagnostics, masked thinking,
 and answer-format-controlled likelihood) have a [run guide](scripts/README_paper_ablations.md).
 
-The four A100 follow-up jobs for fresh-source confirmation and the controlled
-paragraph-confusion diagnostic have a [separate run guide](scripts/README_wmac_a100.md).
+The A100 follow-ups include four primary jobs and two implementation-validation
+jobs, covering Qwen3 and Llama, with a [separate run guide](scripts/README_wmac_a100.md).
 The new package requires explicit preparation and launch commands; it does not start jobs automatically.
 Their fixed samples total 96 + 600 + 255 main evaluations; `--plan-only` previews
 each job without loading a model.

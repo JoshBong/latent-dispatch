@@ -1,6 +1,6 @@
 """Input preparation for the WMAC follow-ups. Nothing executes on import.
 
-Preparation uses a tokenizer but never loads model weights. It freezes selected
+Preparation uses tokenizers but never loads model weights. It freezes selected
 questions before inference. Literal grounding checks are not human adjudication.
 """
 import copy
@@ -15,9 +15,19 @@ from . import prompts, toy
 from .paper_plan import ROOT, digest, file_sha, frozen_json
 from .score import contains_answer, normalize
 
-CONFIG = ROOT/'experiments/wmac_a100_v1.json'
-JOBS = ('validation', 'musique-8b', 'musique-4b', 'toy-8b')
+CONFIG = ROOT/'experiments/wmac_a100_v2.json'
+JOBS = ('validation', 'validation-llama', 'musique-8b', 'musique-llama', 'musique-4b', 'toy-8b')
 MASKS = ('blocked', 'gold', 'full', 'matched_irrelevant')
+CONDITIONS = (*MASKS, 'b1', 'k0')
+
+
+def is_validation(job):
+    return job in ('validation','validation-llama')
+
+
+def model_key(job):
+    if job not in JOBS: raise ValueError(f'unknown job: {job}')
+    return 'llama' if job.endswith('-llama') else '4b' if job=='musique-4b' else '8b'
 
 
 def supports(q):
@@ -87,6 +97,7 @@ def select_sources(questions, excluded, n, seed, reviews=None, eligible=None):
                      for p in supports(next(iter(groups[s].values())))}
     used_questions = {normalize(next(iter(groups[s].values()))['question']) for s in excluded if s in groups}
     selected, audit = [], []
+    # Retain V1's input-only source ordering; V2 adds feasibility for all three tokenizers.
     for source in sorted(groups,key=lambda s:digest([seed,'wmac_a100_v1',s])):
         pair = groups[source]
         q = copy.deepcopy(next(iter(pair.values())))
@@ -171,41 +182,77 @@ def read_benchmarks(folder):
     return questions,hashes
 
 
-def prepare(folder, destination, reviews=None, config_path=CONFIG):
+def reused_sources(prior,n,eligible):
+    """Preserve existing source text, order, and aliases; never substitute failures."""
+    fresh=[copy.deepcopy(prior['questions'][id]) for id in prior['musique_ids']]
+    groups={}
+    for q in fresh: groups.setdefault(q['source_id'],[]).append(q['placement'])
+    if len(fresh)!=2*n or len(groups)!=n or any(sorted(v)!=['AB','BA'] for v in groups.values()):
+        raise ValueError(f'source reuse needs the same {n} paired source questions')
+    for q in fresh:
+        if not eligible(q): raise ValueError(f'{q["id"]}: reused input fails tokenizer feasibility; no question was replaced')
+    return fresh
+
+
+def prepare(folder, destination, reviews=None, config_path=CONFIG, reuse_prepared=None):
     """Josh runs this before inference; existing prepared inputs are never regenerated."""
     destination=Path(destination)
     if destination.exists():
-        if reviews is not None: raise ValueError('human revisions need a NEW prepared path and run name')
+        if reviews is not None or reuse_prepared is not None:
+            raise ValueError('human revisions or source reuse need a NEW prepared path and run name')
         return load(destination)
     from transformers import AutoTokenizer
-    from .wmac_experiments import preflight, matched_indices
+    from huggingface_hub import HfApi
+    from .wmac_experiments import preflight, matched_indices, check_prompt_template
     cfg=json.loads(Path(config_path).read_text())
-    base=cfg['models']['8b']
-    tokenizer=AutoTokenizer.from_pretrained(base['name'],revision=base['revision'])
-    adapter=SimpleNamespace(tok=tokenizer,fmt=prompts.FORMATS['qwen3'],
-                            ids=lambda text:tokenizer(text,add_special_tokens=False).input_ids)
+    adapters={}
+    for key,model in cfg['models'].items():
+        model['requested_revision']=model['revision']
+        model['revision']=HfApi().model_info(model['name'],revision=model['revision'] or 'main').sha
+        if not isinstance(model['revision'],str) or len(model['revision'])!=40:
+            raise ValueError(f'{model["name"]}: could not resolve an immutable model revision')
+        tokenizer=AutoTokenizer.from_pretrained(model['name'],revision=model['revision'])
+        adapters[key]=SimpleNamespace(tok=tokenizer,fmt=prompts.FORMATS[model['format']],
+                            ids=lambda text,tok=tokenizer:tok(text,add_special_tokens=False).input_ids)
     questions,hashes=read_benchmarks(folder)
     excluded,archives=historical_sources(ROOT/'archive')
     def eligible(q):
-        try: matched_indices(adapter,q)
-        except ValueError as error:
-            if 'insufficient earlier irrelevant tokens' in str(error): return False
-            raise
-        return (len(adapter.ids(prompts.prefix(adapter.fmt,q['question'])))+
-                sum(len(adapter.ids(prompts.block(w))) for w in q['workers']))<=cfg['max_context_tokens']
-    fresh,audit=select_sources(questions.values(),excluded,cfg['musique_sources'],cfg['seed'],reviews,eligible)
-    synthetic=factorial_toy(cfg['toy_sources'],cfg['seed'],tokenizer)
+        for adapter in adapters.values():
+            try: matched_indices(adapter,q)
+            except ValueError as error:
+                if 'insufficient earlier irrelevant tokens' in str(error): return False
+                raise
+            if (len(adapter.ids(prompts.prefix(adapter.fmt,q['question'])))+
+                    sum(len(adapter.ids(prompts.block(w))) for w in q['workers']))>cfg['max_context_tokens']:
+                return False
+        return True
+    prior=None
+    if reuse_prepared is None:
+        fresh,audit=select_sources(questions.values(),excluded,cfg['musique_sources'],cfg['seed'],reviews,eligible)
+    else:
+        if reviews is not None: raise ValueError('source reuse preserves answers; do not combine it with new review decisions')
+        prior,_=_read_bundle(reuse_prepared,('wmac_a100_v1','wmac_a100_v2'))
+        if prior['benchmark_sha256']!=hashes: raise ValueError('source-reuse benchmark mismatch')
+        fresh=reused_sources(prior,cfg['musique_sources'],eligible)
+        reviews=prior['reviews'];audit=prior['selection_audit']
+    synthetic=factorial_toy(cfg['toy_sources'],cfg['seed'],adapters['8b'].tok)
     old=json.loads((ROOT/'experiments/paper_ablations_v1.json').read_text())
     diagnostic=[questions[id] for id in old['validation']['ids']]
     chosen={q['id']:q for q in diagnostic+fresh+synthetic}
-    checked=preflight(adapter,chosen,list(chosen),cfg['max_context_tokens'])
+    checked={};templates={}
+    for key,adapter in adapters.items():
+        checked_ids=list(chosen) if key=='8b' else [q['id'] for q in diagnostic+fresh]
+        checked[key]=preflight(adapter,chosen,checked_ids,cfg['max_context_tokens'])
+        templates[key]=check_prompt_template(adapter,fresh[0])
     bundle=dict(config=cfg,config_sha256=file_sha(config_path),benchmark_sha256=hashes,
                 archive_sha256=archives,excluded_historical_sources=sorted(excluded),reviews=reviews or {},
                 selection_audit=audit,exclusion_counts=dict(Counter(flag for row in audit for flag in row['flags'])),
                 questions=chosen,question_sha256={id:digest(q) for id,q in chosen.items()},
                 validation_ids=[q['id'] for q in diagnostic],musique_ids=[q['id'] for q in fresh],
                 toy_ids=[q['id'] for q in synthetic],preflight=checked,
-                tokenizer_sha256=digest(tokenizer.backend_tokenizer.to_str()))
+                prompt_template_checks=templates,
+                reused_prepared_sha256=file_sha(reuse_prepared) if reuse_prepared else None,
+                tokenizer_sha256={key:digest(a.tok.backend_tokenizer.to_str()) for key,a in adapters.items()})
     frozen_json(destination,bundle)
     review_packet=[dict(source_id=q['source_id'],question=q['question'],answers=q['answers'],
                         supports=supports(q),bridges=q['bridges'],decomposition=q['decomposition'],
@@ -214,9 +261,10 @@ def prepare(folder, destination, reviews=None, config_path=CONFIG):
     return bundle,chosen
 
 
-def load(path):
+def _read_bundle(path,allowed):
     bundle=json.loads(Path(path).read_text())
-    if bundle['config']['protocol']!='wmac_a100_v1': raise ValueError('unknown prepared protocol')
+    if bundle['config']['protocol'] not in allowed:
+        raise ValueError('prepared protocol mismatch; use v2 preparation or the original pinned code for v1 runs')
     qs=bundle['questions']
     if {id:digest(q) for id,q in qs.items()}!=bundle['question_sha256']:
         raise ValueError('prepared question hash mismatch')
@@ -225,15 +273,25 @@ def load(path):
     return bundle,qs
 
 
+def load(path):
+    bundle,qs=_read_bundle(path,('wmac_a100_v2',))
+    if set(bundle['config']['models'])!={'8b','4b','llama'}:
+        raise ValueError('v2 requires Qwen3-8B, Qwen3-4B, and Llama')
+    for model in bundle['config']['models'].values():
+        if not isinstance(model['revision'],str) or len(model['revision'])!=40:
+            raise ValueError('v2 requires frozen model revisions from preparation')
+    return bundle,qs
+
+
 def job_ids(job,bundle):
-    return bundle['validation_ids' if job=='validation' else 'musique_ids' if job.startswith('musique') else 'toy_ids']
+    return bundle['validation_ids' if is_validation(job) else 'musique_ids' if job.startswith('musique') else 'toy_ids']
 
 
 def specifications(job,cfg):
-    if job=='validation':
+    if is_validation(job):
         return {a:{'variant':a,'thinking':'off','answer_tokens':cfg['validation_answer_tokens']}
                 for a in ('b1','masked_full','b1_mask','masked_blocked')}
-    masks=MASKS if job.startswith('musique') else ('blocked','gold')
+    masks=CONDITIONS if job.startswith('musique') else ('blocked','gold')
     modes=('off',) if job.startswith('musique') else ('off','forced')
     return {c+'_'+m:{'condition':c,'thinking':m,'answer_tokens':cfg['answer_tokens'],'think_budget':cfg['think_budget']}
             for m in modes for c in masks}

@@ -65,7 +65,8 @@ def summarize(job,ids,specs,questions,store,folder,cfg,probe_store=None):
         for cohort,selected in [('all',paired),('strict',{s:g for s,g in paired.items() if s in strict})]:
             for order in ('AB+BA','AB','BA'):
                 for metric in ('f1','em'):
-                    for a,b in [('gold','blocked'),('gold','matched_irrelevant'),('full','blocked'),('gold','full')]:
+                    for a,b in [('gold','blocked'),('gold','matched_irrelevant'),('full','blocked'),('gold','full'),
+                                ('b1','k0'),('b1','full'),('blocked','k0'),('gold','k0')]:
                         values=[]
                         for group in selected.values():
                             within=[id for id in group if order=='AB+BA' or questions[id]['placement']==order]
@@ -80,9 +81,13 @@ def summarize(job,ids,specs,questions,store,folder,cfg,probe_store=None):
                         for i,limit in enumerate(limits) if n<=limit),f'> {limits[-1]}')
             bins[label].append(group)
         for label,grouped in sorted(bins.items()):
-            for a,b in [('gold','blocked'),('gold','matched_irrelevant')]:
+            for a,b in [('gold','blocked'),('gold','matched_irrelevant'),('b1','k0')]:
                 values=[float(np.mean([rows[id,a+'_off']['f1']-rows[id,b+'_off']['f1'] for id in group])) for group in grouped]
                 contrast(a+'-'+b,'f1',values,cohort='all',support_length_bucket=label,primary=False)
+        result['implementation_comparisons']={
+            'b1-k0':'Actual joint reading minus original local-position, shifted-key separate caches.',
+            'b1-full':'Joint implementation minus full mask; inspect numerical correspondence.',
+            'blocked-k0':'True-position masked computation minus original K0; includes position/stitch and numerical effects.'}
     else:
         def mean(source,condition,metric,cities,headings):
             group=[id for id in paired[source] if questions[id]['cities']==cities and questions[id]['headings']==headings]

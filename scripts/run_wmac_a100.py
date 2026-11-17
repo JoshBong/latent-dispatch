@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Explicit preparation and four resumable A100 jobs. No execution on import."""
+"""Explicit preparation and resumable A100 jobs. No execution on import."""
 import argparse
 import fcntl
 import json
@@ -23,7 +23,7 @@ def arguments(argv=None):
     p.add_argument('--prepared',type=Path,help='Frozen prepared.json; defaults to output-root/run-name/prepared.json')
     p.add_argument('--benchmark-dir',type=Path,default=ROOT/'benchmark')
     p.add_argument('--output-root',type=Path,default=ROOT/'results')
-    p.add_argument('--run-name',default='wmac_a100_v1')
+    p.add_argument('--run-name',default='wmac_a100_v2')
     mode=p.add_mutually_exclusive_group()
     mode.add_argument('--plan-only',action='store_true')
     mode.add_argument('--smoke-only',action='store_true')
@@ -35,14 +35,17 @@ def arguments(argv=None):
     p.add_argument('--revision',help='HF revision override; actual revision is frozen on resume')
     p.add_argument('--validation-limit',type=int,help='Separate numerical diagnostic on N shortest frozen layouts')
     p.add_argument('--reviews',type=Path,help='prepare only: pre-output human exclusions/aliases, with reviewer and reason')
+    p.add_argument('--reuse-prepared',type=Path,help='prepare only: preserve an existing 200-question cohort and answers exactly')
     args=p.parse_args(argv)
     if not re.fullmatch(r'[A-Za-z0-9_-]+',args.run_name): p.error('invalid run name')
     if not 0<args.max_hours<float('inf'): p.error('--max-hours must be finite and positive')
-    if args.job not in ('prepare','validation') and (args.dtype!='bfloat16' or args.attention!='sdpa'):
+    if args.job!='prepare' and not wmac_plan.is_validation(args.job) and (args.dtype!='bfloat16' or args.attention!='sdpa'):
         p.error('main experiments require BF16 + SDPA')
-    if args.validation_limit is not None and (args.job!='validation' or not 1<=args.validation_limit<=24):
+    if args.validation_limit is not None and (not wmac_plan.is_validation(args.job) or not 1<=args.validation_limit<=24):
         p.error('--validation-limit is only for validation and must be between 1 and 24')
     if args.reviews and args.job!='prepare': p.error('human reviews must be frozen during preparation')
+    if args.reuse_prepared and args.job!='prepare': p.error('--reuse-prepared applies only to preparation')
+    if args.reuse_prepared and args.reviews: p.error('source reuse preserves aliases; do not also supply new reviews')
     if args.job=='prepare' and (args.plan_only or args.smoke_only or args.summarize):
         p.error('prepare is tokenizer/data preparation; these modes apply only to inference jobs')
     if args.prepared is None: args.prepared=args.output_root/args.run_name/'prepared.json'
@@ -92,7 +95,7 @@ def main(argv=None):
         args.prepared.parent.mkdir(parents=True,exist_ok=True)
         with args.prepared.with_suffix('.lock').open('a') as lock:
             fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
-            bundle,_=wmac_plan.prepare(args.benchmark_dir,args.prepared,reviews)
+            bundle,_=wmac_plan.prepare(args.benchmark_dir,args.prepared,reviews,reuse_prepared=args.reuse_prepared)
         print(json.dumps(dict(prepared=str(args.prepared),main=bundle['config']['expected_main_rows'],
                               probes=bundle['config']['expected_probe_rows'],screening=bundle['config']['screening']),indent=2))
         return 0
@@ -113,11 +116,14 @@ def main(argv=None):
 
 def run(args,bundle,questions,ids,specs,folder):
     cfg=bundle['config']
-    model_cfg=cfg['models']['4b' if args.job=='musique-4b' else '8b']
+    family=wmac_plan.model_key(args.job)
+    model_cfg=cfg['models'][family]
+    if args.revision and args.revision!=model_cfg['revision']:
+        raise ValueError('model revision differs from the prepared protocol; prepare a separate run')
     revision=args.revision or model_cfg['revision']
     files=code_state();files[str(Path(__file__).relative_to(ROOT))]=file_sha(__file__)
     manifest=dict(protocol=cfg['protocol'],job=args.job,prepared_sha256=file_sha(args.prepared),code_sha256=files,
-        model=model_cfg['name'],revision_requested=revision,dtype=args.dtype,attention=args.attention,
+        model=model_cfg['name'],model_format=model_cfg['format'],revision_requested=revision,dtype=args.dtype,attention=args.attention,
         ids=ids,specifications=specs,question_sha256={id:digest(questions[id]) for id in ids},
         expected_main_rows=len(ids)*len(specs),screening=cfg['screening'])
     frozen_json(folder/'manifest.json',manifest)
@@ -146,9 +152,10 @@ def run(args,bundle,questions,ids,specs,folder):
                     if not path.is_relative_to((folder/phase).resolve()) or not path.is_file():
                         raise ValueError(f'missing or invalid numerical artifact: {row[key]}')
     def summarize():
-        if args.job=='validation':
+        if wmac_plan.is_validation(args.job):
             from latent_dispatch.paper_summary import summarize as old_summary
             summary=old_summary('validation',ids,specs,questions,main_store,folder/'main')
+            summary['job']=args.job
             summary['common_prefix_diagnostics']=dict(saved=len(diagnostics.rows),expected=2*len(ids),file='../diagnostics/rows.jsonl')
             summary['complete']=summary['complete'] and len(diagnostics.rows)==2*len(ids)
             atomic_json(folder/'main/summary.json',summary)
@@ -156,7 +163,7 @@ def run(args,bundle,questions,ids,specs,folder):
         from latent_dispatch.wmac_summary import summarize as new_summary
         return new_summary(args.job,ids,specs,questions,main_store,folder/'main',cfg,probes)
     finished=(len(main_store.rows)==len(ids)*len(specs) and len(probes.rows)==len(probe_ids)*len(probe_specs)
-              and (args.job!='validation' or len(diagnostics.rows)==2*len(ids)))
+              and (not wmac_plan.is_validation(args.job) or len(diagnostics.rows)==2*len(ids)))
     if args.summarize or finished:
         summary=summarize()
         archive=shutil.make_archive(str(folder),'gztar',root_dir=folder.parent,base_dir=folder.name)
@@ -167,7 +174,7 @@ def run(args,bundle,questions,ids,specs,folder):
     import torch
     if args.device.startswith('cuda'):
         if not torch.cuda.is_available(): raise RuntimeError('CUDA unavailable; run this job on the A100')
-        if model_cfg['name'].endswith('8B') and torch.cuda.get_device_properties(torch.device(args.device)).total_memory<30*2**30:
+        if family in ('8b','llama') and torch.cuda.get_device_properties(torch.device(args.device)).total_memory<30*2**30:
             raise RuntimeError('8B protocol requires at least 30 GiB GPU memory')
     torch.manual_seed(cfg['seed']);torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
     start=time.monotonic();deadline=start+args.max_hours*3600;stopped=[False]
@@ -179,12 +186,15 @@ def run(args,bundle,questions,ids,specs,folder):
     try:
         if revision is None and (folder/'runtime.json').exists():
             revision=json.loads((folder/'runtime.json').read_text())['model_revision']
-        model=Model.load(model_cfg['name'],device=args.device,dtype=args.dtype,revision=revision,attn_implementation=args.attention)
+        model=Model.load(model_cfg['name'],device=args.device,dtype=args.dtype,fmt=model_cfg['format'],
+                         revision=revision,attn_implementation=args.attention)
         frozen_json(folder/'runtime.json',runtime_metadata(model))
+        frozen_json(folder/'prompt_template_check.json',wmac_experiments.check_prompt_template(model,questions[ids[0]]))
+        frozen_json(folder/'rope_shift_check.json',wmac_experiments.check_rope_shift(model))
         frozen_json(folder/'preflight.json',wmac_experiments.preflight(model,questions,ids,cfg['max_context_tokens']))
         def evaluator(where):
             def evaluate(q,name,options):
-                if args.job=='validation':
+                if wmac_plan.is_validation(args.job):
                     return paper_experiments.endpoint(model,q,options['variant'],options['answer_tokens'],where)
                 return wmac_experiments.generate(model,q,options['condition'],options['thinking'],options['think_budget'],options['answer_tokens'])
             return evaluate
@@ -199,7 +209,7 @@ def run(args,bundle,questions,ids,specs,folder):
             return 2
         if not execute_phase(args.job,ids,specs,questions,main_store,evaluator(folder/'main'),lambda:stopped[0],deadline,commit()):
             return 2
-        if args.job=='validation' and not numerical_diagnostics(model,ids,questions,main_store,diagnostics,folder,lambda:stopped[0],deadline):
+        if wmac_plan.is_validation(args.job) and not numerical_diagnostics(model,ids,questions,main_store,diagnostics,folder,lambda:stopped[0],deadline):
             return 2
         status='complete';return 0
     except BaseException as error:

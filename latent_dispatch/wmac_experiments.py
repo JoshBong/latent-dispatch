@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from . import arms, masking, paper_experiments, prompts
+from . import arms, kv, masking, paper_experiments, prompts
 from .paper_plan import digest
 from .score import contains_answer
 
@@ -45,18 +45,28 @@ def matched_layout(model,q):
 
 
 def generate(model,q,condition,mode,think_budget,answer_tokens):
-    if condition=='matched_irrelevant':
+    if condition=='b1':
+        cache,pos,sizes=arms.b1_context(model,q)
+        meta=dict(condition='b1',implementation='joint_prefill',encoding_positions='true',key_shift=False)
+    elif condition=='k0':
+        cache,pos,sizes=arms.k0_context(model,q,positions='local',merge='seq')
+        meta=dict(condition='k0',implementation='separate_cache',encoding_positions='local',merge='seq',key_shift=True)
+    elif condition=='matched_irrelevant':
         ids,mask,sizes,meta=matched_layout(model,q)
         out=model.forward(ids,attention_mask=mask)
         cache,pos=out.past_key_values,len(ids)
         del out,mask
     else:
         cache,pos,sizes,meta=masking.context(model,q,condition)
+    expected,expected_sizes,_=paper_experiments.context_tokens(model,q)
+    if sizes!=expected_sizes or pos!=len(expected) or kv.length(cache)!=pos:
+        raise ValueError('encoding condition changed final token/cache positions')
     _,groups=masking.paragraph_tokens(model,q['workers'][0])
     meta['a_gold_tokens']=sum(len(groups[g['index']]) for g in q['gold'] if g['worker']==0)
     tail=model.ids(prompts.tail(model.fmt,mode))
     gen=model.greedy(tail,cache,pos,max_new=answer_tokens,think_budget=think_budget if mode=='forced' else None)
-    return {**paper_experiments.generation_fields(gen),'worker_tokens':sizes,'mask':meta}
+    return {**paper_experiments.generation_fields(gen),'worker_tokens':sizes,'mask':meta,
+            'context_tokens_sha256':digest(expected),'final_answer_position':pos}
 
 
 def probe(model,q,name,answer_tokens):
@@ -71,15 +81,52 @@ def probe(model,q,name,answer_tokens):
             'probe_definition':'closed book or one support plus all distractors, AB order only'}
 
 
+def check_prompt_template(model,q):
+    """Compare our text to the native template, using the repo's fixed date."""
+    paragraphs=[p for w in q['workers'] for p in w]
+    user=f'Target Question: {q["question"]}\n\n{prompts.INTRO}\n\n'+prompts.block(paragraphs)+prompts.FMT
+    messages=[{'role':'system','content':prompts.SYSTEM},{'role':'user','content':user}]
+    native=model.tok.apply_chat_template(messages,tokenize=False,add_generation_prompt=True,
+                                         enable_thinking=False,date_string='26 Jul 2024')
+    ours=prompts.prefix(model.fmt,q['question'])+prompts.block(paragraphs)+prompts.tail(model.fmt,'off')
+    if native!=ours: raise ValueError(f'{model.fmt.name}: prompt differs from native chat template')
+    return dict(format=model.fmt.name,prompt_sha256=digest(ours),native_template_matches=True,
+                dedicated_thinking_disabled=bool(model.fmt.thinking))
+
+
+def check_rope_shift(model):
+    """Small forward-only cache check; no generated answers or accuracy criterion.
+
+    Matches the existing real-model regression: compare shifted layer-0 keys to
+    native encoding at the shifted positions. This does not assert K0 == blocked.
+    """
+    ids=model.ids('The mayor of Velmora is Bram Holt. The river flows through Irvale.')
+    original,_=model.prefill(ids,start_pos=10)
+    native,_=model.prefill(ids,start_pos=1210)
+    shifted_keys=kv.layers(kv.shift(original,1200,model.inv_freq))[0][0].float()
+    native_keys=kv.layers(native)[0][0].float()
+    relative=((shifted_keys-native_keys).norm()/native_keys.norm().clamp_min(1e-12)).item()
+    bound=6e-3 if model.dtype_name=='bfloat16' else 1e-4
+    if not np.isfinite(relative) or relative>=bound:
+        raise ValueError(f'RoPE shift differs from native layer-0 keys: relative L2 {relative}, bound {bound}')
+    return dict(relative_l2=relative,bound=bound,offset=1200,layer=0,
+                scope='rotation implementation only; not equivalence of full K0 and true-position encoding')
+
+
 def preflight(model,questions,ids,max_tokens):
     """Check all inputs without filtering runtime failures or truncating context."""
     lengths,factorial={},{}
     for id in ids:
         q=questions[id]
         tokens,sizes,_=paper_experiments.context_tokens(model,q)
+        segments=[prompts.prefix(model.fmt,q['question']),*[prompts.block(w) for w in q['workers']],
+                  prompts.tail(model.fmt,'off')]
+        if [t for segment in segments for t in model.ids(segment)]!=model.ids(''.join(segments)):
+            raise ValueError(f'{id}: segmented tokenization differs from complete prompt tokenization')
         if len(tokens)>max_tokens:
             raise ValueError(f'{id}: context length {len(tokens)} exceeds {max_tokens}; no silent truncation')
-        lengths[id]=dict(context_tokens=len(tokens),worker_tokens=sizes,input_ids_sha256=digest(tokens))
+        lengths[id]=dict(context_tokens=len(tokens),worker_tokens=sizes,input_ids_sha256=digest(tokens),
+                         segmented_tokenization_matches=True)
         if q.get('layout_protocol')=='support-last-v1':
             _,extra=matched_indices(model,q); lengths[id].update(extra)
         if q['dataset']=='wmac_toy':
