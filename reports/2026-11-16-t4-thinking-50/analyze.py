@@ -44,7 +44,7 @@ with tarfile.open(archive) as tar:
     (HERE/'thinking-pilot-launch.json').write_text(json.dumps(manifest,indent=2)+'\n')
     (HERE/'thinking-experiment.log').write_bytes(tar.extractfile(members['thinking-experiment.log']).read())
 with (HERE/'scored-responses.csv').open('w') as f:
-    w=csv.DictWriter(f,fieldnames=list(scored[0]));w.writeheader();w.writerows(scored)
+    w=csv.DictWriter(f,fieldnames=list(scored[0]),lineterminator="\n");w.writeheader();w.writerows(scored)
 groups={
  'Toy two-fact AB+BA':[q for q in questions.values() if q['dataset']=='toy_d2' and q['qtype']=='hop1'],
  'Toy three-fact AB+BA':[q for q in questions.values() if q['dataset']=='toy_d2' and q['qtype']=='hop2'],
