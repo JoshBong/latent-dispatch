@@ -54,7 +54,7 @@ evidence during encoding that are harder to recover during answer generation.
 Using synthetic fact chains and two-hop MuSiQue (multi-hop QA benchmark), we control cross-worker
 evidence access through attention masks. In preliminary Qwen3-8B experiments,
 exposing the other worker's supporting paragraph raises exact-match accuracy
-from 64.5\% to 100\% on synthetic questions and from 14.5\% to 38.5\% on MuSiQue.
+from 64.5\% to 100\% on synthetic questions and from 14.6\% to 38.6\% on MuSiQue.
 Answer-time reasoning also helps, with gains varying across tasks and encoding
 conditions. These findings suggest that retaining source-token representations
 does not ensure successful evidence composition. Our interventions use gold
@@ -186,8 +186,11 @@ attention within blocks, and answer access remain unchanged. Conditions are
 The intervention uses gold labels and recomputes the sequence, including B;
 it does not demonstrate reduced computation. Non-gold access is also not a
 perfect information-removal control: later A tokens can encode information
-from an earlier supporting paragraph and relay it to B. Restricting controls
-to paragraphs preceding A's gold paragraph is a planned cleaner test.
+from an earlier supporting paragraph and relay it to B. We checked this on the existing rows. On MuSiQue, distractor access
+gives no gain over blocked ($-1$ [$-5$,4]). On the toy, the gain from a visible
+distractor is larger when it precedes A's supporting paragraph and cannot have
+read it (AB order: 50\% to 86\%, $n=42$) than when it follows it
+(67\% to 79\%, $n=58$).
 
 \subsection{Answer-Time Reasoning}
 The main masking run uses Qwen3-8B, bfloat16, greedy decoding, thinking off,
@@ -210,7 +213,7 @@ AB/BA pooled on the originally screened sources.}
 Dataset & Sources & Blocked & Gold & Full \\
 \midrule
 Two-fact toy & 100 & 64.5 & 100.0 & 100.0 \\
-MuSiQue & 79 & 14.5 & 38.5 & 29.0 \\
+MuSiQue & 79 & 14.6 & 38.6 & 29.1 \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -224,6 +227,13 @@ Distractor-only and except-gold gains are small: $-1$ [$-5$,4] and
 +2 [$-4$,8]. These results support the importance of supporting-paragraph
 access, without establishing that one particular bridge mention is the
 mechanism. Gold exceeding full also shows that more access need not help.
+
+\paragraph{Independent KV encoding.}
+On the subset of Table~\ref{tab:masking}'s sources where all three encodings
+were run (50 toy, 41 MuSiQue), independent KV encoding (K0) scores 70\% on the
+toy and 12\% on MuSiQue, against 74\% and 17\% for blocked encoding and 100\%
+and 39\% for joint encoding. The stitched caches therefore behave like the
+blocked condition, so the masking results apply to the setting they stand in for.
 
 \paragraph{Scoring and screening sensitivity.}
 A later analysis found acceptable answer variants missed by EM and possible
