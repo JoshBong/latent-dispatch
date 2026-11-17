@@ -240,6 +240,8 @@ class Model:
         cut = think_cut = think_eos = False
         force_close = self.ids(prompts.THINK_CLOSE)
         while len(gen) < hard_cap:
+            if not torch.isfinite(out.logits[0, -1]).all():
+                raise ValueError('non-finite generation logits; stop instead of scoring an invalid answer')
             nxt = int(out.logits[0, -1].argmax())
             if trace_topk:
                 values, indices = out.logits[0, -1].float().topk(min(trace_topk, out.logits.shape[-1]))

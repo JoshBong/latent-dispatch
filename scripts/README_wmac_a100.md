@@ -1,7 +1,17 @@
-# WMAC follow-ups for Josh's A100
+# WMAC follow-ups: one T4 job and one A100 job
 
-V2 has four primary jobs and two implementation-validation jobs. These are
-inference/evaluation jobs, not training. The primary jobs produce **8,000 answers**.
+V3 splits the work into **two launch jobs**, which can run concurrently on
+separate machines. These are inference/evaluation jobs, not training.
+
+| Launch job | Components, in order | Precision | Primary answers |
+| --- | --- | --- | ---: |
+| `t4` | 4B validation, Qwen3-4B MuSiQue | FP16 | 2,400 |
+| `a100` | 8B validation, Llama validation, Qwen3-8B MuSiQue, Llama MuSiQue, 8B toy | BF16 | 5,600 |
+
+The primary experiments still produce **8,000 answers**. Each launcher runs its
+components sequentially in separate processes, releasing model memory between
+them. No 8B component is assigned to the T4.
+
 This package was written and statically reviewed; **its tests, preparation,
 tokenizer checks, smoke runs, and GPU experiments have not been executed for
 this revision**. Run the supplied checks and smoke commands before full runs.
@@ -13,19 +23,20 @@ and keep that checkout unchanged while jobs run or resume. It includes the
 earlier paper runner dependency, so PR #2 need not be merged separately.
 
 The branch is published through PR #3 from the `ajit-mallav` fork. For a separate
-checkout that leaves any existing V1 run alone:
+checkout that leaves any existing V1/V2 run alone:
 
 ```bash
-git clone --single-branch --branch codex/wmac-a100-followups https://github.com/ajit-mallav/latent-dispatch.git latent-dispatch-wmac-v2
-cd latent-dispatch-wmac-v2
+git clone --single-branch --branch codex/wmac-a100-followups https://github.com/ajit-mallav/latent-dispatch.git latent-dispatch-wmac-v3
+cd latent-dispatch-wmac-v3
 git rev-parse HEAD
 ```
 
-Use Python 3.11+ and CUDA-enabled PyTorch on an A100 40 GB or larger:
+Use the same commit and package versions on both machines, Python 3.11+, and
+CUDA-enabled PyTorch. Target hardware is a T4 16 GB and an A100 40 GB or larger:
 
 ```bash
 python -m pip install -e '.[dev]'
-python -m pytest tests/test_wmac_a100.py tests/test_masking.py tests/test_paper_ablations.py
+python -m pytest tests/test_wmac_gpu.py tests/test_wmac_a100.py tests/test_masking.py tests/test_paper_ablations.py
 ```
 
 The tests use tiny random CPU models and a tokenizer; they do not run the 4B/8B
@@ -34,6 +45,8 @@ experiments. Do not interpret this document as a record that these checks passed
 Llama uses `meta-llama/Llama-3.1-8B-Instruct`. Before preparation, the Hugging Face
 account on the A100 must have accepted access to that gated repository and be
 authenticated. There is no automatic model substitution if access is unavailable.
+The T4 operator only needs Qwen3-4B access after receiving the prepared bundle;
+the T4 job does not load Llama's tokenizer or weights.
 
 ## Prepare once, before inference
 
@@ -47,25 +60,33 @@ them, and preparation verifies the repository's SHA256 checksums. Preparation
 resolves immutable model revisions and uses all three tokenizers, but does not
 download model weights or run inference.
 
-Preparation writes `results/wmac_a100_v2/prepared.json` plus
+Preparation writes `results/wmac_gpu_v3/prepared.json` plus
 `prepared-review.json`. All three models use this same frozen set of 200 MuSiQue
 sources. The bundle includes all questions, hashes, the historical exclusion
 list, input-only screening decisions, per-model token preflight, and the full protocol.
 Re-running preparation loads the existing bundle; it does not select new data.
 
-If V1 preparation has already selected the 200 questions, use this command
-**instead of** plain V2 preparation, before the V2 destination exists:
+**Prepare once on one machine**, then copy the exact `prepared.json` and review
+packet to the same relative directory on the other machine, or supply its path
+with `--prepared`. Do not prepare independently on the T4: model revisions and
+the selected inputs must match. Both launchers record the prepared file's hash.
+
+If V1 or V2 preparation has already selected the 200 questions, use this command
+**instead of** plain V3 preparation, before the V3 destination exists. Supply the
+actual path to the previous checkout's bundle:
 
 ```bash
-python scripts/run_wmac_a100.py prepare --reuse-prepared results/wmac_a100_v1/prepared.json
+python scripts/run_wmac_a100.py prepare --reuse-prepared /path/to/existing/prepared.json
 ```
 
-This preserves the exact source texts, orders, and accepted answers. It checks
-feasibility with all three tokenizers and stops if any selected question fails;
+This preserves the exact source texts, orders, accepted answers, and previously
+resolved model revisions. It checks feasibility with all three tokenizers and
+stops if any selected question fails;
 it never replaces a source. Without reuse, shared-tokenizer feasibility can select
-a different cohort from V1. V2 never imports V1 generated answers. Existing V1
+a different cohort from V1. V3 never imports earlier generated answers. Existing
 jobs must continue on their original pinned checkout; do not change a running
-checkout or point V2 inference directly at a V1 bundle.
+checkout or point V3 inference directly at a V1/V2 bundle. In particular, V2's
+BF16 4B rows cannot be resumed as the new FP16 T4 experiment.
 
 The review packet includes questions, both supporting paragraphs, decompositions,
 and accepted answers. Automatic grounding checks do **not** establish semantic
@@ -81,33 +102,46 @@ python scripts/run_wmac_a100.py prepare --reviews reviewed_sources.json --run-na
 Then use `--run-name wmac_reviewed` for every job. Do not silently retrofit new
 aliases or exclusions to already-observed experimental results.
 
-## Six A100 commands
+## Two launch commands
 
-Run both validation jobs first and inspect their diagnostic outputs before the
-primary jobs. Completion means diagnostics were collected, not that numerical
-equivalence was established.
+After copying the frozen bundle, run this on the **T4**:
 
 ```bash
-python scripts/run_wmac_a100.py validation
-python scripts/run_wmac_a100.py validation-llama
-python scripts/run_wmac_a100.py musique-8b
-python scripts/run_wmac_a100.py musique-llama
-python scripts/run_wmac_a100.py musique-4b
-python scripts/run_wmac_a100.py toy-8b
+python scripts/run_wmac_gpu.py t4
 ```
 
-Run sequentially on one GPU in a durable session such as tmux, saving to durable
-storage. Add `--smoke-only` to any command to stop after its smoke pass, then
-repeat without it to continue. Smoke prints raw answers. Wrong answers, malformed
-boxes, and cap hits are outcomes; the smoke check does not filter those examples.
+Run this on the **A100**:
+
+```bash
+python scripts/run_wmac_gpu.py a100
+```
+
+Use a durable session such as tmux on each machine, saving to durable storage.
+Each job runs validation before its main components and stops on a failed or
+incomplete component. Validation completion means diagnostics were collected,
+not that numerical equivalence was established; inspect the saved comparisons.
+
+For an initial smoke pass, add `--smoke-only` to the corresponding command,
+then repeat without it to continue. The T4 smoke pass selects the longest
+prepared context in each dataset/order cell and runs all its conditions.
+This checks memory and FP16 numerics on the frozen inputs before the full run;
+it does not promise that every later decode fits. An OOM or non-finite logits
+stops the job. Do not truncate, quantize, or drop selected questions to resume.
+
+Smoke prints raw answers. Wrong answers, malformed boxes, and cap hits are
+outcomes; the smoke check does not filter those examples.
 Empty outputs or unclosed forced-thinking output stop the run for inspection.
 
 `--plan-only` validates the prepared inputs and writes the job manifest without
 loading weights. `--summarize` rebuilds tables and the archive without weights.
-The default soft time limit is 24 hours per job (`--max-hours` changes it).
+The default soft time limit is 24 hours for the whole GPU launch job
+(`--max-hours` changes it). Each component receives the remaining time.
 Signals and time limits stop between evaluations and return exit code 2 when
 incomplete. Repeat the exact command to resume. Do not change code, precision,
-backend, model, data, or package versions inside an existing run.
+backend, model, data, or package versions inside an existing run. Completed
+components are recognized on resume. The component runner retains its old
+filename, `scripts/run_wmac_a100.py`, for individual diagnostics; the two launch
+commands above select the appropriate precision automatically.
 
 Prioritize the fresh MuSiQue jobs. If time is tight, defer the entire toy
 diagnostic rather than dropping factorial control cells. Timings for the new
@@ -124,14 +158,18 @@ remaining work, and report actual per-condition timing from the final bundles.
 | toy-8b | 25 chains × 2 orders × 2 placements × 2 headings × 2 masks × 2 thinking modes = 800 | 32 smoke answers |
 | validation | 24 layouts × 4 paths = 96 | 48 shared-prefix diagnostic pairs; 16 smoke answers |
 | validation-llama | Same diagnostic layouts and paths = 96 | 48 shared-prefix diagnostic pairs; 16 smoke answers |
+| validation-4b | Same diagnostic layouts and paths, on T4 FP16 = 96 | 48 shared-prefix diagnostic pairs; 16 smoke answers |
 
-Total: **8,000 primary answers + 192 validation answers + 1,800 shortcut-probe
-answers + 100 smoke answers = 10,092 generated answers**.
+Total: **8,000 primary answers + 288 validation answers + 1,800 shortcut-probe
+answers + 116 smoke answers = 10,204 generated answers**. The T4 accounts for
+3,124 generated answers and the A100 for 7,080. The extra 112 answers over V2
+are the T4 validation and its smoke pass.
 Teacher-forced diagnostic pairs reuse fixed continuations and are not additional
 generated answers. Small forward-only RoPE checks also generate no answers.
 Keep validation/smoke/probe outcomes out of the primary sample counts.
 
-BF16, SDPA, greedy decoding, one sequence at a time. Main answer cap: 1,024
+FP16 for the T4's Qwen3-4B; BF16 for both A100 models. Both use SDPA, greedy
+decoding, one sequence at a time, and unquantized weights. Main answer cap: 1,024
 tokens. Forced-thinking toy cells get 1,024 thinking tokens separately, then an
 answer budget of 1,024. Validation and shortcut probes use 256 answer tokens.
 No 4,096-token thinking extension. Every cap hit and forced thinking closure is
@@ -139,6 +177,15 @@ recorded; no capped main answer is discarded.
 For Qwen3, thinking off closes the dedicated thinking channel. Llama uses its own
 native template and no Qwen thinking tags. Neither prevents reasoning in ordinary
 answer text; these are not matched reasoning-model architectures.
+
+The [T4 supports FP16](https://www.nvidia.com/en-us/data-center/tesla-t4/).
+The runner rejects BF16 on pre-Ampere CUDA devices and requires at least 14 GiB
+total device memory for the T4 profile and 30 GiB for A100 components. Those
+are capacity checks, not measured peak-memory guarantees. PyTorch SDPA kernel
+selection can differ by hardware and input, and its
+[math backend uses float32 intermediates for half inputs](https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention).
+Interpret paired condition effects within each model first. The 4B-versus-8B
+comparison also changes precision/hardware and cannot isolate model size.
 
 Qwen3-8B is pinned to revision `b968826d9c46dd6066d109eabc6255188de91218` from the
 archived run. Preparation resolves and freezes Qwen3-4B and Llama revisions before
@@ -148,9 +195,9 @@ over 8,192 tokens; it does not truncate or silently replace selected questions.
 
 ## Experiment 1: implementation correspondence
 
-Run on Qwen3-8B and Llama using the previous 24 deliberately selected diagnostic
-layouts. Compare joint reading versus masked-full, and true-position separate caches versus
-masked-blocked. Save full first-answer logits and free-generation traces. Then
+Run on Qwen3-8B, Llama, and Qwen3-4B using the previous 24 deliberately selected
+diagnostic layouts. Compare joint reading versus masked-full, and true-position
+separate caches versus masked-blocked. Save full first-answer logits and free-generation traces. Then
 feed both implementations the **same reference-generated continuation**, including
 after their free answers diverge. Save per-position argmax, maximum/mean logit
 differences, KL, top-two margins, and complete logit vectors at fixed prefix
@@ -172,7 +219,7 @@ Numerical differences are evidence to inspect, not an automatic bug/no-bug verdi
 For a separate precision check, if memory permits:
 
 ```bash
-python scripts/run_wmac_a100.py validation --dtype float32 --validation-limit 8 --prepared results/wmac_a100_v2/prepared.json --run-name wmac_fp32_diagnostic
+python scripts/run_wmac_a100.py validation --dtype float32 --validation-limit 8 --prepared results/wmac_gpu_v3/prepared.json --run-name wmac_fp32_diagnostic
 ```
 
 This uses the eight shortest frozen diagnostic layouts. FP32 8B may exceed
@@ -204,8 +251,8 @@ not extra semantic interventions. Blocked minus K0 includes position/stitching
 effects as well as numerical differences.
 
 Put the support last in each worker under **all six** conditions so earlier
-irrelevant keys cannot already have attended to the annotated support. This intentional layout change
-from the historical sample must be stated in the paper.
+irrelevant keys cannot already have attended to the annotated support. This
+intentional layout change from the historical sample must be stated in the paper.
 
 The irrelevant control is a deterministic window over eligible non-support token
 indices before A's support. It may cover parts of multiple paragraphs. Exclude
@@ -237,11 +284,17 @@ Neutral fillers remain artificial; equal length does not imply equal semantics.
 
 ## Return complete bundles and inspect raw answers
 
-Each command writes a `.tar.gz` beside its job directory under
-`results/wmac_a100_v2/`. It includes the prepared questions, manifest/runtime,
+The launchers write **`results/wmac_gpu_v3-t4.tar.gz`** and
+**`results/wmac_gpu_v3-a100.tar.gz`**. Return both complete archives. Each contains
+only its assigned components and can be packaged while the other GPU runs.
+Each component also writes a `.tar.gz` beside its directory under
+`results/wmac_gpu_v3/`. These include the prepared questions, manifest/runtime,
 raw smoke/probe/main outputs, numerical artifacts, status, and summary tables.
 Keep the whole validation archive, including the logit files missing from the
 previous handoff. No tool sends the archives or messages to teammates.
+The launcher writes its progress and completion status under `gpu-t4/` or
+`gpu-a100/`. An archive may contain a partial run; inspect status before reporting
+completion. Smoke-only archives are explicitly marked `smoke_passed`.
 
 `main/summary.json`, `cells.csv`, and `answers.csv` contain F1/EM, timing/token/cap
 metrics, order splits, and paired source-bootstrap intervals (20,000 resamples).

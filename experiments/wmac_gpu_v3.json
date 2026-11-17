@@ -1,0 +1,48 @@
+{
+  "protocol": "wmac_gpu_v3",
+  "seed": 20261116,
+  "musique_sources": 200,
+  "toy_sources": 25,
+  "models": {
+    "8b": {"name": "Qwen/Qwen3-8B", "revision": "b968826d9c46dd6066d109eabc6255188de91218", "format": "qwen3"},
+    "4b": {"name": "Qwen/Qwen3-4B", "revision": null, "format": "qwen3"},
+    "llama": {"name": "meta-llama/Llama-3.1-8B-Instruct", "revision": null, "format": "llama3"}
+  },
+  "gpu_jobs": {
+    "t4": {
+      "jobs": ["validation-4b", "musique-4b"],
+      "dtype": "float16",
+      "minimum_memory_gib": 14,
+      "smoke_selection": "longest_context_per_cell"
+    },
+    "a100": {
+      "jobs": ["validation", "validation-llama", "musique-8b", "musique-llama", "toy-8b"],
+      "dtype": "bfloat16",
+      "minimum_memory_gib": 30,
+      "smoke_selection": "first_per_cell"
+    }
+  },
+  "attention": "sdpa",
+  "decoding": "greedy",
+  "answer_tokens": 1024,
+  "think_budget": 1024,
+  "validation_answer_tokens": 256,
+  "probe_answer_tokens": 256,
+  "max_context_tokens": 8192,
+  "bootstrap_resamples": 20000,
+  "support_length_bins": [128, 256, 512],
+  "expected_main_rows": {
+    "validation": 96,
+    "validation-llama": 96,
+    "validation-4b": 96,
+    "musique-8b": 2400,
+    "musique-llama": 2400,
+    "musique-4b": 2400,
+    "toy-8b": 800
+  },
+  "expected_probe_rows": {"musique-8b": 600, "musique-llama": 600, "musique-4b": 600},
+  "primary_metric": "f1",
+  "primary_musique_contrasts": ["gold-blocked", "gold-matched_irrelevant", "b1-k0"],
+  "strict_sensitivity": "All three model-specific AB shortcut probes F1 < 0.5, with no answer truncation",
+  "screening": "Automatic literal-grounding and shared tokenizer-feasibility checks; human reviews only where explicitly recorded"
+}

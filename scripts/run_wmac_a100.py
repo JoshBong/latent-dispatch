@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Explicit preparation and resumable A100 jobs. No execution on import."""
+"""Preparation and individual WMAC components; run_wmac_gpu.py groups them by GPU."""
 import argparse
 import fcntl
 import json
@@ -23,14 +23,15 @@ def arguments(argv=None):
     p.add_argument('--prepared',type=Path,help='Frozen prepared.json; defaults to output-root/run-name/prepared.json')
     p.add_argument('--benchmark-dir',type=Path,default=ROOT/'benchmark')
     p.add_argument('--output-root',type=Path,default=ROOT/'results')
-    p.add_argument('--run-name',default='wmac_a100_v2')
+    p.add_argument('--run-name',default='wmac_gpu_v3')
     mode=p.add_mutually_exclusive_group()
     mode.add_argument('--plan-only',action='store_true')
     mode.add_argument('--smoke-only',action='store_true')
     mode.add_argument('--summarize',action='store_true')
     p.add_argument('--max-hours',type=float,default=24)
     p.add_argument('--device',default='cuda')
-    p.add_argument('--dtype',choices=['bfloat16','float32'],default='bfloat16')
+    p.add_argument('--dtype',choices=['float16','bfloat16','float32'],
+                   help='Default: FP16 for the T4 components, BF16 for A100; overrides are validation-only')
     p.add_argument('--attention',choices=['sdpa','eager'],default='sdpa')
     p.add_argument('--revision',help='HF revision override; actual revision is frozen on resume')
     p.add_argument('--validation-limit',type=int,help='Separate numerical diagnostic on N shortest frozen layouts')
@@ -39,8 +40,10 @@ def arguments(argv=None):
     args=p.parse_args(argv)
     if not re.fullmatch(r'[A-Za-z0-9_-]+',args.run_name): p.error('invalid run name')
     if not 0<args.max_hours<float('inf'): p.error('--max-hours must be finite and positive')
-    if args.job!='prepare' and not wmac_plan.is_validation(args.job) and (args.dtype!='bfloat16' or args.attention!='sdpa'):
-        p.error('main experiments require BF16 + SDPA')
+    if args.job!='prepare' and not wmac_plan.is_validation(args.job):
+        dtype='float16' if wmac_plan.model_key(args.job)=='4b' else 'bfloat16'
+        if args.dtype not in (None,dtype) or args.attention!='sdpa':
+            p.error(f'{args.job} requires {dtype} + SDPA')
     if args.validation_limit is not None and (not wmac_plan.is_validation(args.job) or not 1<=args.validation_limit<=24):
         p.error('--validation-limit is only for validation and must be between 1 and 24')
     if args.reviews and args.job!='prepare': p.error('human reviews must be frozen during preparation')
@@ -52,11 +55,13 @@ def arguments(argv=None):
     return args
 
 
-def smoke_ids(ids,questions):
+def smoke_ids(ids,questions,lengths=None):
     cells={}
     for id in ids:
         q=questions[id]
-        cells.setdefault((q['dataset'],q['placement'],q.get('cities',''),q.get('headings','')),id)
+        cell=(q['dataset'],q['placement'],q.get('cities',''),q.get('headings',''))
+        if cell not in cells or (lengths is not None and lengths[id]['context_tokens']>lengths[cells[cell]]['context_tokens']):
+            cells[cell]=id
     return list(cells.values())
 
 
@@ -117,6 +122,10 @@ def main(argv=None):
 def run(args,bundle,questions,ids,specs,folder):
     cfg=bundle['config']
     family=wmac_plan.model_key(args.job)
+    gpu,profile=wmac_plan.gpu_profile(args.job,cfg)
+    args.dtype=args.dtype or profile['dtype']
+    if not wmac_plan.is_validation(args.job) and args.dtype!=profile['dtype']:
+        raise ValueError('precision differs from the frozen GPU assignment')
     model_cfg=cfg['models'][family]
     if args.revision and args.revision!=model_cfg['revision']:
         raise ValueError('model revision differs from the prepared protocol; prepare a separate run')
@@ -124,6 +133,7 @@ def run(args,bundle,questions,ids,specs,folder):
     files=code_state();files[str(Path(__file__).relative_to(ROOT))]=file_sha(__file__)
     manifest=dict(protocol=cfg['protocol'],job=args.job,prepared_sha256=file_sha(args.prepared),code_sha256=files,
         model=model_cfg['name'],model_format=model_cfg['format'],revision_requested=revision,dtype=args.dtype,attention=args.attention,
+        gpu_assignment=gpu,gpu_profile=profile,
         ids=ids,specifications=specs,question_sha256={id:digest(questions[id]) for id in ids},
         expected_main_rows=len(ids)*len(specs),screening=cfg['screening'])
     frozen_json(folder/'manifest.json',manifest)
@@ -131,7 +141,8 @@ def run(args,bundle,questions,ids,specs,folder):
     fingerprint=digest(manifest)
     print(f'{args.job}: {len(ids)*len(specs)} main generations; {folder/"manifest.json"}',flush=True)
     if args.plan_only: return 0
-    smoke=smoke_ids(ids,questions)
+    lengths=bundle['preflight'][family] if profile['smoke_selection']=='longest_context_per_cell' else None
+    smoke=smoke_ids(ids,questions,lengths)
     main_store=store_for(folder,'main',fingerprint,ids,specs)
     smoke_store=store_for(folder,'smoke',fingerprint,smoke,specs)
     probe_ids=[id for id in ids if questions[id]['placement']=='AB'] if args.job.startswith('musique') else []
@@ -173,9 +184,12 @@ def run(args,bundle,questions,ids,specs,folder):
     from latent_dispatch import paper_experiments,wmac_experiments
     import torch
     if args.device.startswith('cuda'):
-        if not torch.cuda.is_available(): raise RuntimeError('CUDA unavailable; run this job on the A100')
-        if family in ('8b','llama') and torch.cuda.get_device_properties(torch.device(args.device)).total_memory<30*2**30:
-            raise RuntimeError('8B protocol requires at least 30 GiB GPU memory')
+        if not torch.cuda.is_available(): raise RuntimeError(f'CUDA unavailable; this component targets {gpu.upper()}')
+        props=torch.cuda.get_device_properties(torch.device(args.device))
+        if props.total_memory<profile['minimum_memory_gib']*2**30:
+            raise RuntimeError(f'{gpu} protocol requires at least {profile["minimum_memory_gib"]} GiB GPU memory')
+        if args.dtype=='bfloat16' and props.major<8:
+            raise RuntimeError('BF16 requires an Ampere-or-newer GPU; use the FP16 T4 job for Qwen3-4B')
     torch.manual_seed(cfg['seed']);torch.backends.cuda.matmul.allow_tf32=False;torch.backends.cudnn.allow_tf32=False
     start=time.monotonic();deadline=start+args.max_hours*3600;stopped=[False]
     def stop(signum,frame):

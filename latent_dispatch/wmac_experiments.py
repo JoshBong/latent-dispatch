@@ -106,7 +106,7 @@ def check_rope_shift(model):
     shifted_keys=kv.layers(kv.shift(original,1200,model.inv_freq))[0][0].float()
     native_keys=kv.layers(native)[0][0].float()
     relative=((shifted_keys-native_keys).norm()/native_keys.norm().clamp_min(1e-12)).item()
-    bound=6e-3 if model.dtype_name=='bfloat16' else 1e-4
+    bound={'bfloat16':6e-3,'float16':1e-3,'float32':1e-4}[model.dtype_name]
     if not np.isfinite(relative) or relative>=bound:
         raise ValueError(f'RoPE shift differs from native layer-0 keys: relative L2 {relative}, bound {bound}')
     return dict(relative_l2=relative,bound=bound,offset=1200,layer=0,

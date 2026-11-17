@@ -138,7 +138,7 @@ def config():
     return json.loads(wmac_plan.CONFIG.read_text())
 
 
-def test_v2_has_three_matched_models_and_preserves_full_toy_controls():
+def test_v3_has_three_matched_models_and_preserves_full_toy_controls():
     cfg=config()
     for job in ('musique-8b','musique-4b','musique-llama'):
         specs=wmac_plan.specifications(job,cfg)
@@ -151,6 +151,23 @@ def test_v2_has_three_matched_models_and_preserves_full_toy_controls():
     assert len(wmac_plan.specifications('toy-8b',cfg))==4
     assert sum(n for job,n in cfg['expected_main_rows'].items() if not wmac_plan.is_validation(job))==8000
     assert sum(cfg['expected_probe_rows'].values())==1800
+    assert wmac_plan.model_key('validation-4b')=='4b'
+    assert wmac_plan.gpu_profile('musique-4b',cfg)[1]['dtype']=='float16'
+    assert wmac_plan.gpu_profile('musique-llama',cfg)[1]['dtype']=='bfloat16'
+
+
+def test_t4_smoke_uses_longest_input_in_each_order():
+    qs={q['id']:q for q in pair('s1')+pair('s2',question='Another question?')}
+    lengths={id:{'context_tokens':100 if id.startswith('s1') else 200} for id in qs}
+    assert runner.smoke_ids(list(qs),qs,lengths)==['s2:AB','s2:BA']
+    assert runner.smoke_ids(list(qs),qs)==['s1:AB','s1:BA']
+
+
+def test_nonfinite_generation_is_not_scored(tiny,monkeypatch):
+    out=SimpleNamespace(logits=torch.full((1,1,8),float('nan')))
+    monkeypatch.setattr(tiny,'forward',lambda *a,**kw:out)
+    with pytest.raises(ValueError,match='non-finite generation logits'):
+        tiny.greedy(tiny.ids('Answer:'),max_new=2)
 
 
 def test_reuse_preserves_questions_and_aliases_without_replacement():
@@ -193,6 +210,7 @@ def test_smoke_does_not_gate_on_correctness_or_natural_truncation():
 
 @pytest.mark.parametrize('argv',[
     ['toy-8b','--dtype','float32'],['musique-4b','--attention','eager'],
+    ['musique-4b','--dtype','bfloat16'],['musique-8b','--dtype','float16'],
     ['toy-8b','--validation-limit','2'],['validation','--max-hours','nan'],['prepare','--plan-only']])
 def test_cli_refuses_incompatible_settings(argv):
     with pytest.raises(SystemExit):runner.arguments(argv)
@@ -202,7 +220,7 @@ def test_interruption_resume_and_self_contained_archive(monkeypatch,tmp_path):
     from latent_dispatch.model import Model
     qs={q['id']:q for q in pair('s1')+pair('s2',question='Another question?')}
     cfg=config();cfg['expected_main_rows']['musique-4b']=24;cfg['bootstrap_resamples']=100
-    bundle=dict(config=cfg,musique_ids=list(qs))
+    bundle=dict(config=cfg,musique_ids=list(qs),preflight={'4b':{id:{'context_tokens':200} for id in qs}})
     prepared=tmp_path/'prepared.json';prepared.write_text(json.dumps(bundle))
     monkeypatch.setattr(wmac_plan,'load',lambda path:(bundle,qs))
     monkeypatch.setattr(Model,'load',lambda *a,**kw:object())
@@ -219,7 +237,7 @@ def test_interruption_resume_and_self_contained_archive(monkeypatch,tmp_path):
     monkeypatch.setattr(wmac_experiments,'probe',probe)
     argv=['musique-4b','--device','cpu','--prepared',str(prepared),'--output-root',str(tmp_path)]
     with pytest.raises(RuntimeError,match='simulated'):runner.main(argv)
-    folder=tmp_path/'wmac_a100_v2/musique-4b'
+    folder=tmp_path/'wmac_gpu_v3/musique-4b'
     assert len((folder/'probes/rows.jsonl').read_text().splitlines())==1
     assert runner.main(argv)==0
     assert len((folder/'probes/rows.jsonl').read_text().splitlines())==6

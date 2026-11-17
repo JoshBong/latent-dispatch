@@ -15,19 +15,25 @@ from . import prompts, toy
 from .paper_plan import ROOT, digest, file_sha, frozen_json
 from .score import contains_answer, normalize
 
-CONFIG = ROOT/'experiments/wmac_a100_v2.json'
-JOBS = ('validation', 'validation-llama', 'musique-8b', 'musique-llama', 'musique-4b', 'toy-8b')
+CONFIG = ROOT/'experiments/wmac_gpu_v3.json'
+JOBS = ('validation', 'validation-llama', 'validation-4b', 'musique-8b', 'musique-llama', 'musique-4b', 'toy-8b')
 MASKS = ('blocked', 'gold', 'full', 'matched_irrelevant')
 CONDITIONS = (*MASKS, 'b1', 'k0')
 
 
 def is_validation(job):
-    return job in ('validation','validation-llama')
+    return job in ('validation','validation-llama','validation-4b')
 
 
 def model_key(job):
     if job not in JOBS: raise ValueError(f'unknown job: {job}')
-    return 'llama' if job.endswith('-llama') else '4b' if job=='musique-4b' else '8b'
+    return 'llama' if job.endswith('-llama') else '4b' if job.endswith('-4b') else '8b'
+
+
+def gpu_profile(job,cfg):
+    matches=[(name,profile) for name,profile in cfg['gpu_jobs'].items() if job in profile['jobs']]
+    if len(matches)!=1: raise ValueError(f'{job}: expected exactly one GPU assignment')
+    return matches[0]
 
 
 def supports(q):
@@ -205,8 +211,15 @@ def prepare(folder, destination, reviews=None, config_path=CONFIG, reuse_prepare
     from huggingface_hub import HfApi
     from .wmac_experiments import preflight, matched_indices, check_prompt_template
     cfg=json.loads(Path(config_path).read_text())
+    if reuse_prepared is not None and reviews is not None:
+        raise ValueError('source reuse preserves answers; do not combine it with new review decisions')
+    prior=_read_bundle(reuse_prepared,('wmac_a100_v1','wmac_a100_v2','wmac_gpu_v3'))[0] if reuse_prepared else None
     adapters={}
     for key,model in cfg['models'].items():
+        if prior is not None:
+            old=prior['config']['models'].get(key,{})
+            if old.get('name')==model['name'] and isinstance(old.get('revision'),str) and len(old['revision'])==40:
+                model['revision']=old['revision']
         model['requested_revision']=model['revision']
         model['revision']=HfApi().model_info(model['name'],revision=model['revision'] or 'main').sha
         if not isinstance(model['revision'],str) or len(model['revision'])!=40:
@@ -226,12 +239,9 @@ def prepare(folder, destination, reviews=None, config_path=CONFIG, reuse_prepare
                     sum(len(adapter.ids(prompts.block(w))) for w in q['workers']))>cfg['max_context_tokens']:
                 return False
         return True
-    prior=None
     if reuse_prepared is None:
         fresh,audit=select_sources(questions.values(),excluded,cfg['musique_sources'],cfg['seed'],reviews,eligible)
     else:
-        if reviews is not None: raise ValueError('source reuse preserves answers; do not combine it with new review decisions')
-        prior,_=_read_bundle(reuse_prepared,('wmac_a100_v1','wmac_a100_v2'))
         if prior['benchmark_sha256']!=hashes: raise ValueError('source-reuse benchmark mismatch')
         fresh=reused_sources(prior,cfg['musique_sources'],eligible)
         reviews=prior['reviews'];audit=prior['selection_audit']
@@ -264,7 +274,7 @@ def prepare(folder, destination, reviews=None, config_path=CONFIG, reuse_prepare
 def _read_bundle(path,allowed):
     bundle=json.loads(Path(path).read_text())
     if bundle['config']['protocol'] not in allowed:
-        raise ValueError('prepared protocol mismatch; use v2 preparation or the original pinned code for v1 runs')
+        raise ValueError('prepared protocol mismatch; prepare v3 or use the original pinned code for earlier runs')
     qs=bundle['questions']
     if {id:digest(q) for id,q in qs.items()}!=bundle['question_sha256']:
         raise ValueError('prepared question hash mismatch')
@@ -274,12 +284,19 @@ def _read_bundle(path,allowed):
 
 
 def load(path):
-    bundle,qs=_read_bundle(path,('wmac_a100_v2',))
+    bundle,qs=_read_bundle(path,('wmac_gpu_v3',))
     if set(bundle['config']['models'])!={'8b','4b','llama'}:
-        raise ValueError('v2 requires Qwen3-8B, Qwen3-4B, and Llama')
+        raise ValueError('v3 requires Qwen3-8B, Qwen3-4B, and Llama')
     for model in bundle['config']['models'].values():
         if not isinstance(model['revision'],str) or len(model['revision'])!=40:
-            raise ValueError('v2 requires frozen model revisions from preparation')
+            raise ValueError('v3 requires frozen model revisions from preparation')
+    profiles=bundle['config']['gpu_jobs']
+    expected={'t4':('float16',{'validation-4b','musique-4b'}),
+              'a100':('bfloat16',set(JOBS)-{'validation-4b','musique-4b'})}
+    if set(profiles)!=set(expected): raise ValueError('v3 needs T4 and A100 jobs')
+    for gpu,(dtype,jobs) in expected.items():
+        if profiles[gpu]['dtype']!=dtype or set(profiles[gpu]['jobs'])!=jobs or len(profiles[gpu]['jobs'])!=len(jobs):
+            raise ValueError(f'{gpu}: invalid precision or component assignment')
     return bundle,qs
 
 
