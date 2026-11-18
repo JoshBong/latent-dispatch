@@ -4,6 +4,56 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-18, afternoon: control layout. With both supporting paragraphs in one worker, B's access to A is worth nothing
+
+Results only. This runs the lead that the first 11-18 entry left untested.
+
+**Why.** Every fresh-source run so far puts one supporting paragraph in each worker, and B loses about 6 F1 points when it cannot read A. If that loss comes from a fact having to cross between workers, it should vanish when both supporting paragraphs sit in the same worker.
+
+**What ran.** `colab_wmac_together.ipynb` on an A100 80 GB. The notebook holds one script that builds the layouts and calls the fresh-source code at `64044d8` unchanged; every row is stamped with that commit. Qwen3-8B and Llama 3.1 8B at the main run's revisions, bfloat16, sdpa, thinking off, same decoding. For each of the 200 sources it makes two layouts from the source's AB layout:
+
+- `AA`: B's supporting paragraph moves into A. A's last two slots hold hop 1, then hop 2. B holds only distractors.
+- `BB`: A's supporting paragraph moves into B. B's last two slots hold hop 1, then hop 2. A holds only distractors.
+
+The worker that gives up its supporting paragraph gets, in its last slot, the distractor that made room. Every paragraph is used once and each worker keeps its 10 paragraphs. Two conditions: blocked (B may attend to none of A) and full mask (B may attend to all of A). 800 answers per model, no layout dropped. Rows: `archive/wmac_gpu_v3/a100-together-2026-11-18.tar.gz`.
+
+Exact match / F1, 200 sources:
+
+| | AA, blocked | AA, full mask | BB, blocked | BB, full mask |
+|---|---|---|---|---|
+| Qwen3-8B | 42.0 / 52.0 | 46.5 / 55.6 | 45.0 / 54.5 | 41.5 / 51.9 |
+| Llama 3.1 8B | 36.5 / 44.9 | 36.5 / 44.9 | 40.5 / 48.5 | 37.0 / 44.3 |
+
+Full mask − blocked, paired over the 200 sources. The first row is the main run on the same sources.
+
+| F1 points | Qwen3-8B | Llama 3.1 8B | two models pooled |
+|---|---|---|---|
+| one supporting paragraph in each worker (main run, AB and BA) | +6.4 (2.3, 10.7) | +4.3 (−0.1, 8.6) | +5.4 (2.0, 8.8) |
+| both in one worker (AA and BB) | +0.5 (−2.7, 3.7) | −2.1 (−5.9, 1.7) | −0.8 (−3.3, 1.7) |
+| both in A (AA) | +3.6 (−1.4, 8.7) | +0.0 (−4.5, 4.5) | +1.8 (−1.6, 5.2) |
+| both in B (BB) | −2.6 (−6.8, 1.4) | −4.1 (−9.7, 1.3) | −3.4 (−6.8, 0.0) |
+| first row minus second row | +6.0 (1.1, 10.9) | +6.4 (1.2, 11.6) | +6.2 (2.5, 9.9) |
+
+| exact match points | Qwen3-8B | Llama 3.1 8B | two models pooled |
+|---|---|---|---|
+| one supporting paragraph in each worker (main run, AB and BA) | +5.8 (1.8, 9.8) | +4.5 (0.2, 8.8) | +5.1 (1.8, 8.5) |
+| both in one worker (AA and BB) | +0.5 (−2.5, 3.8) | −1.8 (−5.5, 2.0) | −0.6 (−3.1, 1.9) |
+| both in A (AA) | +4.5 (−0.5, 9.5) | +0.0 (−4.5, 4.5) | +2.2 (−1.0, 5.5) |
+| both in B (BB) | −3.5 (−7.5, 0.5) | −3.5 (−9.0, 2.0) | −3.5 (−7.0, 0.0) |
+| first row minus second row | +5.2 (0.5, 10.2) | +6.2 (1.0, 11.5) | +5.8 (1.9, 9.6) |
+
+- **The loss needs a fact to cross.** B's access to A is worth about 5 F1 points with one supporting paragraph in each worker and nothing with both in one. The difference between the two layouts has an interval that excludes zero in each model, in F1 and in exact match.
+- **BB leans negative. Not claimed.** When A holds only distractors, letting B read A scores lower in both models, pooled −3.4 (−6.8, 0.0) F1. This is the cell the 11-15 rows flagged at −10.1 (−19.0, −2.5) exact match on 79 sources. The direction is the same, the size is a third (−3.5), and the interval reaches zero.
+- **AA shows nothing.** +3.6 on Qwen3-8B with zero inside the interval, 0.0 on Llama.
+
+**Limits.**
+- In these layouts the two supporting paragraphs are also next to each other, so every level is higher than in the main run (Qwen3-8B blocked: 52.0 and 54.5 F1, against 42.3). Only the difference between conditions is compared across layouts.
+- A different machine and day than the main run. The code commit, the model revisions and the transformers version are the same; the main run did not record its torch version.
+- No joint-reading arm (the notebook can run it; it was left out for time). Qwen3-4B was not run.
+- AA and BB were both planned, but reading them one by one adds comparisons, and no interval here is adjusted for that.
+
+Checked: every number in the tables is printed by `python scripts/paper_tables.py together`, with the scoring and intervals of the entries below. `tests/test_paper_tables.py` pins them and checks what the rows record: the main run's commit and sources, the same input tokens under both conditions in 400 of 400 layouts per model, both supporting paragraphs in A in every AA row and neither in every BB row, none of A visible under blocked and all of it under full. Run once and not in the tests: every layout hash in the rows equals a rebuild from `prepared.json` with the notebook's `together()`, and the plain means the notebook printed when the run ended equal the levels above. Answers cut at the 1,024-token limit: none on Qwen3-8B, 31 of 800 on Llama (38 of 800 under the same two conditions in the main run); without the 24 sources involved, Llama's AA-and-BB figure is −1.8 (−5.6, 1.8), computed apart from the script. Not checked: the answers have not been read.
+
 ## 2026-11-18, later: Qwen3-4B on the same 200 sources, the three models pooled, and where the rows live
 
 **Qwen3-4B on the same frozen bundle.** L4, float16, thinking off, code at `a432bfd` (the fresh-source code plus a memory-saving prefill). 2,400 answers and 600 probe answers; the same input tokens across the six conditions in 400 of 400 layouts. The rows are in `archive/wmac_gpu_v3/l4-4b-no-logits-2026-11-18.tar.gz`, which is the run's published raw archive minus its logit arrays. The raw archive is on branch `codex/wmac-l4-v3` in seven parts (sha256 `244f3e1e…509f85`, reassembled and checked).

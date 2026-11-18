@@ -1,12 +1,13 @@
-"""Rebuild the fresh-source tables from the archived rows. No GPU and no model: it reads the three tarballs in
+"""Rebuild the fresh-source tables from the archived rows. No GPU and no model: it reads the four tarballs in
 archive/wmac_gpu_v3/, re-scores every saved answer with latent_dispatch.score, and prints the tables quoted in
 JOURNAL.md (the 2026-11-18 entries) as markdown.
 
     python scripts/paper_tables.py              # every table (a few seconds)
-    python scripts/paper_tables.py main toy     # some of: main, position, checks, validation, toy
+    python scripts/paper_tables.py main toy     # some of: main, position, together, checks, validation, toy
 
-Unit of analysis: the source question. Its AB and BA layouts are averaged first; intervals are 95% percentile
-bootstrap intervals over sources (stats.bootstrap_ci, 20,000 resamples, seed 0). Toy intervals are over chains.
+Unit of analysis: the source question. Its layouts (AB and BA; AA and BB in the control layout) are averaged first;
+intervals are 95% percentile bootstrap intervals over sources (stats.bootstrap_ci, 20,000 resamples, seed 0). Toy
+intervals are over chains.
 """
 import collections
 import json
@@ -23,6 +24,7 @@ ARCHIVE = ROOT / "archive" / "wmac_gpu_v3"
 A100 = ARCHIVE / "a100-no-logits-2026-11-17.tar.gz"      # Qwen3-8B and Llama: main run, validation, toy
 CHECKS = ARCHIVE / "a100-checks-2026-11-18.tar.gz"       # second machine: mask checks, support-first position run
 L4 = ARCHIVE / "l4-4b-no-logits-2026-11-18.tar.gz"       # Qwen3-4B: main run, validation
+TOGETHER = ARCHIVE / "a100-together-2026-11-18.tar.gz"   # control layout: both supporting paragraphs in one worker
 
 # model -> (tarball, folder of the MuSiQue job, folder of the validation job)
 MODELS = {
@@ -31,6 +33,7 @@ MODELS = {
     "Qwen3-4B": (L4, "wmac_gpu_v3_l4/musique-4b", "wmac_gpu_v3_l4/validation-4b"),
 }
 POSITION = {"Qwen3-8B": "wmac_gpu_v3_checks/8b", "Llama 3.1 8B": "wmac_gpu_v3_checks/llama"}   # in CHECKS
+TOGETHER_FOLDER = {"Qwen3-8B": "wmac_gpu_v3_together/8b", "Llama 3.1 8B": "wmac_gpu_v3_together/llama"}   # in TOGETHER
 
 LABEL = {"b1": "joint reading", "full": "full mask", "gold": "gold", "matched_irrelevant": "equal-token window",
          "matched_late": "equal-token window next to B", "blocked": "blocked", "k0": "K0"}
@@ -77,14 +80,14 @@ def sources_of(scores):
     return sorted({layout.split(":")[0] for _, layout in scores})
 
 
-def per_source(scores, condition, metric, sources):
-    """One number per source: the mean of its AB and BA layouts. metric 0 = exact match, 1 = F1."""
-    return [(scores[(condition, f"{s}:AB:s0")][metric] + scores[(condition, f"{s}:BA:s0")][metric]) / 2
-            for s in sources]
+def per_source(scores, condition, metric, sources, layouts=("AB", "BA")):
+    """One number per source: the mean over its layouts (AB and BA unless said). metric 0 = exact match, 1 = F1."""
+    return [sum(scores[(condition, f"{s}:{layout}:s0")][metric] for layout in layouts) / len(layouts) for s in sources]
 
 
-def difference(scores, a, b, sources, metric=1):
-    return [x - y for x, y in zip(per_source(scores, a, metric, sources), per_source(scores, b, metric, sources))]
+def difference(scores, a, b, sources, metric=1, layouts=("AB", "BA")):
+    return [x - y for x, y in zip(per_source(scores, a, metric, sources, layouts),
+                                  per_source(scores, b, metric, sources, layouts))]
 
 
 def interval(differences):
@@ -94,7 +97,7 @@ def interval(differences):
 
 
 def show(triple):
-    mean, low, high = triple
+    mean, low, high = (value + 0.0 for value in triple)      # + 0.0 turns a rounded −0.0 into 0.0
     return f"{mean:+.1f} ({low:.1f}, {high:.1f})".replace("-", "−")
 
 
@@ -122,6 +125,15 @@ def position_run(model, qs):
     return layout_scores(jsonl(read_tar(CHECKS, [name])[name]), qs)
 
 
+def together_run(model, qs):
+    """Scores of the control layout: both supporting paragraphs in one worker (AA: in A, BB: in B), blocked and full.
+    Its layouts are built from each source's AB layout and are not in the bundle; a row names that layout in base_id,
+    and the accepted answers are that layout's."""
+    name = f"{TOGETHER_FOLDER[model]}/together/rows.jsonl"
+    rows = jsonl(read_tar(TOGETHER, [name])[name])
+    return layout_scores(rows, {r["id"]: qs[r["base_id"]] for r in rows})
+
+
 def pooled(per_model_differences):
     """Average the per-source differences over models (same 200 sources in every run), one number per source."""
     return [sum(values) / len(values) for values in zip(*per_model_differences)]
@@ -129,9 +141,9 @@ def pooled(per_model_differences):
 
 # ---- tables ----------------------------------------------------------------------------------------------------
 
-def levels(scores, sources, conditions):
-    return {c: (round(100 * statistics.mean(per_source(scores, c, 0, sources)), 1),
-                round(100 * statistics.mean(per_source(scores, c, 1, sources)), 1)) for c in conditions}
+def levels(scores, sources, conditions, layouts=("AB", "BA")):
+    return {c: (round(100 * statistics.mean(per_source(scores, c, 0, sources, layouts)), 1),
+                round(100 * statistics.mean(per_source(scores, c, 1, sources, layouts)), 1)) for c in conditions}
 
 
 def main_table(qs):
@@ -192,6 +204,49 @@ def position_table(qs):
         row["pooled"] = interval(pooled(list(per_model.values())))
         result["change"][(a, b)] = row
         print(f"| change in {LABEL[a]} − {LABEL[b]} | " + " | ".join(show(row[m]) for m in POSITION) + f" | {show(row['pooled'])} |")
+    print()
+    return result
+
+
+TOGETHER_ROWS = {"split": "one supporting paragraph in each worker (main run, AB and BA)",
+                 "together": "both in one worker (AA and BB)", "AA": "both in A (AA)", "BB": "both in B (BB)",
+                 "split − together": "first row minus second row"}
+
+
+def together_table(qs):
+    """Control layout against the main run on the same sources: what B's access to A is worth (full mask − blocked)
+    when the two supporting paragraphs sit in different workers, and when they sit in the same one."""
+    result = {"levels": {}, "contrasts": {"F1": {}, "exact match": {}}}
+    per_model, sources = {}, None
+    for m in TOGETHER_FOLDER:
+        scores = together_run(m, qs)
+        main_scores, main_sources, _ = main_run(m, qs)
+        sources = sources or main_sources
+        if main_sources != sources or sources_of(scores) != sources or len(scores) != 4 * len(sources):
+            raise ValueError(f"{m}: the control layout must hold the main run's sources, each in AA and BB, blocked and full")
+        result["levels"][m] = {(layout, c): value for layout in ("AA", "BB")
+                               for c, value in levels(scores, sources, ["blocked", "full"], (layout,)).items()}
+        per_model[m] = {}
+        for metric, name in ((1, "F1"), (0, "exact match")):
+            d = {"split": difference(main_scores, "full", "blocked", sources, metric),
+                 "together": difference(scores, "full", "blocked", sources, metric, ("AA", "BB")),
+                 "AA": difference(scores, "full", "blocked", sources, metric, ("AA",)),
+                 "BB": difference(scores, "full", "blocked", sources, metric, ("BB",))}
+            d["split − together"] = [x - y for x, y in zip(d["split"], d["together"])]
+            per_model[m][name] = d
+    print(f"### Control layout: both supporting paragraphs in one worker. Exact match / F1, {len(sources)} sources\n")
+    print("| | AA, blocked | AA, full mask | BB, blocked | BB, full mask |\n|---|---|---|---|---|")
+    for m in TOGETHER_FOLDER:
+        print(f"| {m} | " + " | ".join("{:.1f} / {:.1f}".format(*result["levels"][m][(layout, c)])
+                                       for layout in ("AA", "BB") for c in ("blocked", "full")) + " |")
+    for name in ("F1", "exact match"):
+        print(f"\n| full mask − blocked, {name} points | " + " | ".join(TOGETHER_FOLDER) + " | two models pooled |")
+        print("|---|" + "---|" * (len(TOGETHER_FOLDER) + 1))
+        for key, label in TOGETHER_ROWS.items():
+            row = {m: interval(per_model[m][name][key]) for m in TOGETHER_FOLDER}
+            row["pooled"] = interval(pooled([per_model[m][name][key] for m in TOGETHER_FOLDER]))
+            result["contrasts"][name][key] = row
+            print(f"| {label} | " + " | ".join(show(row[m]) for m in TOGETHER_FOLDER) + f" | {show(row['pooled'])} |")
     print()
     return result
 
@@ -305,8 +360,8 @@ def toy_table(qs):
     return result
 
 
-TABLES = {"main": main_table, "position": position_table, "checks": lambda qs: checks_table(),
-          "validation": lambda qs: validation_table(), "toy": toy_table}
+TABLES = {"main": main_table, "position": position_table, "together": together_table,
+          "checks": lambda qs: checks_table(), "validation": lambda qs: validation_table(), "toy": toy_table}
 
 if __name__ == "__main__":
     chosen = sys.argv[1:] or list(TABLES)

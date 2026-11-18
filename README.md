@@ -32,6 +32,7 @@ Paired F1 differences over the 200 questions, 95% bootstrap intervals, pooled ov
 - **It is specific.** The same number of other tokens recovers nothing: window − blocked is −0.8 (−2.6, 1.0).
 - **It is not position handling.** Separately encoded caches score the same as the blocked mask (blocked − K0: −0.7 (−2.5, 1.2)). Under the blocked mask, swapping A's text for other text leaves B's keys and values bit-identical at every layer.
 - **It does not depend on the paragraph sitting next to B.** With A's supporting paragraph moved to the front of A and the control window placed next to B, gold − blocked is +9.6 (6.4, 12.9) and the window still adds nothing (two models).
+- **It appears only when a fact has to cross between workers.** With both supporting paragraphs in the same worker, B's access to A is worth nothing: full − blocked is −0.8 (−3.3, 1.7), against +5.4 (2.0, 8.8) on the same questions with one in each worker (two models).
 - **Gold against full access is small and depends on the layout.** +2.0 (0.1, 3.8) with the supporting paragraph last in A, −2.1 (−4.4, 0.2) with it first.
 - **An earlier set of 79 questions, kept because the model failed their shortcut probes, showed the same direction at three times the size** (gold − blocked +23). Quote the fresh-source sizes.
 
@@ -68,6 +69,7 @@ One row per experiment. "Code" is what ran it. Where the code is not on `main`, 
 | Fresh-source masks: six conditions, 200 new questions | Qwen3-8B, Llama 3.1 8B | `scripts/run_wmac_gpu.py a100` (guide: `scripts/README_wmac_a100.md`, plan: `experiments/wmac_gpu_v3.json`); tag `run/2026-11-17-fresh-sources` | `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz` | 11-18 | main result |
 | Same, third model | Qwen3-4B | same code plus a memory-saving prefill, tag `run/2026-11-18-fresh-sources-4b` (branch `codex/wmac-l4-v3`) | `archive/wmac_gpu_v3/l4-4b-no-logits-2026-11-18.tar.gz` | 11-18, later | main result |
 | Supporting paragraph first: position run | Qwen3-8B, Llama 3.1 8B | `colab_wmac_checks.ipynb` | `archive/wmac_gpu_v3/a100-checks-2026-11-18.tar.gz`, `<model>/position/` | 11-18 | robustness |
+| Control layout: both supporting paragraphs in one worker (AA, BB), blocked and full | Qwen3-8B, Llama 3.1 8B | `colab_wmac_together.ipynb` | `archive/wmac_gpu_v3/a100-together-2026-11-18.tar.gz` | 11-18, afternoon | control |
 | Mask checks: swap test, kernel comparison | Qwen3-8B, Llama 3.1 8B | `colab_wmac_checks.ipynb` | same tarball, `<model>/verify/` | 11-18 | implementation check |
 | Endpoint validation on 24 picked layouts | all three | `scripts/run_wmac_gpu.py` (`validation` jobs) | inside the two no-logits tarballs | 11-18 | implementation check |
 | Toy, new layout, thinking off and forced | Qwen3-8B | `scripts/run_wmac_gpu.py a100` (`toy-8b`) | `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz` | 11-18 | toy result |
@@ -83,11 +85,12 @@ One row per experiment. "Code" is what ran it. Where the code is not on `main`, 
 
 ## Reproducing
 
-**The tables, from saved rows (no GPU).** `python scripts/paper_tables.py` prints the main, position, mask-check, validation and toy tables. `pytest tests/test_paper_tables.py` checks them against the summaries the runner saved at run time.
+**The tables, from saved rows (no GPU).** `python scripts/paper_tables.py` prints the main, position, control-layout, mask-check, validation and toy tables. `pytest tests/test_paper_tables.py` checks them against the summaries the runner saved at run time.
 
 **A rerun (GPU).**
 - Fresh-source protocol: `scripts/README_wmac_a100.md`. `python scripts/run_wmac_a100.py prepare` rebuilds the frozen question bundle; `python scripts/run_wmac_gpu.py a100` runs every job. `--plan-only` previews a job without loading a model.
 - Position run and mask checks: open `colab_wmac_checks.ipynb` on an A100.
+- Control layout: open `colab_wmac_together.ipynb` on an A100.
 - Ablations: `scripts/README_paper_ablations.md`.
 - Earlier notebook experiments: `colab.ipynb` clones this repo at a commit, builds the benchmarks, runs the chosen notebooks as a smoke and then in full. `LOAD` starts a run from a tarball in `archive/`.
 
@@ -143,7 +146,7 @@ python -m latent_dispatch.data toy toy_d0 musique hotpotqa
 cd benchmark && shasum -a 256 -c SHA256SUMS
 ```
 
-Rebuilding the tables needs none of this: the questions, layouts and accepted answers of the fresh-source runs are in `prepared.json` inside each tarball of `archive/wmac_gpu_v3/`.
+Rebuilding the tables needs none of this: the questions, layouts and accepted answers of the fresh-source runs are in `prepared.json` inside the two `no-logits` tarballs of `archive/wmac_gpu_v3/`; the other runs there read the same file.
 
 ## Datasets and models
 
