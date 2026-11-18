@@ -1,0 +1,12 @@
+{
+  "tokenizer_matches": true,
+  "layouts": 400,
+  "sources": 200,
+  "dropped": {},
+  "prepared_sha256": "8abf29425611b1f3b65f5016fd40651ef0281bdb6de9852e1df2940f33953058",
+  "conditions": [
+    "blocked",
+    "full"
+  ],
+  "dtype": "float16"
+}
