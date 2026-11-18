@@ -4,6 +4,94 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-18: fresh-source rerun finished (two models, two layouts, mask checks, toy)
+
+Results only, no change of plan. Everything here ran the PR #3 code at `64044d8` (every row is stamped with it), bfloat16, sdpa, thinking off unless said. The 200 MuSiQue 2-hop sources were fixed before any output; none is among the 100 sources of the earlier entries.
+
+**What is in the two archives.**
+- `archive/wmac_gpu_v3-a100-no-logits-2026-11-17.tar.gz`: the run's own archive without the saved logit arrays (A100 40 GB). `wmac_gpu_v3/prepared.json` has the layouts and accepted answers. Jobs: `musique-8b` and `musique-llama` (Qwen3-8B, Llama 3.1 8B; 400 layouts = 200 sources in AB and BA order; 2,400 answers and 600 probe answers each), `validation` and `validation-llama` (the 24 layouts picked on 11-16, four paths, and both implementations fed the same answer tokens), `toy-8b` (25 chains, 800 answers). Each job has `main/rows.jsonl` and the runner's own `main/summary.json`.
+- `archive/wmac_gpu_v3-checks-2026-11-18.tar.gz`: a second machine (A100 80 GB) reading the same `prepared.json`, written by `colab_wmac_checks.ipynb`. The checks are one script inside that notebook; it calls the PR #3 code unchanged. Per model: `verify/` (48 layouts: the 24 above and 24 evenly spaced ones from the 400) and `position/` (the 400 layouts with A's supporting paragraph moved from the last slot of A to the first, B untouched; 2,000 answers).
+
+**Main run.** Every worker's supporting paragraph is the last paragraph of its block. Conditions: joint reading (`b1`), full mask, gold, `matched_irrelevant` (as many of A's tokens as its supporting paragraph has, from earlier non-supporting text that names neither the answer nor the bridge), blocked, and K0 (each block encoded on its own at local positions, keys rotated to their true positions, caches joined). Input tokens and the answer position are the same across the six conditions in 400 of 400 layouts, both models.
+
+MuSiQue 2-hop, AB and BA averaged within source, 200 sources. Exact match / F1:
+
+| | Qwen3-8B | Llama 3.1 8B |
+|---|---|---|
+| joint reading | 40.2 / 49.5 | 35.2 / 43.4 |
+| full mask | 39.8 / 48.8 | 35.5 / 42.8 |
+| gold | 40.0 / 49.8 | 36.0 / 44.2 |
+| equal-token window | 34.0 / 42.7 | 29.5 / 37.1 |
+| blocked | 34.0 / 42.3 | 31.0 / 38.5 |
+| K0 | 34.5 / 42.9 | 30.5 / 37.9 |
+
+Paired differences in F1 points, 95% bootstrap intervals over sources. "Probe cohort" is the runner's stricter set: sources whose closed-book probe and both single-supporting-paragraph probes score F1 below 0.5 with no answer cut off, per model (102 sources for Qwen, 77 for Llama).
+
+| | Qwen3-8B, all 200 | Qwen3-8B, probe cohort | Llama, all 200 | Llama, probe cohort |
+|---|---|---|---|---|
+| gold − blocked | +7.4 (3.5, 11.5) | +11.5 (5.8, 17.3) | +5.6 (1.8, 9.5) | +9.6 (3.8, 15.4) |
+| gold − window | +7.0 (3.1, 11.1) | +10.1 (4.0, 16.2) | +7.0 (3.1, 11.0) | +10.8 (5.7, 16.5) |
+| window − blocked | +0.4 (−2.5, 3.3) | +1.4 (−3.1, 6.2) | −1.4 (−4.5, 1.7) | −1.3 (−5.6, 2.9) |
+| gold − full | +1.0 (−2.2, 4.1) | +2.0 (−1.8, 5.9) | +1.3 (−2.4, 5.2) | +0.1 (−6.0, 6.1) |
+| full − blocked | +6.4 (2.3, 10.7) | +9.4 (3.3, 15.9) | +4.3 (−0.1, 8.6) | +9.5 (3.0, 16.0) |
+| joint − K0 | +6.6 (2.5, 10.8) | +7.9 (1.9, 14.0) | +5.5 (1.2, 9.9) | +11.7 (4.2, 19.4) |
+| blocked − K0 | −0.6 (−3.7, 2.6) | −2.6 (−7.4, 1.9) | +0.6 (−3.1, 4.3) | +1.5 (−3.1, 6.6) |
+
+**Reading.** The conditions fall into two groups. Joint, full and gold sit together; the equal-token window, blocked and K0 sit together about 5 to 7 F1 points lower. Letting B read A's supporting paragraph recovers the whole difference between blocked and full, and the same number of other tokens recovers none of it, in both model families. The direction of the 11-15 and 11-16 results holds on fresh sources. The size does not: gold − blocked was +23 (16, 32) on the 79 sources of the 11-16 evening entry and is +7.4 here (+11.5 on the probe cohort). Llama answers reach the 1,024-token answer cap in 13 to 23 of 400 layouts per condition; Qwen answers never do.
+
+**A's supporting paragraph first** (second machine, same 200 sources). The paragraph now ends 500 to 2,100 tokens before B. The control is `matched_late`: as many tokens as the supporting paragraph has, taken from the end of A's non-supporting text, so it is the text nearest B (within 3 tokens of B in 384 of 400 layouts). It comes after the supporting paragraph and has read it, which favours the control.
+
+| exact match / F1, 200 sources | Qwen3-8B | Llama 3.1 8B |
+|---|---|---|
+| joint reading | 49.5 / 58.6 | 34.5 / 43.3 |
+| full mask | 50.0 / 58.8 | 35.2 / 44.7 |
+| gold | 46.2 / 55.7 | 35.2 / 43.5 |
+| equal-token window next to B | 37.2 / 45.8 | 27.5 / 35.6 |
+| blocked | 35.8 / 44.8 | 27.5 / 35.2 |
+
+| F1 points | Qwen3-8B, all 200 | Qwen3-8B, probe cohort | Llama, all 200 | Llama, probe cohort |
+|---|---|---|---|---|
+| gold − blocked | +10.9 (6.7, 15.3) | +12.8 (7.1, 18.8) | +8.3 (4.5, 12.3) | +7.4 (0.4, 14.9) |
+| gold − window | +9.9 (5.7, 14.2) | +11.0 (5.0, 17.2) | +7.9 (3.9, 12.0) | +6.1 (−0.4, 13.0) |
+| window − blocked | +1.0 (−1.8, 3.9) | +1.8 (−2.4, 6.0) | +0.5 (−2.6, 3.5) | +1.3 (−2.8, 5.6) |
+| gold − full | −3.1 (−5.9, −0.3) | −3.3 (−7.6, 1.0) | −1.2 (−4.6, 2.2) | −1.2 (−6.1, 4.0) |
+| full − blocked | +14.0 (9.6, 18.6) | +16.1 (9.9, 22.6) | +9.5 (5.3, 14.0) | +8.6 (1.5, 15.8) |
+
+So the main contrast does not depend on the supporting paragraph being the text next to B. With it far away and the control adjacent, gold still beats the control by about the same amount, and the control still adds nothing over blocked.
+
+Two things differ between the layouts. The cost of blocking is larger with A's supporting paragraph first: full − blocked rises by 7.5 (3.4, 11.8) on Qwen and 5.2 (0.1, 10.6) on Llama. And on Qwen, joint reading itself gains 9.1 F1 (5.3, 13.0) from the move while blocked gains 2.5 (−0.8, 5.8); Llama's levels show no clear change. Only the first and the last slot were run, and the first slot is also the start of the context, so distance between the two supporting paragraphs and absolute position are not separated.
+
+**Gold-only access does not beat full access.** The 11-15 entry found gold above full on Qwen3-8B (79 sources, exact match 38.6 against 29.1, +9.5 (3.2, 16.5)), and the 11-16 evening entry said supporting-paragraph-only access "beats full access at 8B on every version". On fresh sources gold − full is +1.0 and +1.3 F1 with the supporting paragraph last and −3.1 and −1.2 with it first (rows above). None of the four shows gold ahead. Do not claim it. On Qwen with the paragraph first, full is right and gold wrong in 25 layouts against 10 the other way; that is one contrast among several, on one model.
+
+Location does not explain the old result. The 11-15 rows split by the slot of A's supporting paragraph (exact match; a split chosen after seeing the result, so exploratory): slots 0–2 +6.8 (−2.7, 16.2), slots 3–6 +7.4 (0.0, 16.2), slots 7–9 +9.8 (−1.1, 21.7). The old difference has a positive estimate in every third, including the early slots where the fresh run shows none. What is left is the 79-question cohort, or chance in one contrast among many, which the 11-15 entry flagged.
+
+One lead is untested. In the 11-15 rows, BB layouts (both supporting paragraphs in B, A holds only distractors) lost 10 points of exact match when B could see A: full − blocked −10.1 (−19.0, −2.5), against +1.3 (−5.1, 7.6) for AA. The fresh runs have no BB layouts. Blocked against full on BB layouts of the fresh 200 sources needs no gold labels and about 400 answers per model.
+
+**Mask checks** (second machine, 48 layouts per model).
+- Swap. A's tokens are replaced by another question's A tokens of the same length (88% to 100% of A's positions change). Under the blocked mask B's keys and values are bit-identical at every layer, and the last logits are identical, in 48 of 48 layouts on both models. Under the full mask B changes in 48 of 48. So under the blocked mask nothing of A reaches B at any layer.
+- Full mask against joint reading. Bit-identical at every layer and in the first answer logits in 48 of 48 on both models when both sides are forced onto one attention kernel. With default settings they are never bit-identical, because a custom mask sends scaled-dot-product attention down a different kernel: first-token logits then differ by a median of 0.88 (largest 1.59) on Qwen and 0.38 (0.81) on Llama. In the main run these two paths disagree on exact match in 14 of 400 layouts on Qwen (8 one way, 6 the other) and 17 of 400 on Llama (8 and 9). That is rounding, not mask logic.
+- Blocked mask against blocks encoded separately at their true positions. Not bit-identical under either setting. First-token logits differ by a median of 0.88 (largest 1.25) on Qwen and 0.46 (2.02) on Llama, with the same top token in 46 and 47 of 48. The largest key or value difference per layout (median 14 on Qwen, 1.9 on Llama) is what a kernel change alone does to one computation (16 and 1.8). The first layer's keys already differ, before any attention has run, so the source is arithmetic on differently shaped tensors, not what B can attend to. Consistent with rounding; not a proof that the two are identical. The swap test is the direct evidence.
+
+**Endpoint validation on the 24 picked layouts.** The 11-16 numbers reproduce exactly on Qwen (same layouts, greedy decoding): generated tokens identical in 17 of 24 full pairs and 10 of 24 blocked pairs; exact match differs in 3 and 9. The 24 layouts were picked as 12 with an archived disagreement and 12 without (`experiments/paper_ablations_v1.json` in PR #2), so "12 of 48" is the selection, not a rate. Llama on the same layouts: 20 and 15 of 24 identical; exact match differs in 1 and 1. New here: fed the same continuation, the two paths choose the same next token at 2,199 of 2,205 steps for the full pair and 2,160 of 2,170 for the blocked pair on Qwen (99.7%, 99.5%), and at 1,519 of 1,525 and 1,397 of 1,411 on Llama (99.6%, 99.0%). At every disagreeing step the two leading logits are within 0.75 of each other on Qwen and 0.25 on Llama. The endpoint disagreements are near-ties that greedy decoding then amplifies.
+
+**Toy** (Qwen3-8B, 25 new chains, 800 answers). New layout, three paragraphs per worker. The People paragraph naming the question's person is in one worker and the real Cities paragraph, which has that city's mayor, is in the other. A second People paragraph is always in the other worker. A look-alike Cities paragraph about other cities sits either in the same worker as the real one ("together") or in the other worker ("split"), with the two Cities headings identical or distinct. This removes the confound noted on 11-16 evening, where the Cities paragraphs were split exactly when the People paragraphs were.
+
+| exact match, AB+BA | thinking off, split | thinking off, together | forced, split | forced, together |
+|---|---|---|---|---|
+| blocked | 89 | 97 | 41 | 97 |
+| gold | 100 | 100 | 96 | 100 |
+
+- Thinking off: gold − blocked +7.0 (2.0, 13.0) over all layouts, +11.0 (3.0, 21.0) in split layouts.
+- Forced thinking, 1,024-token budget: gold − blocked +55 (43, 67) in split layouts and +3 (0, 6) in together layouts. Under the blocked mask, forced thinking lowers split layouts by 48 points (33, 62) and leaves together layouts where they were.
+- In blocked, forced, split layouts thinking used the whole budget in 60 of 100 answers. 59 of those 60 are wrong, and all 40 that finished are right. All 59 wrong answers say the mayor is not given. So the size of this drop is tied to the 1,024 budget, as the 11-16 entry warned for every forced number.
+- Headings identical against distinct, blocked, split: −6 (−18, 4) with thinking off, +6 (−12, 24) forced. No difference seen.
+
+The split effect survives the removal of the confound: under the blocked mask with forced thinking, accuracy depends on which worker holds the look-alike paragraph. Thinking does not repair a blocked read here. The thinking-off gap is small in this layout.
+
+**Not in these runs.** No 4B rows (a rerun was started on 11-17, branch `codex/wmac-l4-v3`). No thinking run on the fresh MuSiQue sources. One selection of the control window per layout. No slot between the first and the last.
+
+Checked: every number above recomputed from the archived rows with `latent_dispatch/score.py` and `stats.bootstrap_ci` (20,000 resamples, seed 0), AB and BA averaged within source; for the main run they agree with the runner's `summary.json` to 0.1. Same input tokens across conditions in 400 of 400 layouts in both runs. Mask-check counts from `verify/rows.jsonl`; the notebook's `verify/summary.json` agrees. Toy intervals are over the 25 chains; the wrong answers were classified by string match and one capped trace was read in full. The 11-15 location and BB numbers were recomputed on 11-17 from `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` joined to `benchmark/musique.jsonl`, bootstrap over sources, 10,000 resamples. Not checked: the answers of the fresh runs have not been read, so the scorer limits of the 11-16 evening entry apply; the 4B.
+
 ## 2026-11-16, evening: MuSiQue masking tables re-scored and re-screened (F1, stricter composition filter)
 
 Two problems found by reading answers (entries below) were checked against the main masking result, using only saved rows: the 8B run in `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz` and Elliott's 4B float16 run on branch `results/t4-masking-2026-11-15`. No new inference.
