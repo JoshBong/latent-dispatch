@@ -4,13 +4,55 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-18, later: Qwen3-4B on the same 200 sources, the three models pooled, and where the rows live
+
+**Qwen3-4B on the same frozen bundle.** L4, float16, thinking off, code at `a432bfd` (the fresh-source code plus a memory-saving prefill). 2,400 answers and 600 probe answers; the same input tokens across the six conditions in 400 of 400 layouts. The rows are in `archive/wmac_gpu_v3/l4-4b-no-logits-2026-11-18.tar.gz`, which is the run's published raw archive minus its logit arrays. The raw archive is on branch `codex/wmac-l4-v3` in seven parts (sha256 `244f3e1e…509f85`, reassembled and checked).
+
+Exact match / F1: joint reading 31.8 / 39.8, full mask 31.8 / 39.7, gold 34.8 / 43.3, equal-token window 25.2 / 32.0, blocked 26.8 / 33.5, K0 29.0 / 35.5.
+
+| F1 points | all 200 | probe cohort (127) |
+|---|---|---|
+| gold − blocked | +9.8 (6.5, 13.2) | +10.1 (5.8, 14.5) |
+| gold − window | +11.3 (7.4, 15.2) | +12.2 (7.6, 17.2) |
+| window − blocked | −1.5 (−4.3, 1.3) | −2.1 (−5.4, 1.0) |
+| gold − full | +3.6 (0.6, 6.7) | +4.4 (0.7, 8.3) |
+| full − blocked | +6.2 (2.5, 9.8) | +5.7 (1.3, 10.3) |
+| joint − K0 | +4.3 (0.4, 8.2) | +3.7 (−1.0, 8.7) |
+| blocked − K0 | −2.0 (−4.3, 0.3) | −2.6 (−5.7, 0.4) |
+
+The third model agrees with the other two on everything in the entry below except gold against full. Endpoint validation at float16: generated tokens identical in 23 of 24 full pairs and 23 of 24 blocked pairs; the same next token at 902 of 903 and 1,038 of 1,040 shared-prefix steps. These figures match the run's own report on that branch.
+
+**Pooled over the three models.** The 200 sources are the same in every run, so each source's difference is averaged over the models first, then the usual bootstrap over sources. Gold − blocked +7.6 (5.1, 10.2); gold − window +8.4 (5.7, 11.3); window − blocked −0.8 (−2.6, 1.0); full − blocked +5.6 (2.8, 8.5); joint − K0 +5.5 (2.9, 8.1); blocked − K0 −0.7 (−2.5, 1.2).
+
+**Correction to the entry below: gold against full is small, and it changes sign with the layout.** The entry below said none of the fresh comparisons shows gold ahead. The 4B does, and pooling shows a pattern:
+
+| gold − full, F1 points | A's supporting paragraph last | A's supporting paragraph first |
+|---|---|---|
+| Qwen3-8B | +1.0 (−2.2, 4.1) | −3.1 (−5.9, −0.3) |
+| Llama 3.1 8B | +1.3 (−2.4, 5.2) | −1.2 (−4.6, 2.2) |
+| Qwen3-4B | +3.6 (0.6, 6.7) | not run |
+| pooled | +2.0 (0.1, 3.8) | −2.1 (−4.4, 0.2) |
+
+Last minus first on the two models that ran both: +3.3 (0.5, 6.2). In exact match the pooled figure with the paragraph last is +1.2 (−0.7, 3.2). So it is about two points either way, against +8 F1 on the 79 sources of the 11-16 evening entry. That size is still not reproduced, and "gold-only beats full access" stays unclaimed. One reading, not tested: text of A that comes before the supporting paragraph can only distract B, while text that comes after it has already read it and carries some of it. Pooling was chosen after seeing the per-model numbers, so this is exploratory.
+
+**Where the rows live now.**
+- The fresh-source tarballs moved from the top of `archive/` into `archive/wmac_gpu_v3/`. `wmac_plan.historical_sources` hashes every tarball at the top of `archive/` and excludes its questions, so the two tarballs added there this morning would have made `prepare` treat the fresh 200 sources as historical. Checked after the move: the planner sees the same nine tarballs with the same hashes, and the same 100 excluded sources, as the frozen bundle. A test now holds that set fixed. The paths in the entry below were edited to match.
+- `scripts/paper_tables.py` rebuilds the fresh-source tables of today's two entries from the tarballs, with no GPU (the 11-15 location and BB numbers in the entry below are not part of it). `tests/test_paper_tables.py` pins it to the summaries the runner saved at run time.
+- Tags mark the commits that rows are stamped with and that are not on `main`: `run/2026-11-15-masking` (`f4914e4`), `run/2026-11-16-ablations` (`116151f`), `run/2026-11-18-fresh-sources-4b` (`a432bfd`). `run/2026-11-17-fresh-sources` (`64044d8`) is on `main` with the merge of PR #3.
+- `README.md` now leads with the question and the fresh-source table, and has one index from each experiment to its code, rows and journal entry. The original plan (hypotheses H1 to H7) is in its history: `git log -p README.md`.
+- `tests/test_results.py::test_archived_runs_are_in_the_format_run_writes` had been failing since the three `paper_v1` tarballs were added on 11-16, because they are not in the layout `results.run` writes. It now checks the tarballs that are.
+
+Checked: 4B numbers recomputed from the rows with `score.py` and `stats.bootstrap_ci` (20,000 resamples, seed 0) and compared with the report on `codex/wmac-l4-v3`; pooled numbers from `scripts/paper_tables.py`; fast tests pass (`pytest -m "not slow"`). Not checked: the 4B answers have not been read; the 4B has no position run.
+
 ## 2026-11-18: fresh-source rerun finished (two models, two layouts, mask checks, toy)
+
+*Edited later the same day: the two tarball paths now point into `archive/wmac_gpu_v3/`, and the paragraph on gold against full is corrected in the entry above. Nothing else here was changed.*
 
 Results only, no change of plan. Everything here ran the PR #3 code at `64044d8` (every row is stamped with it), bfloat16, sdpa, thinking off unless said. The 200 MuSiQue 2-hop sources were fixed before any output; none is among the 100 sources of the earlier entries.
 
 **What is in the two archives.**
-- `archive/wmac_gpu_v3-a100-no-logits-2026-11-17.tar.gz`: the run's own archive without the saved logit arrays (A100 40 GB). `wmac_gpu_v3/prepared.json` has the layouts and accepted answers. Jobs: `musique-8b` and `musique-llama` (Qwen3-8B, Llama 3.1 8B; 400 layouts = 200 sources in AB and BA order; 2,400 answers and 600 probe answers each), `validation` and `validation-llama` (the 24 layouts picked on 11-16, four paths, and both implementations fed the same answer tokens), `toy-8b` (25 chains, 800 answers). Each job has `main/rows.jsonl` and the runner's own `main/summary.json`.
-- `archive/wmac_gpu_v3-checks-2026-11-18.tar.gz`: a second machine (A100 80 GB) reading the same `prepared.json`, written by `colab_wmac_checks.ipynb`. The checks are one script inside that notebook; it calls the PR #3 code unchanged. Per model: `verify/` (48 layouts: the 24 above and 24 evenly spaced ones from the 400) and `position/` (the 400 layouts with A's supporting paragraph moved from the last slot of A to the first, B untouched; 2,000 answers).
+- `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz`: the run's own archive without the saved logit arrays (A100 40 GB). `wmac_gpu_v3/prepared.json` has the layouts and accepted answers. Jobs: `musique-8b` and `musique-llama` (Qwen3-8B, Llama 3.1 8B; 400 layouts = 200 sources in AB and BA order; 2,400 answers and 600 probe answers each), `validation` and `validation-llama` (the 24 layouts picked on 11-16, four paths, and both implementations fed the same answer tokens), `toy-8b` (25 chains, 800 answers). Each job has `main/rows.jsonl` and the runner's own `main/summary.json`.
+- `archive/wmac_gpu_v3/a100-checks-2026-11-18.tar.gz`: a second machine (A100 80 GB) reading the same `prepared.json`, written by `colab_wmac_checks.ipynb`. The checks are one script inside that notebook; it calls the PR #3 code unchanged. Per model: `verify/` (48 layouts: the 24 above and 24 evenly spaced ones from the 400) and `position/` (the 400 layouts with A's supporting paragraph moved from the last slot of A to the first, B untouched; 2,000 answers).
 
 **Main run.** Every worker's supporting paragraph is the last paragraph of its block. Conditions: joint reading (`b1`), full mask, gold, `matched_irrelevant` (as many of A's tokens as its supporting paragraph has, from earlier non-supporting text that names neither the answer nor the bridge), blocked, and K0 (each block encoded on its own at local positions, keys rotated to their true positions, caches joined). Input tokens and the answer position are the same across the six conditions in 400 of 400 layouts, both models.
 
