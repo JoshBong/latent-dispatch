@@ -184,12 +184,26 @@ class Model:
             return self.hf(input_ids=torch.tensor([ids], device=self.device), **kw)
         return self.hf(inputs_embeds=embeds, **kw)
 
+    @torch.no_grad()
     def prefill(self, ids: list[int], cache=None, start_pos: int | None = None, attention_mask=None):
-        """-> (cache, last hidden state [1, d])."""
+        """-> (cache, last hidden state [1, d]), without unused logits/layer histories."""
         if cache is None:
             cache = DynamicCache()
-        out = self.forward(ids, cache, start_pos, hidden=True, attention_mask=attention_mask)
-        return out.past_key_values, out.hidden_states[-1][:, -1, :]
+        past = kv.length(cache)
+        start = past if start_pos is None else start_pos
+        kw = dict(
+            input_ids=torch.tensor([ids], device=self.device),
+            position_ids=torch.arange(start, start + len(ids), device=self.device).unsqueeze(0),
+            cache_position=torch.arange(past, past + len(ids), device=self.device),
+            past_key_values=cache, use_cache=True, output_hidden_states=False, return_dict=True,
+        )
+        if attention_mask is not None:
+            kw['attention_mask'] = attention_mask
+        # The decoder computes the same final states and KV entries as the causal
+        # LM, but skips the vocabulary projection and retaining every layer's state.
+        out = self.hf.base_model(**kw)
+        # A view would keep the entire sequence's final hidden tensor alive.
+        return out.past_key_values, out.last_hidden_state[:, -1, :].clone()
 
     # ----------------------------------------------------------- latent steps
     def _latent_embed(self, h: torch.Tensor, realign: bool) -> torch.Tensor:
