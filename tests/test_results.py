@@ -1,3 +1,4 @@
+import hashlib
 import io
 import json
 import tarfile
@@ -188,8 +189,26 @@ def test_loaded_rows_must_come_from_this_checkouts_benchmark_and_prompts():
             results._same_inputs(commit, "x")
 
 
-@pytest.mark.parametrize("path", sorted((results.ROOT / "archive").glob("*.tar.gz")), ids=lambda p: p.name)
+# The top level of archive/ holds two kinds of tarball. Runs made by results.run (results/<model>-<dtype>/<arm>.jsonl,
+# what the Colab runner's LOAD reads) are checked here. The three "paper_v1" tarballs are the output folders of
+# scripts/run_paper_ablations.py and have their own layout. Fresh-source runs live one level down, in
+# archive/wmac_gpu_v3/, for the reason given in the next test.
+RUN_FORMAT = [p for p in sorted((results.ROOT / "archive").glob("*.tar.gz")) if "-paper_v1-" not in p.name]
+
+
+@pytest.mark.parametrize("path", RUN_FORMAT, ids=lambda p: p.name)
 def test_archived_runs_are_in_the_format_run_writes(path, tmp_path, monkeypatch):
     monkeypatch.setattr(results, "_same_inputs", lambda commit, where: None)       # format only: inputs may move on
     results.load_archive(path, tmp_path)
     assert list((tmp_path / "results").glob("*/*.jsonl"))
+
+
+def test_top_level_archives_are_exactly_the_ones_the_fresh_source_plan_froze():
+    """wmac_plan.historical_sources treats every tarball at the top of archive/ as an earlier run: it hashes it and
+    excludes its questions from the fresh sample. The frozen bundle records the set it saw. A tarball added at the
+    top level would change what `prepare` selects, so new runs go in a subfolder."""
+    bundle_tar = results.ROOT / "archive" / "wmac_gpu_v3" / "a100-no-logits-2026-11-17.tar.gz"
+    with tarfile.open(bundle_tar) as tar:
+        frozen = json.load(tar.extractfile("wmac_gpu_v3/prepared.json"))["archive_sha256"]
+    now = {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((results.ROOT / "archive").glob("*.tar.gz"))}
+    assert now == frozen
