@@ -42,3 +42,27 @@ def test_prefill_matches_causal_lm_without_projection_or_layer_history(tiny_fami
             assert not a.requires_grad
     assert not hidden.requires_grad
     assert hidden.untyped_storage().nbytes() == hidden.numel() * hidden.element_size()
+
+
+@pytest.mark.parametrize('masked', [False, True])
+def test_long_prefill_preserves_positions_cache_and_decode(tiny_family, masked):
+    model = tiny_family
+    ids = torch.randint(0, 1000, (1031,), generator=torch.Generator().manual_seed(7)).tolist()
+    prefix = model.forward([21, 14, 52]).past_key_values
+    past = kv.length(prefix)
+    mask = None
+    if masked:
+        allowed = torch.ones(len(ids), past + len(ids), dtype=torch.bool).tril(past)
+        allowed[:, 1] = False
+        mask = torch.zeros_like(allowed, dtype=next(model.hf.parameters()).dtype)
+        mask.masked_fill_(~allowed, torch.finfo(mask.dtype).min)
+        mask = mask[None, None]
+    reference = model.forward(ids, kv.copy(prefix), 17, hidden=True, attention_mask=mask)
+    cache, hidden = model.prefill(ids, kv.copy(prefix), 17, mask)
+    torch.testing.assert_close(hidden, reference.hidden_states[-1][:, -1, :], atol=1e-4, rtol=1e-4)
+    for actual, expected in zip(kv.layers(cache), kv.layers(reference.past_key_values), strict=True):
+        for a, e in zip(actual, expected, strict=True):
+            torch.testing.assert_close(a, e, atol=1e-4, rtol=1e-4)
+    actual = model.forward([51], cache, 17 + len(ids)).logits
+    expected = model.forward([51], reference.past_key_values, 17 + len(ids)).logits
+    torch.testing.assert_close(actual, expected, atol=1e-4, rtol=1e-4)

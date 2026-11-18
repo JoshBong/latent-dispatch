@@ -11,8 +11,8 @@ unused vocabulary projection and retained intermediate layer states, and clones
 the final-token hidden state so its view cannot retain a full-sequence tensor.
 The forward method used for scoring/generation is unchanged.
 
-94 CPU tests passed, including cache/final-hidden comparisons for whole,
-cached and shifted masked prefill on Qwen3, Llama, Mistral and Phi3. The retry
+102 CPU tests passed, including cache/final-hidden comparisons for whole,
+cached, chunked and shifted masked prefill on Qwen3, Llama, Mistral and Phi3. The retry
 also requires a real Qwen3-4B FP16 short-context bitwise comparison and a
 longest-frozen-MuSiQue prefill memory check before the usual smoke/full run.
 Actual GPU results will be recorded after capacity is obtained.
@@ -31,4 +31,14 @@ The user explicitly approved the memory change and further GPU testing after
 the failure. The first restart was rejected for zone capacity; a broad T4
 search tried all 51 advertised zones without finding capacity. All experiment
 VMs remain stopped and no reservation remains. GPU parity/memory checks and
-the retry smoke/full run have NOT executed; only the 94 CPU tests passed.
+the retry smoke/full run have NOT executed; only the 102 CPU tests passed.
+
+The first real-model retry passed the short-context bitwise comparison but
+still exhausted T4 memory on the longest prefill. Its log is preserved in
+first-memory-check-failure.log.gz. Prefill now processes at most 1,024 query
+tokens at a time, retaining the complete preceding cache and explicit positions.
+No input is shortened. FP16 operation partitioning can change rounding, so the
+GPU gate additionally compares a 1,152-token chunked run with unchunked output
+at relative hidden/KV and next-logit error <=1e-3, with the same next token.
+All 102 CPU checks passed, including cross-boundary cache, masks, positions and
+next-logit comparisons. Real-model GPU results are pending the second check.

@@ -191,6 +191,19 @@ class Model:
             cache = DynamicCache()
         past = kv.length(cache)
         start = past if start_pos is None else start_pos
+        # Bound attention's temporary query-by-key tensors on smaller GPUs.
+        # Cache positions still span the complete context; no tokens are dropped.
+        chunk_size = 1024
+        if len(ids) > chunk_size:
+            for offset in range(0, len(ids), chunk_size):
+                end = min(offset + chunk_size, len(ids))
+                mask = attention_mask
+                if mask is not None:
+                    mask = mask[..., :past + end]
+                    if mask.ndim == 4 and mask.shape[-2] != 1:
+                        mask = mask[..., offset:end, :]
+                cache, last = self.prefill(ids[offset:end], cache, start + offset, mask)
+            return cache, last
         kw = dict(
             input_ids=torch.tensor([ids], device=self.device),
             position_ids=torch.arange(start, start + len(ids), device=self.device).unsqueeze(0),
