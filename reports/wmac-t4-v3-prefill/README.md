@@ -29,5 +29,6 @@ No main responses existed to reuse. Model weights/tokenizer caches are reused.
 
 The user explicitly approved the memory change and further GPU testing after
 the failure. The first restart was rejected for zone capacity; a broad T4
-search was started. This record alone is not evidence that GPU tests passed
-or that the full run started.
+search tried all 51 advertised zones without finding capacity. All experiment
+VMs remain stopped and no reservation remains. GPU parity/memory checks and
+the retry smoke/full run have NOT executed; only the 94 CPU tests passed.
