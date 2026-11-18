@@ -1,0 +1,187 @@
+{
+  "verified": true,
+  "sources": 200,
+  "layouts": 400,
+  "main_answers": 800,
+  "runtime": {
+    "model": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "dtype": "float16",
+    "device": "cuda:0",
+    "device_name": "NVIDIA L4",
+    "torch": "2.6.0+cu124",
+    "transformers": "4.57.6",
+    "attention": "sdpa"
+  },
+  "cells": [
+    {
+      "placement": "AA",
+      "condition": "blocked_off",
+      "rows": 200,
+      "em": 0.355,
+      "f1": 0.4300938505938506,
+      "answer_cuts": 1,
+      "missing_boxes": 2,
+      "mean_seconds": 3.4878551661700037
+    },
+    {
+      "placement": "AA",
+      "condition": "full_off",
+      "rows": 200,
+      "em": 0.395,
+      "f1": 0.4589909622541201,
+      "answer_cuts": 0,
+      "missing_boxes": 0,
+      "mean_seconds": 2.8601028898850127
+    },
+    {
+      "placement": "BB",
+      "condition": "blocked_off",
+      "rows": 200,
+      "em": 0.335,
+      "f1": 0.4259480504875242,
+      "answer_cuts": 1,
+      "missing_boxes": 1,
+      "mean_seconds": 3.4330493055099884
+    },
+    {
+      "placement": "BB",
+      "condition": "full_off",
+      "rows": 200,
+      "em": 0.315,
+      "f1": 0.3881774701906281,
+      "answer_cuts": 0,
+      "missing_boxes": 0,
+      "mean_seconds": 2.9944093217950045
+    },
+    {
+      "placement": "AA+BB",
+      "condition": "blocked_off",
+      "rows": 400,
+      "em": 0.345,
+      "f1": 0.42802095054068734,
+      "answer_cuts": 2,
+      "missing_boxes": 3,
+      "mean_seconds": 3.460452235839996
+    },
+    {
+      "placement": "AA+BB",
+      "condition": "full_off",
+      "rows": 400,
+      "em": 0.355,
+      "f1": 0.4235842162223741,
+      "answer_cuts": 0,
+      "missing_boxes": 0,
+      "mean_seconds": 2.927256105840008
+    }
+  ],
+  "contrasts": [
+    {
+      "contrast": "control_AA_BB_full_minus_blocked",
+      "metric": "f1",
+      "mean": -0.004436734318313263,
+      "ci95": [
+        -0.03615054631041472,
+        0.027532065522197086
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "control_AA_full_minus_blocked",
+      "metric": "f1",
+      "mean": 0.028897111660269554,
+      "ci95": [
+        -0.013852101845522897,
+        0.07302002880160774
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "control_BB_full_minus_blocked",
+      "metric": "f1",
+      "mean": -0.03777058029689608,
+      "ci95": [
+        -0.08748881578947366,
+        0.01252262145748979
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "main_AB_BA_full_minus_blocked",
+      "metric": "f1",
+      "mean": 0.06176828288670395,
+      "ci95": [
+        0.025655480046269524,
+        0.0985136950951095
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "split_gap_minus_together_gap",
+      "metric": "f1",
+      "mean": 0.0662050172050172,
+      "ci95": [
+        0.019734437090687087,
+        0.11284538759851247
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "control_AA_BB_full_minus_blocked",
+      "metric": "em",
+      "mean": 0.01,
+      "ci95": [
+        -0.02,
+        0.0425
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "control_AA_full_minus_blocked",
+      "metric": "em",
+      "mean": 0.04,
+      "ci95": [
+        -0.005,
+        0.085
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "control_BB_full_minus_blocked",
+      "metric": "em",
+      "mean": -0.02,
+      "ci95": [
+        -0.07,
+        0.03
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "main_AB_BA_full_minus_blocked",
+      "metric": "em",
+      "mean": 0.05,
+      "ci95": [
+        0.015,
+        0.085
+      ],
+      "sources": 200
+    },
+    {
+      "contrast": "split_gap_minus_together_gap",
+      "metric": "em",
+      "mean": 0.04,
+      "ci95": [
+        -0.0075,
+        0.0875
+      ],
+      "sources": 200
+    }
+  ],
+  "statistics": {
+    "unit": "source question, averaging AA/BB or AB/BA within source",
+    "resamples": 20000,
+    "seed": 20261116,
+    "ci": "95% unadjusted paired percentile",
+    "caveat": "A confidence interval covering zero does not prove equivalence; layout interaction is not a unique mechanism test. Fixed accepted answers retain known ambiguity."
+  }
+}
