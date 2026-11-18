@@ -1,0 +1,165 @@
+{
+  "verified": true,
+  "generated_answers": 3124,
+  "numerical_pairs": 48,
+  "numeric_files_verified": 160,
+  "phases": {
+    "validation-4b/main": {
+      "rows": 96,
+      "conditions": {
+        "masked_full": 24,
+        "b1": 24,
+        "b1_mask": 24,
+        "masked_blocked": 24
+      },
+      "answer_cuts": 0,
+      "missing_boxes": 0
+    },
+    "validation-4b/smoke": {
+      "rows": 16,
+      "conditions": {
+        "masked_full": 4,
+        "b1": 4,
+        "b1_mask": 4,
+        "masked_blocked": 4
+      },
+      "answer_cuts": 0,
+      "missing_boxes": 0
+    },
+    "validation-4b/diagnostics": {
+      "rows": 48,
+      "conditions": {
+        "masked_full": 24,
+        "masked_blocked": 24
+      },
+      "answer_cuts": 0,
+      "missing_boxes": null
+    },
+    "musique-4b/main": {
+      "rows": 2400,
+      "conditions": {
+        "matched_irrelevant_off": 400,
+        "k0_off": 400,
+        "gold_off": 400,
+        "full_off": 400,
+        "blocked_off": 400,
+        "b1_off": 400
+      },
+      "answer_cuts": 8,
+      "missing_boxes": 8
+    },
+    "musique-4b/smoke": {
+      "rows": 12,
+      "conditions": {
+        "k0_off": 2,
+        "matched_irrelevant_off": 2,
+        "blocked_off": 2,
+        "gold_off": 2,
+        "full_off": 2,
+        "b1_off": 2
+      },
+      "answer_cuts": 0,
+      "missing_boxes": 0
+    },
+    "musique-4b/probes": {
+      "rows": 600,
+      "conditions": {
+        "keep_hop1": 200,
+        "keep_hop0": 200,
+        "closed_book": 200
+      },
+      "answer_cuts": 7,
+      "missing_boxes": 7
+    }
+  },
+  "conditions": {
+    "blocked_off": {
+      "rows": 400,
+      "em": 0.2675,
+      "f1": 0.3349169434366803,
+      "answer_cuts": 1,
+      "missing_boxes": 1,
+      "mean_seconds": 3.360194720247497,
+      "mean_answer_tokens": 48.1825,
+      "partial_f1_but_not_em": 56
+    },
+    "gold_off": {
+      "rows": 400,
+      "em": 0.3475,
+      "f1": 0.43280701448146275,
+      "answer_cuts": 0,
+      "missing_boxes": 0,
+      "mean_seconds": 3.1262734026825045,
+      "mean_answer_tokens": 43.93,
+      "partial_f1_but_not_em": 67
+    },
+    "full_off": {
+      "rows": 400,
+      "em": 0.3175,
+      "f1": 0.39668522632338415,
+      "answer_cuts": 3,
+      "missing_boxes": 3,
+      "mean_seconds": 3.1200010574549903,
+      "mean_answer_tokens": 43.84,
+      "partial_f1_but_not_em": 63
+    },
+    "matched_irrelevant_off": {
+      "rows": 400,
+      "em": 0.2525,
+      "f1": 0.32001501248233,
+      "answer_cuts": 0,
+      "missing_boxes": 0,
+      "mean_seconds": 3.144664563625023,
+      "mean_answer_tokens": 44.115,
+      "partial_f1_but_not_em": 55
+    },
+    "b1_off": {
+      "rows": 400,
+      "em": 0.3175,
+      "f1": 0.39760189299005083,
+      "answer_cuts": 3,
+      "missing_boxes": 3,
+      "mean_seconds": 2.931237979904986,
+      "mean_answer_tokens": 43.0875,
+      "partial_f1_but_not_em": 64
+    },
+    "k0_off": {
+      "rows": 400,
+      "em": 0.29,
+      "f1": 0.35498021861179757,
+      "answer_cuts": 1,
+      "missing_boxes": 1,
+      "mean_seconds": 3.547692500649973,
+      "mean_answer_tokens": 52.36,
+      "partial_f1_but_not_em": 52
+    }
+  },
+  "prepared_sha256": "8abf29425611b1f3b65f5016fd40651ef0281bdb6de9852e1df2940f33953058",
+  "runtime_commits": [
+    "a432bfda7ff9e73322f5e6526e67863084c7a2ee"
+  ],
+  "sources": 200,
+  "strict_sources": 127,
+  "duplicated_support_paragraph_groups": [],
+  "human_review_records": 0,
+  "numerical_summary": {
+    "masked_full": {
+      "pairs": 24,
+      "first_argmax_matches": 24,
+      "same_generated_tokens": 23,
+      "same_prediction": 23,
+      "same_prefix_argmax_mismatches": 1,
+      "same_prefix_positions": 903,
+      "maximum_first_relative_l2": 0.009424241731757033
+    },
+    "masked_blocked": {
+      "pairs": 24,
+      "first_argmax_matches": 24,
+      "same_generated_tokens": 23,
+      "same_prediction": 24,
+      "same_prefix_argmax_mismatches": 2,
+      "same_prefix_positions": 1040,
+      "maximum_first_relative_l2": 0.0077430549209829115
+    }
+  }
+}

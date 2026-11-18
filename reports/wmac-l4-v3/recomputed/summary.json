@@ -1,0 +1,1766 @@
+{
+  "job": "musique-4b",
+  "saved_rows": 2400,
+  "expected_rows": 2400,
+  "main_complete": true,
+  "complete": true,
+  "fully_paired_sources": 200,
+  "cells": [
+    {
+      "condition": "b1_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.285,
+      "f1": 0.36746318447634235,
+      "seconds": 3.0993843591299832,
+      "think_tokens": 0.0,
+      "answer_tokens": 46.16,
+      "gen_tokens": 46.16,
+      "cut": 0.01,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "b1_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.35,
+      "f1": 0.42774060150375937,
+      "seconds": 2.7630916006799886,
+      "think_tokens": 0.0,
+      "answer_tokens": 40.015,
+      "gen_tokens": 40.015,
+      "cut": 0.005,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "blocked_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.275,
+      "f1": 0.3381605046999783,
+      "seconds": 3.191595899535009,
+      "think_tokens": 0.0,
+      "answer_tokens": 45.12,
+      "gen_tokens": 45.12,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "blocked_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.26,
+      "f1": 0.3316733821733821,
+      "seconds": 3.5287935409599847,
+      "think_tokens": 0.0,
+      "answer_tokens": 51.245,
+      "gen_tokens": 51.245,
+      "cut": 0.005,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "full_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.285,
+      "f1": 0.36646318447634235,
+      "seconds": 3.2677785029350024,
+      "think_tokens": 0.0,
+      "answer_tokens": 46.54,
+      "gen_tokens": 46.54,
+      "cut": 0.01,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "full_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.35,
+      "f1": 0.426907268170426,
+      "seconds": 2.972223611974978,
+      "think_tokens": 0.0,
+      "answer_tokens": 41.14,
+      "gen_tokens": 41.14,
+      "cut": 0.005,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "gold_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.35,
+      "f1": 0.43039175590491374,
+      "seconds": 3.075421691155018,
+      "think_tokens": 0.0,
+      "answer_tokens": 43.06,
+      "gen_tokens": 43.06,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "gold_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.345,
+      "f1": 0.4352222730580116,
+      "seconds": 3.1771251142099914,
+      "think_tokens": 0.0,
+      "answer_tokens": 44.8,
+      "gen_tokens": 44.8,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "k0_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.305,
+      "f1": 0.36419944821260614,
+      "seconds": 3.4626231765499846,
+      "think_tokens": 0.0,
+      "answer_tokens": 50.8,
+      "gen_tokens": 50.8,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "k0_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.275,
+      "f1": 0.345760989010989,
+      "seconds": 3.6327618247499616,
+      "think_tokens": 0.0,
+      "answer_tokens": 53.92,
+      "gen_tokens": 53.92,
+      "cut": 0.005,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "placement": "AB",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.245,
+      "f1": 0.3111850967839932,
+      "seconds": 3.266394872605033,
+      "think_tokens": 0.0,
+      "answer_tokens": 46.34,
+      "gen_tokens": 46.34,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "placement": "BA",
+      "cities": "",
+      "headings": "",
+      "rows": 200,
+      "sources": 200,
+      "em": 0.26,
+      "f1": 0.32884492818066674,
+      "seconds": 3.022934254645013,
+      "think_tokens": 0.0,
+      "answer_tokens": 41.89,
+      "gen_tokens": 41.89,
+      "cut": 0.0,
+      "think_cut": 0.0,
+      "think_eos": 0.0
+    }
+  ],
+  "contrasts": [
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 200,
+      "mean": 0.09789007104478242,
+      "ci95": [
+        0.06505034137009942,
+        0.13212756009023513
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 200,
+      "mean": 0.11279200199913272,
+      "ci95": [
+        0.07404287790590845,
+        0.15224537206744865
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.06176828288670394,
+      "ci95": [
+        0.025768437118437116,
+        0.09891812724921273
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.03612178815807848,
+      "ci95": [
+        0.005745725108225107,
+        0.06748842776846797
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 200,
+      "mean": 0.04262167437825332,
+      "ci95": [
+        0.004586867408906885,
+        0.0821267270740954
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0009166666666666662,
+      "ci95": [
+        -0.010333333333333332,
+        0.0125
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.02006327517511728,
+      "ci95": [
+        -0.04362900861930467,
+        0.003178612195552957
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.07782679586966514,
+      "ci95": [
+        0.04303900619518192,
+        0.11317478300326346
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.08,
+      "ci95": [
+        0.0475,
+        0.115
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.095,
+      "ci95": [
+        0.055,
+        0.135
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.05,
+      "ci95": [
+        0.015,
+        0.085
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.03,
+      "ci95": [
+        -0.0025,
+        0.0625
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0275,
+      "ci95": [
+        -0.01,
+        0.065
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0,
+      "ci95": [
+        -0.0125,
+        0.0125
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.0225,
+      "ci95": [
+        -0.045,
+        0.0
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0575,
+      "ci95": [
+        0.0225,
+        0.0925
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.09223125120493542,
+      "ci95": [
+        0.049238143435511854,
+        0.13786151677270092
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.11920665912092059,
+      "ci95": [
+        0.06871263238742016,
+        0.17154828469022013
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.02830267977636398,
+      "ci95": [
+        -0.023462704839020628,
+        0.08040111095045305
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.06392857142857143,
+      "ci95": [
+        0.020166666666666666,
+        0.10983392857142851
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0032637362637362635,
+      "ci95": [
+        -0.05344926739926739,
+        0.060502426739926694
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0009999999999999998,
+      "ci95": [
+        -0.013999999999999999,
+        0.015
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.02603894351262772,
+      "ci95": [
+        -0.06259213659147869,
+        0.009991447368421034
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.06619230769230769,
+      "ci95": [
+        0.016525091575091577,
+        0.11861909340659339
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.075,
+      "ci95": [
+        0.03,
+        0.12
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.105,
+      "ci95": [
+        0.055,
+        0.16
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.01,
+      "ci95": [
+        -0.04,
+        0.06
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.065,
+      "ci95": [
+        0.02,
+        0.11
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.02,
+      "ci95": [
+        -0.075,
+        0.035
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0,
+      "ci95": [
+        -0.015,
+        0.015
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.03,
+      "ci95": [
+        -0.065,
+        0.005
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.045,
+      "ci95": [
+        -0.005,
+        0.095
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.10354889088462942,
+      "ci95": [
+        0.060898362890882,
+        0.14853899334960455
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.10637734487734488,
+      "ci95": [
+        0.057920806277056286,
+        0.15567129329004328
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0952338859970439,
+      "ci95": [
+        0.05088810166441746,
+        0.14330913943512627
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.00831500488758553,
+      "ci95": [
+        -0.030550391006842616,
+        0.04664524071358748
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.08197961249277037,
+      "ci95": [
+        0.03184043964076858,
+        0.1332500490007069
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0008333333333333326,
+      "ci95": [
+        -0.016666666666666666,
+        0.02
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.01408760683760684,
+      "ci95": [
+        -0.05006458333333333,
+        0.020282234432234387
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0894612840470226,
+      "ci95": [
+        0.04422633959136505,
+        0.13550642917966765
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.085,
+      "ci95": [
+        0.045,
+        0.13
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.085,
+      "ci95": [
+        0.035,
+        0.135
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.09,
+      "ci95": [
+        0.045,
+        0.135
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.005,
+      "ci95": [
+        -0.045,
+        0.035
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.075,
+      "ci95": [
+        0.025,
+        0.125
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.0,
+      "ci95": [
+        -0.02,
+        0.02
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": -0.015,
+      "ci95": [
+        -0.05,
+        0.02
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 200,
+      "mean": 0.07,
+      "ci95": [
+        0.025,
+        0.115
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.10105966213007375,
+      "ci95": [
+        0.05909058811980486,
+        0.14526539790733742
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.12245084679278496,
+      "ci95": [
+        0.07585574863220813,
+        0.17208226002348548
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.05703584875777168,
+      "ci95": [
+        0.013011661750783176,
+        0.10260994418966853
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.04402381337230207,
+      "ci95": [
+        0.007240803339831786,
+        0.08282904473817602
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.03703556539238263,
+      "ci95": [
+        -0.010356592255421513,
+        0.08620139935696292
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.005905511811023622,
+      "ci95": [
+        -0.003937007874015748,
+        0.01968503937007874
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.02590579517641266,
+      "ci95": [
+        -0.05692490108776889,
+        0.00400668476663087
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.07515386695366108,
+      "ci95": [
+        0.03103320629798512,
+        0.12053124714075814
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.07480314960629922,
+      "ci95": [
+        0.03543307086614173,
+        0.1141732283464567
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.09055118110236221,
+      "ci95": [
+        0.047244094488188976,
+        0.1377952755905512
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.051181102362204724,
+      "ci95": [
+        0.015748031496062992,
+        0.09055118110236221
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.023622047244094488,
+      "ci95": [
+        -0.007874015748031496,
+        0.05905511811023622
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.031496062992125984,
+      "ci95": [
+        -0.007874015748031496,
+        0.07480314960629922
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.007874015748031496,
+      "ci95": [
+        0.0,
+        0.01968503937007874
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.027559055118110236,
+      "ci95": [
+        -0.05511811023622047,
+        0.0
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.047244094488188976,
+      "ci95": [
+        0.007874015748031496,
+        0.08661417322834646
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.09207482667905378,
+      "ci95": [
+        0.0377794880903045,
+        0.14914323589106013
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.11557354142277207,
+      "ci95": [
+        0.05398442766810345,
+        0.17932825300487687
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.001636131515949172,
+      "ci95": [
+        -0.061163235162406314,
+        0.06355515150687131
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.09043869516310461,
+      "ci95": [
+        0.03483220847394076,
+        0.15024371953505813
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.0312710911136108,
+      "ci95": [
+        -0.10022497187851517,
+        0.03663292088488938
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.007874015748031496,
+      "ci95": [
+        0.0,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.04078123837759146,
+      "ci95": [
+        -0.08671552063077136,
+        0.0022629825624022218
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.05129358830146231,
+      "ci95": [
+        -0.013873265841769778,
+        0.11777277840269965
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.06299212598425197,
+      "ci95": [
+        0.015748031496062992,
+        0.11811023622047244
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.09448818897637795,
+      "ci95": [
+        0.03937007874015748,
+        0.15748031496062992
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.007874015748031496,
+      "ci95": [
+        -0.06299212598425197,
+        0.047244094488188976
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.07086614173228346,
+      "ci95": [
+        0.015748031496062992,
+        0.12598425196850394
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.03937007874015748,
+      "ci95": [
+        -0.10236220472440945,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.007874015748031496,
+      "ci95": [
+        0.0,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.03937007874015748,
+      "ci95": [
+        -0.07874015748031496,
+        0.0
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.023622047244094488,
+      "ci95": [
+        -0.031496062992125984,
+        0.08661417322834646
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.11004449758109369,
+      "ci95": [
+        0.05337970731608019,
+        0.1713554568145292
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.12932815216279783,
+      "ci95": [
+        0.06850393700787401,
+        0.1939338548590516
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.11243556599959417,
+      "ci95": [
+        0.05461631757062756,
+        0.1751603911353186
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.0023910684185004735,
+      "ci95": [
+        -0.0498976300982905,
+        0.04456199344216868
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.10534222189837605,
+      "ci95": [
+        0.04415992282341226,
+        0.16889868839775585
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.003937007874015748,
+      "ci95": [
+        -0.011811023622047244,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.011030351975233861,
+      "ci95": [
+        -0.05679571303587051,
+        0.03130762500841241
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.09901414560585985,
+      "ci95": [
+        0.041247877373099616,
+        0.1597449505014041
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.08661417322834646,
+      "ci95": [
+        0.03937007874015748,
+        0.14173228346456693
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.08661417322834646,
+      "ci95": [
+        0.031496062992125984,
+        0.14960629921259844
+      ]
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.11023622047244094,
+      "ci95": [
+        0.05511811023622047,
+        0.16535433070866143
+      ]
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.023622047244094488,
+      "ci95": [
+        -0.06299212598425197,
+        0.015748031496062992
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.10236220472440945,
+      "ci95": [
+        0.047244094488188976,
+        0.16535433070866143
+      ]
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.007874015748031496,
+      "ci95": [
+        0.0,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": -0.015748031496062992,
+      "ci95": [
+        -0.06299212598425197,
+        0.023622047244094488
+      ]
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 127,
+      "mean": 0.07086614173228346,
+      "ci95": [
+        0.015748031496062992,
+        0.12598425196850394
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(128, 256]",
+      "primary": false,
+      "sources": 74,
+      "mean": 0.10446671630882158,
+      "ci95": [
+        0.05485800295010821,
+        0.1583219610522242
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(128, 256]",
+      "primary": false,
+      "sources": 74,
+      "mean": 0.11143137327347855,
+      "ci95": [
+        0.04549486046196573,
+        0.18054721801432325
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(128, 256]",
+      "primary": false,
+      "sources": 74,
+      "mean": 0.04373544307754834,
+      "ci95": [
+        -0.0034911538201011865,
+        0.09231459789025566
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(256, 512]",
+      "primary": false,
+      "sources": 6,
+      "mean": -0.06101559730591988,
+      "ci95": [
+        -0.25,
+        0.06993678364646107
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(256, 512]",
+      "primary": false,
+      "sources": 6,
+      "mean": -0.05894777265745007,
+      "ci95": [
+        -0.24942396313364057,
+        0.07142857142857144
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "(256, 512]",
+      "primary": false,
+      "sources": 6,
+      "mean": -0.10085470085470087,
+      "ci95": [
+        -0.3508547008547009,
+        0.16666666666666666
+      ]
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "<= 128",
+      "primary": false,
+      "sources": 120,
+      "mean": 0.1017797565494934,
+      "ci95": [
+        0.05892740331062699,
+        0.14673095833868857
+      ]
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "<= 128",
+      "primary": false,
+      "sources": 120,
+      "mean": 0.12221804511278193,
+      "ci95": [
+        0.07481650741436925,
+        0.1714323699874685
+      ]
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "support_length_bucket": "<= 128",
+      "primary": false,
+      "sources": 120,
+      "mean": 0.0491086691086691,
+      "ci95": [
+        -0.006475033068783064,
+        0.10524825752950746
+      ]
+    }
+  ],
+  "statistics": {
+    "unit": "source, averaging orders within source",
+    "seed": 20261116,
+    "bootstrap_resamples": 20000,
+    "ci": "unadjusted paired percentile",
+    "caution": "Exploratory slices; no family-wise significance claim. Cap subsets are not causal."
+  },
+  "paired_absolute_scores": [
+    {
+      "condition": "blocked_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.3349169434366803,
+      "ci95": [
+        0.28249307771906457,
+        0.3888147059811533
+      ]
+    },
+    {
+      "condition": "blocked_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.2675,
+      "ci95": [
+        0.215,
+        0.3225
+      ]
+    },
+    {
+      "condition": "gold_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.43280701448146275,
+      "ci95": [
+        0.374815013469953,
+        0.49104278855282146
+      ]
+    },
+    {
+      "condition": "gold_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.3475,
+      "ci95": [
+        0.2875,
+        0.41
+      ]
+    },
+    {
+      "condition": "full_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.3966852263233842,
+      "ci95": [
+        0.33982970494417863,
+        0.45574264069264064
+      ]
+    },
+    {
+      "condition": "full_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.3175,
+      "ci95": [
+        0.26,
+        0.3775
+      ]
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.32001501248233,
+      "ci95": [
+        0.26858836332032426,
+        0.37305010969505875
+      ]
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.2525,
+      "ci95": [
+        0.2,
+        0.3075
+      ]
+    },
+    {
+      "condition": "b1_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.3976018929900509,
+      "ci95": [
+        0.3404527903565733,
+        0.4566285840073668
+      ]
+    },
+    {
+      "condition": "b1_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.3175,
+      "ci95": [
+        0.26,
+        0.3775
+      ]
+    },
+    {
+      "condition": "k0_off",
+      "metric": "f1",
+      "sources": 200,
+      "mean": 0.35498021861179757,
+      "ci95": [
+        0.30219411235694127,
+        0.40867461230290175
+      ]
+    },
+    {
+      "condition": "k0_off",
+      "metric": "em",
+      "sources": 200,
+      "mean": 0.29,
+      "ci95": [
+        0.2375,
+        0.345
+      ]
+    }
+  ],
+  "probes": {
+    "saved_rows": 600,
+    "expected_rows": 600,
+    "complete": true,
+    "strict_paired_sources": 127,
+    "definition": "All three model-specific AB shortcut probes F1 < 0.5, with no answer truncation"
+  },
+  "implementation_comparisons": {
+    "b1-k0": "Actual joint reading minus original local-position, shifted-key separate caches.",
+    "b1-full": "Joint implementation minus full mask; inspect numerical correspondence.",
+    "blocked-k0": "True-position masked computation minus original K0; includes position/stitch and numerical effects."
+  },
+  "cap_subsets_descriptive": [
+    {
+      "condition": "blocked_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.2675,
+      "f1": 0.3349169434366803
+    },
+    {
+      "condition": "gold_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.3475,
+      "f1": 0.43280701448146275
+    },
+    {
+      "condition": "full_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.3175,
+      "f1": 0.39668522632338415
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.2525,
+      "f1": 0.32001501248233
+    },
+    {
+      "condition": "b1_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.3175,
+      "f1": 0.39760189299005083
+    },
+    {
+      "condition": "k0_off",
+      "think_cut": false,
+      "rows": 400,
+      "em": 0.29,
+      "f1": 0.35498021861179757
+    }
+  ]
+}

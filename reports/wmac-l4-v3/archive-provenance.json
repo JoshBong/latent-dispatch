@@ -1,0 +1,47 @@
+{
+  "raw_archive_sha256": "244f3e1e97d5f71027f9319290c9214033311f9fd3ae7d28df96b0d9aa509f85",
+  "raw_archive_bytes": 273073526,
+  "recovery_archive_sha256": "848d69c4c0b569f6ac97f5f5c419a0e965cbf79e98910a29c7d112653a2d801d",
+  "recovery_archive_bytes": 273019884,
+  "original_vm": "latent-wmac-l4-v3",
+  "zone": "us-central1-b",
+  "recovery": "stopped-disk snapshot, disposable copy mounted ro,noload on CPU-only helper",
+  "original_vm_modified": false,
+  "parts": [
+    {
+      "file": "raw-results.part-000",
+      "bytes": 41943040,
+      "sha256": "5b87c7a42245874144996b698e88fd1477cb9eed834055f90471d3e634abcc20"
+    },
+    {
+      "file": "raw-results.part-001",
+      "bytes": 41943040,
+      "sha256": "aacca5d91a2dd0c388eda559629e36d301a7e2e1177f27c1f9a85b751680e193"
+    },
+    {
+      "file": "raw-results.part-002",
+      "bytes": 41943040,
+      "sha256": "6746f3005f4ddb38f934bbd4f72050b96afa51c3f53a256a037b03f2bff30817"
+    },
+    {
+      "file": "raw-results.part-003",
+      "bytes": 41943040,
+      "sha256": "1daa4fae072c1a46fb666eee9ee5d297a3db235ec7df547d250fc749abf548e4"
+    },
+    {
+      "file": "raw-results.part-004",
+      "bytes": 41943040,
+      "sha256": "e268ccaaa5181486134fc41ca11df04dc48140c0dc00cebacca45b863b3fdfa1"
+    },
+    {
+      "file": "raw-results.part-005",
+      "bytes": 41943040,
+      "sha256": "bfcdbf7ff09df03550365ec7bef74e0037668a7ce616ae31c601312991711307"
+    },
+    {
+      "file": "raw-results.part-006",
+      "bytes": 21415286,
+      "sha256": "61edf4edf5a92b96acae99eef2f88d88ec7787daf1b9b4cbeb24fa272cd61675"
+    }
+  ]
+}

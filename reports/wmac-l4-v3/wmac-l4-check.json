@@ -1,0 +1,28 @@
+{
+  "model": {
+    "name": "Qwen/Qwen3-4B",
+    "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+    "format": "qwen3",
+    "requested_revision": null
+  },
+  "device": "NVIDIA L4",
+  "torch": "2.6.0+cu124",
+  "prefill": "full_context_no_chunking",
+  "short": {
+    "tokens": 53,
+    "hidden_and_kv": "bitwise_equal"
+  },
+  "medium": {
+    "tokens": 1152,
+    "hidden_and_kv": "bitwise_equal"
+  },
+  "cached_medium": {
+    "tokens": 1152,
+    "hidden_and_kv": "bitwise_equal"
+  },
+  "longest_id": "2hop__16267_25719:AB:s0",
+  "prefill_tokens": 4646,
+  "peak_allocated_mib": 8740.22265625,
+  "peak_reserved_mib": 8982.0,
+  "status": "passed"
+}

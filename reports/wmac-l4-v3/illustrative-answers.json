@@ -1,0 +1,169 @@
+[
+  {
+    "comparison": "gold_off vs blocked_off",
+    "id": "2hop__176712_8311:AB:s0",
+    "question": "What year was the father of Katherine of England crowned?",
+    "accepted_answers": [
+      "1216"
+    ],
+    "answers": {
+      "gold_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Henry III was crowned king of England in 1216. Therefore, the year the father of Katherine of England was crowned is:\n\n\\boxed{1216}",
+      "blocked_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Therefore, the father of Katherine of England was Henry III.\n\nHenry III was crowned king of England in 1220.\n\n\\boxed{1220}"
+    },
+    "support_paragraphs": [
+      "Katherine of England: Katherine of England (Old English: \"Katerine\"; 25 November 12533 May 1257) was the fifth child of Henry III and his wife, Eleanor of Provence. She was born either a deaf-mute or just deaf and mentally challenged and was very sickly. She possibly had a degenerative disease, did not survive her fourth year and died at Windsor.",
+      "Westminster Abbey: Since the coronations in 1066 of both King Harold and William the Conqueror, coronations of English and British monarchs were held in the abbey. In 1216, Henry III was unable to be crowned in London when he first came to the throne, because the French prince Louis had taken control of the city, and so the king was crowned in Gloucester Cathedral. This coronation was deemed by the Pope to be improper, and a further coronation was held in the abbey on 17 May 1220. The Archbishop of Canterbury is the traditional cleric in the coronation ceremony.[citation needed]"
+    ]
+  },
+  {
+    "comparison": "gold_off vs blocked_off",
+    "id": "2hop__167577_31122:AB:s0",
+    "question": "What century did the author of A Treatise Concerning the Principles of Human Knowledge live in?",
+    "accepted_answers": [
+      "18th",
+      "18th-century",
+      "18th century"
+    ],
+    "answers": {
+      "gold_off": "The author of *A Treatise Concerning the Principles of Human Knowledge* is George Berkeley, who lived in the 18th century.\n\n\\boxed{18th}",
+      "blocked_off": "The author of *A Treatise Concerning the Principles of Human Knowledge* is George Berkeley, who lived in the **17th century**.\n\n\\boxed{17th}"
+    },
+    "support_paragraphs": [
+      "A Treatise Concerning the Principles of Human Knowledge: A Treatise Concerning the Principles of Human Knowledge (commonly called Treatise when referring to Berkeley's works) is a 1710 work, in English, by Irish Empiricist philosopher George Berkeley. This book largely seeks to refute the claims made by Berkeley's contemporary John Locke about the nature of human perception. Whilst, like all the Empiricist philosophers, both Locke and Berkeley agreed that we are having experiences, regardless of whether material objects exist, Berkeley sought to prove that the outside world (the world which causes the ideas one has within one's mind) is also composed \"solely\" of ideas. Berkeley did this by suggesting that \"Ideas can only resemble Ideas\" \u2013 the mental ideas that we possess can only resemble other ideas (not material objects) and thus the external world consists not of physical form, but rather of ideas. This world is (or, at least, was) given logic and regularity by some other force, which Berkeley concludes is God.",
+      "Idealism: The earliest extant arguments that the world of experience is grounded in the mental derive from India and Greece. The Hindu idealists in India and the Greek Neoplatonists gave panentheistic arguments for an all-pervading consciousness as the ground or true nature of reality. In contrast, the Yog\u0101c\u0101ra school, which arose within Mahayana Buddhism in India in the 4th century CE, based its \"mind-only\" idealism to a greater extent on phenomenological analyses of personal experience. This turn toward the subjective anticipated empiricists such as George Berkeley, who revived idealism in 18th-century Europe by employing skeptical arguments against materialism."
+    ]
+  },
+  {
+    "comparison": "gold_off vs matched_irrelevant_off",
+    "id": "2hop__124412_402641:BA:s0",
+    "question": "Who is the child of Chiang Hsiao-wen's father?",
+    "accepted_answers": [
+      "Chiang Hsiao-wu",
+      "Alex Chiang"
+    ],
+    "answers": {
+      "gold_off": "\\boxed{Chiang Hsiao-wu}",
+      "matched_irrelevant_off": "\\boxed{Hsiao-chang}"
+    },
+    "support_paragraphs": [
+      "Chiang Hsiao-wen: Chiang Hsiao-wen (; also known as Alan Chiang; 14 December 1935 \u2013 14 April 1989) was the eldest son of Chiang Ching-kuo, the President of the Republic of China in Taiwan from 1978 to 1988. His mother is Faina Ipatyevna Vakhreva, also known as Chiang Fang-liang. He had one younger sister, Hsiao-chang, and two younger brothers, Hsiao-wu and Hsiao-yung. He had two half-brothers, Winston Chang and John Chiang, with whom he shared the same father.",
+      "Chiang Hsiao-wu: Chiang Hsiao-wu (; also known as Alex Chiang; April 25, 1945 - July 1, 1991) was the second son of Chiang Ching-kuo, the President of the Republic of China in Taiwan from 1978 to 1988. His mother is Faina Ipatyevna Vakhreva, also known as Chiang Fang-liang. He had one older brother, Hsiao-wen, one older sister, Hsiao-chang, and one younger brother, Hsiao-yung. He also had two half-brothers, Winston Chang and John Chiang, with whom he shared the same father."
+    ]
+  },
+  {
+    "comparison": "gold_off vs matched_irrelevant_off",
+    "id": "2hop__176712_8311:AB:s0",
+    "question": "What year was the father of Katherine of England crowned?",
+    "accepted_answers": [
+      "1216"
+    ],
+    "answers": {
+      "gold_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Henry III was crowned king of England in 1216. Therefore, the year the father of Katherine of England was crowned is:\n\n\\boxed{1216}",
+      "matched_irrelevant_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Therefore, the father of Katherine of England was Henry III.\n\nHenry III was crowned king of England in 1220.\n\n\\boxed{1220}"
+    },
+    "support_paragraphs": [
+      "Katherine of England: Katherine of England (Old English: \"Katerine\"; 25 November 12533 May 1257) was the fifth child of Henry III and his wife, Eleanor of Provence. She was born either a deaf-mute or just deaf and mentally challenged and was very sickly. She possibly had a degenerative disease, did not survive her fourth year and died at Windsor.",
+      "Westminster Abbey: Since the coronations in 1066 of both King Harold and William the Conqueror, coronations of English and British monarchs were held in the abbey. In 1216, Henry III was unable to be crowned in London when he first came to the throne, because the French prince Louis had taken control of the city, and so the king was crowned in Gloucester Cathedral. This coronation was deemed by the Pope to be improper, and a further coronation was held in the abbey on 17 May 1220. The Archbishop of Canterbury is the traditional cleric in the coronation ceremony.[citation needed]"
+    ]
+  },
+  {
+    "comparison": "gold_off vs full_off",
+    "id": "2hop__176712_8311:AB:s0",
+    "question": "What year was the father of Katherine of England crowned?",
+    "accepted_answers": [
+      "1216"
+    ],
+    "answers": {
+      "gold_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Henry III was crowned king of England in 1216. Therefore, the year the father of Katherine of England was crowned is:\n\n\\boxed{1216}",
+      "full_off": "The question asks for the year the father of Katherine of England was crowned. Katherine of England was the fifth child of Henry III and Eleanor of Provence. Therefore, the father of Katherine of England was Henry III.\n\nHenry III was crowned king of England in 1220.\n\n\\boxed{1220}"
+    },
+    "support_paragraphs": [
+      "Katherine of England: Katherine of England (Old English: \"Katerine\"; 25 November 12533 May 1257) was the fifth child of Henry III and his wife, Eleanor of Provence. She was born either a deaf-mute or just deaf and mentally challenged and was very sickly. She possibly had a degenerative disease, did not survive her fourth year and died at Windsor.",
+      "Westminster Abbey: Since the coronations in 1066 of both King Harold and William the Conqueror, coronations of English and British monarchs were held in the abbey. In 1216, Henry III was unable to be crowned in London when he first came to the throne, because the French prince Louis had taken control of the city, and so the king was crowned in Gloucester Cathedral. This coronation was deemed by the Pope to be improper, and a further coronation was held in the abbey on 17 May 1220. The Archbishop of Canterbury is the traditional cleric in the coronation ceremony.[citation needed]"
+    ]
+  },
+  {
+    "comparison": "gold_off vs full_off",
+    "id": "2hop__43283_86694:AB:s0",
+    "question": "Who has the most wins in the league that wins the All Star Game more often?",
+    "accepted_answers": [
+      "New York Yankees",
+      "Yankees"
+    ],
+    "answers": {
+      "gold_off": "The question is asking for the team with the most wins in the league that has won the All-Star Game more often. From the provided material, the 2016 Major League Baseball All-Star Game was won by the American League All-Stars. The List of Major League Baseball All-Star Games indicates that the American League has won the All-Star Game more often than the National League. The American League has 44 victories in the All-Star Game series. The team with the most wins in the league (Major League Baseball) is the New York Yankees, who have won 27 World Series titles. Therefore, the answer is:\n\n\\boxed{New York Yankees}",
+      "full_off": "\\boxed{Chicago Cubs}"
+    },
+    "support_paragraphs": [
+      "List of Major League Baseball All-Star Games: Eighty - nine Major League Baseball All - Star Games have been played since the inaugural one in 1933. The American League (AL) leads the series with 44 victories; two games ended in ties. The National League (NL) has the longest winning streak of 11 games from 1972 -- 1982; the AL held a 13 - game unbeaten streak from 1997 -- 2009 (including a tie in 2002). The AL previously dominated from 1933 to 1949, winning 12 of the first 16. The NL dominated from 1950 to 1987, winning 33 of 42 with 1 tie, including a stretch from 1963 to 1982 when they won 19 of 20. Since 1988 the AL has dominated, winning 24 of 31 with one tie. In 2018 the AL took their first lead in the series since 1963.",
+      "World Series: American League (AL) teams have won 65 of the 113 World Series played (57.5%). The New York Yankees have won 27 titles, accounting for 23.9% of all series played and 41.5% of the wins by American League teams. The St. Louis Cardinals have won 11 World Series, accounting for 9.7% of all series played and 23% of the 48 National League victories."
+    ]
+  },
+  {
+    "comparison": "b1_off vs k0_off",
+    "id": "2hop__167577_31122:AB:s0",
+    "question": "What century did the author of A Treatise Concerning the Principles of Human Knowledge live in?",
+    "accepted_answers": [
+      "18th",
+      "18th-century",
+      "18th century"
+    ],
+    "answers": {
+      "b1_off": "The author of *A Treatise Concerning the Principles of Human Knowledge* is George Berkeley, who lived in the 18th century.\n\n\\boxed{18th}",
+      "k0_off": "The author of *A Treatise Concerning the Principles of Human Knowledge* is George Berkeley, who lived in the **17th century**.\n\n\\boxed{17th}"
+    },
+    "support_paragraphs": [
+      "A Treatise Concerning the Principles of Human Knowledge: A Treatise Concerning the Principles of Human Knowledge (commonly called Treatise when referring to Berkeley's works) is a 1710 work, in English, by Irish Empiricist philosopher George Berkeley. This book largely seeks to refute the claims made by Berkeley's contemporary John Locke about the nature of human perception. Whilst, like all the Empiricist philosophers, both Locke and Berkeley agreed that we are having experiences, regardless of whether material objects exist, Berkeley sought to prove that the outside world (the world which causes the ideas one has within one's mind) is also composed \"solely\" of ideas. Berkeley did this by suggesting that \"Ideas can only resemble Ideas\" \u2013 the mental ideas that we possess can only resemble other ideas (not material objects) and thus the external world consists not of physical form, but rather of ideas. This world is (or, at least, was) given logic and regularity by some other force, which Berkeley concludes is God.",
+      "Idealism: The earliest extant arguments that the world of experience is grounded in the mental derive from India and Greece. The Hindu idealists in India and the Greek Neoplatonists gave panentheistic arguments for an all-pervading consciousness as the ground or true nature of reality. In contrast, the Yog\u0101c\u0101ra school, which arose within Mahayana Buddhism in India in the 4th century CE, based its \"mind-only\" idealism to a greater extent on phenomenological analyses of personal experience. This turn toward the subjective anticipated empiricists such as George Berkeley, who revived idealism in 18th-century Europe by employing skeptical arguments against materialism."
+    ]
+  },
+  {
+    "comparison": "b1_off vs k0_off",
+    "id": "2hop__58111_7298:BA:s0",
+    "question": "Who started his career on adult contemporary radio along with the person who plays andy bernard's brother on the office?",
+    "accepted_answers": [
+      "Michael Bubl\u00e9"
+    ],
+    "answers": {
+      "b1_off": "The person who plays Andy Bernard's brother on *The Office* is Josh Groban. According to the provided material, Michael Bubl\u00e9 and Josh Groban started out as AC artists. Therefore, the answer is:\n\n\\boxed{Michael Bubl\u00e9}",
+      "k0_off": "The person who plays Andy Bernard's brother on *The Office* is Josh Groban. Josh Groban started his career on adult contemporary radio. Therefore, the answer is \\boxed{Josh Groban}."
+    },
+    "support_paragraphs": [
+      "Garden Party (The Office): Andy Bernard (Ed Helms) decides to throw a garden party at Schrute Farms to impress his parents and Robert California (James Spader), and exhaustively explains party manners to the office workers. Andy is jealous at the amount of attention his younger brother Walter Bernard, Jr. (Josh Groban) receives from his father, and thinks that by throwing an elaborate party he can ensure his father's blessings. At first, the party goes along smoothly. Andy makes a toast to Robert in order to get his fellow employees to toast him, as if to show to his parents and California that he is valued by his employees. His plan backfires, however, and instead more people toast Robert. To get everybody's mind off of Robert, Andy decides to sing ``More Than Words ''as a duet with his father. This too goes awry as his father corrects his playing and singing, and ultimately decides to sing a duet with Walter Jr. instead of Andy. Upset, Andy takes his guitar and storms off. His father confronts him privately about his outburst, and when Andy admits to trying to win his father's affection, he reacts with annoyance. This conversation is overheard by the other staff on the baby monitor Jim (John Krasinski) and Pam Halpert (Jenna Fischer) brought for their daughter, and Pam quickly turns off the monitor to let Andy save face. Darryl Philbin (Craig Robinson) and Oscar Martinez (Oscar Nunez) confide to the camera that they now understand why Andy feels he needs to prove himself to everyone. After his family leaves, a dejected Andy, feeling unwanted by his family and co-workers, says goodbye to the office staff as they turn the garden party into a barbecue. Darryl and Oscar, however, convince Andy to stay with a cheeseburger and a beer.",
+      "Adult contemporary music: While most artists became established in other formats before moving to adult contemporary, Michael Bubl\u00e9 and Josh Groban started out as AC artists. Throughout this decade, artists such as Nick Lachey, James Blunt, John Mayer, Bruno Mars, Jason Mraz, Kelly Clarkson, Adele, Clay Aiken and Susan Boyle have become successful thanks to a ballad heavy sound. Much as some hot AC and modern rock artists have crossed over into each other, so too has soft AC crossed with country music in this decade. Country musicians such as Faith Hill, Shania Twain, LeAnn Rimes and Carrie Underwood have had success on both charts."
+    ]
+  },
+  {
+    "comparison": "b1_off vs full_off",
+    "id": "2hop__329676_119915:BA:s0",
+    "question": "In which year did Taifa of Francisco Giner de los Rios' birthplace cease to exist?",
+    "accepted_answers": [
+      "1065"
+    ],
+    "answers": {
+      "b1_off": "The birthplace of Francisco Giner de los R\u00edos was Ronda, which was part of the Taifa of Ronda. The Taifa of Ronda existed from 1039 to 1065. Therefore, the year the Taifa of Ronda ceased to exist is 1065.\n\n\\boxed{1065}",
+      "full_off": "To answer the question, we need to determine the year in which the birthplace of Francisco Giner de los R\u00edos ceased to exist. According to the provided material, Francisco Giner de los R\u00edos was born in Ronda, Spain. The Taifa of Ronda existed from 1039 to 1065. However, the Taifa of Ronda was under the control of the Taifa of Seville from 1065 until 1091.\n\nThe question is about the year when the birthplace (Ronda) ceased to exist. However, Ronda is a modern city in Spain, not a medieval taifa. The Taifa of Ronda was a medieval entity, but Ronda as a place has existed for many centuries beyond the medieval period.\n\nSince the question refers to the birthplace of Francisco Giner de los R\u00edos (Ronda, Spain), and Ronda is a modern city, the question is not about the medieval Taifa of Ronda but about the city of Ronda. The city of Ronda has not ceased to exist, and the information provided does not indicate when it ceased to exist.\n\nTherefore, the correct answer is that the birthplace of Francisco Giner de los R\u00edos (Ronda, Spain) has not ceased to exist, and the information provided does not specify a year when it ceased to exist.\n\n\\boxed{No}"
+    },
+    "support_paragraphs": [
+      "Francisco Giner de los R\u00edos: Francisco Giner de los R\u00edos (10 October 1839 in Ronda, Spain \u2013 18 February 1915 in Madrid) was a philosopher, educator and one of the most influential Spanish intellectuals at the end of the 19th and the beginning of the 20th century.",
+      "Taifa of Ronda: The Taifa of Ronda was a medieval Berber taifa kingdom centered in Moorish al-Andalus in what is now southern Spain. It existed from 1039 to 1065. The taifa was ruled by a family from the Berber Banu Ifran tribe of North Africa. Its capital was the city of Ronda. From 1065 until 1091, the taifa was under the control of the Taifa of Seville, led by Abbad II al-Mu'tadid."
+    ]
+  },
+  {
+    "comparison": "b1_off vs full_off",
+    "id": "2hop__770487_494646:BA:s0",
+    "question": "What administrative territorial entity contains the headquarters of the Mono Lake Committee?",
+    "accepted_answers": [
+      "Mono County",
+      "Mono County, California"
+    ],
+    "answers": {
+      "b1_off": "The Mono Lake Committee is based in Lee Vining, California. Therefore, the administrative territorial entity containing the headquarters of the Mono Lake Committee is \\boxed{Mono County, California}.",
+      "full_off": "The Mono Lake Committee is based in Lee Vining, California. Therefore, the administrative territorial entity containing the headquarters of the Mono Lake Committee is \\boxed{Lee Vining}."
+    },
+    "support_paragraphs": [
+      "Mono Lake Committee: The Mono Lake Committee (MLC) is an environmental organization based in Lee Vining, California in the United States. Its mission is to preserve Mono Lake, by reducing diversions of water from the Eastern Sierra watersheds by the Los Angeles Department of Water and Power (LADWP).",
+      "Lee Vining, California: Lee Vining (formerly, Leevining, Poverty Flat, and Lakeview) is a census-designated place in Mono County, California, United States. It is located south-southeast of Bridgeport, at an elevation of 6781 feet (2067 m). Lee Vining is located on the southwest shore of Mono Lake. The population was 222 as of the 2010 census, down from 250 reported as of 2000 by Mono County. At the previous census (1990) the town population was 398, and at the census before that (1980) it was 315."
+    ]
+  }
+]
