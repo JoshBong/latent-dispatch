@@ -3,269 +3,167 @@
 CS 5787 Deep Learning (Cornell Tech, Fall 2026) final project.
 Josh Huang, Elliott Kalt, Ajit Mallavarapu.
 
-Research journal (what is running, what was decided, dead ends, open questions): [`JOURNAL.md`](JOURNAL.md). People and agents reviewing or extending this repo: read its newest entry first.
+Research journal (what was run, what was decided, dead ends, open questions): [`JOURNAL.md`](JOURNAL.md). People and agents reviewing or extending this repo: read its newest entry first.
 
 ## The question
 
-An orchestrator model splits a multi-hop question's paragraphs across N parallel workers (copies of the same model). Each worker reads only its share and sends something back: its KV cache, a compressed latent payload, or text. The orchestrator answers.
+An orchestrator splits a multi-hop question's paragraphs across parallel workers, which are copies of one model. Each worker reads only its share. The orchestrator then answers from what the workers hand back: here, their key-value caches, joined into one context.
 
-**When the evidence a question needs is split across workers, at which stage does this lose the answer, and does the loss grow with the number of crossings?**
+**When the two facts a question needs sit in different workers, what is lost, and what would a worker have had to see to keep it?**
 
-A *crossing* is one jump in the reasoning chain from one worker's evidence to another's. Hop 1 on worker A and hop 2 on worker B is one crossing. A, B, A is two.
+We answer it with attention masks. Two workers, A and B, each hold 10 paragraphs of a 2-hop question (one supporting paragraph each, 18 distractors). The model reads `[question, A's block, B's block]` and answers. A mask changes one thing: which of A's tokens B's tokens may attend to while B is being read. The answer step always attends to everything.
 
-## Pipeline and where each hypothesis sits
+## What we found
+
+Fresh-source run, 2026-11-17 and 11-18: 200 MuSiQue 2-hop questions fixed before any output, each in both orders (AB, BA), thinking off, three models. Exact match / F1:
+
+| | Qwen3-8B | Llama 3.1 8B | Qwen3-4B |
+|---|---|---|---|
+| joint reading | 40.2 / 49.5 | 35.2 / 43.4 | 31.8 / 39.8 |
+| full mask (B may attend to all of A) | 39.8 / 48.8 | 35.5 / 42.8 | 31.8 / 39.7 |
+| gold (B may attend to A's supporting paragraph only) | 40.0 / 49.8 | 36.0 / 44.2 | 34.8 / 43.3 |
+| equal-token window (as many other tokens of A) | 34.0 / 42.7 | 29.5 / 37.1 | 25.2 / 32.0 |
+| blocked (B may attend to none of A) | 34.0 / 42.3 | 31.0 / 38.5 | 26.8 / 33.5 |
+| K0 (blocks encoded separately, caches joined) | 34.5 / 42.9 | 30.5 / 37.9 | 29.0 / 35.5 |
+
+Paired F1 differences over the 200 questions, 95% bootstrap intervals, pooled over the three models unless said:
+
+- **Reading separately costs about 6 F1 points, and one paragraph accounts for it.** Gold − blocked is +7.6 (5.1, 10.2). Letting B read A's supporting paragraph recovers everything that full access recovers.
+- **It is specific.** The same number of other tokens recovers nothing: window − blocked is −0.8 (−2.6, 1.0).
+- **It is not position handling.** Separately encoded caches score the same as the blocked mask (blocked − K0: −0.7 (−2.5, 1.2)). Under the blocked mask, swapping A's text for other text leaves B's keys and values bit-identical at every layer.
+- **It does not depend on the paragraph sitting next to B.** With A's supporting paragraph moved to the front of A and the control window placed next to B, gold − blocked is +9.6 (6.4, 12.9) and the window still adds nothing (two models).
+- **Gold against full access is small and depends on the layout.** +2.0 (0.1, 3.8) with the supporting paragraph last in A, −2.1 (−4.4, 0.2) with it first.
+- **An earlier set of 79 questions, kept because the model failed their shortcut probes, showed the same direction at three times the size** (gold − blocked +23). Quote the fresh-source sizes.
+
+Every number above and in the 2026-11-18 journal entries is rebuilt from the saved rows, with no GPU, by:
 
 ```
-split paragraphs -> workers encode -> workers think -> send payload -> orchestrator composes -> [re-query rounds]
-                        H1                H2               H3                 H4                      H5
-H6 = a trained fix for H3      H7 = does the orchestrator use what was sent (checks all of the above)
+python scripts/paper_tables.py
 ```
 
-Payloads sit on two axes. They have to be kept apart: in our pilots, lossy text reports beat lossless KV. Text gets re-read jointly in the orchestrator's prompt, while the KV is used as the workers encoded it.
+## Words used in this repo
 
-|            | orchestrator re-encodes it jointly | orchestrator uses worker KV as-is |
-|------------|------------------------------------|-----------------------------------|
-| lossless   | B1                                 | K0, K1                            |
-| compressed | T1, T2, L1/L2, K4 re-prefilled     | K3, K4 as KV                      |
-
-## Arms
-
-| Arm | What the orchestrator gets |
+| Word | Meaning |
 |---|---|
-| B0 | The question only. Closed-book floor. |
-| B1 | All paragraphs as text in one context. Ceiling. |
-| B1-mask | B1 with a block-diagonal attention mask (paragraph blocks can't attend to each other) and true positions. |
-| K0 | Each worker's paragraph KV with no latent steps, stitched at disjoint positions (keys RoPE-shifted). |
-| K1 | K0 plus m latent thinking steps per worker. |
-| K2 | K1 with LatentMAS's W_a realignment. Models with tied embeddings (Qwen3-4B and smaller, Llama-3.2-3B) have W_a ≈ I, so K2 ≈ K1 there; run it only as a check. Qwen3-8B/14B, Llama-3.1-8B, Mistral-Nemo and phi-4 don't tie them, so K2 is a real arm on those. |
-| K3 | Only the m latent-thought positions. |
-| K4 | Top-B positions per worker, chosen by the question's attention (CacheBack-style). Sent as KV, or re-prefilled as tokens. |
-| T1 | The worker's text report, capped at B tokens. |
-| T2 | The worker's copied supporting sentences, capped at B tokens. |
-| L1 / L2 | Trained RecursiveLink: worker hidden states → link → orchestrator input embeddings. L2 shares weights across workers and works for any N. (The framework doc calls these H1/H2; renamed here so they don't collide with the hypotheses.) |
+| worker A, worker B | The two halves of the context, read in that order. Both follow a shared prefix S (system prompt and question), so both know the question. |
+| supporting paragraph | One of the two paragraphs a 2-hop question needs. "Gold" in file and condition names. |
+| AB, BA, AA, BB | Where the two supporting paragraphs sit. AB: hop 1 in A, hop 2 in B. BA: the reverse. AA and BB: both in one worker. |
+| joint reading, `b1` | The whole context read in one pass. The reference. |
+| blocked, `b1_mask` | B is read without access to A. Positions are the true ones. |
+| gold, full, distractor, except-gold, `matched_irrelevant`, `matched_late` | Mask conditions: what of A's block B may attend to. The last two are controls with as many tokens as the supporting paragraph, taken from other text of A before it or nearest B. |
+| K0 | Each block encoded on its own at local positions, keys rotated to their true positions, caches joined. What a multi-worker system would do. |
+| K1 | K0 plus m latent "thinking" steps per worker. |
+| T1 | Each worker writes a text report and the orchestrator answers from the reports. |
+| scan, repair | The orchestrator reads one worker's cache at a time and keeps a short note between reads, for 1 or 2 rounds. |
+| B0 | The question alone. Closed-book floor. |
+| probe cohort | Questions on which the closed-book probe and both single-supporting-paragraph probes fail (F1 below 0.5) for that model. A stricter set, reported next to all questions. |
+| toy | Synthetic two-fact chains ("who is the mayor of X's favorite city") with look-alike paragraphs. |
 
-Every worker continues from a shared prefix S (system prompt + question, prefilled once), so every worker knows the question.
+## Index: each experiment, its code and its rows
 
-Placements: **P-colo** = all gold paragraphs on one worker. **P-split** = gold paragraphs on different workers. **P-rand** = random. **P-plan** = the orchestrator assigns by title.
+One row per experiment. "Code" is what ran it. Where the code is not on `main`, the tag marks the exact commit the rows are stamped with. "Role" is how the result is used as of 2026-11-18; update this table when a run is added or its role changes.
 
-## Main design: crossings set by placement on the same question
-
-Use N = 2 workers, and set the number of crossings by where the gold paragraphs go:
-- A 3-hop MuSiQue question can be placed BBB (0 crossings), AAB (1) or ABA (2).
-- A 4-hop question can go up to ABAB (3).
-- The 0-crossing control is BB-type: all gold in the second block, which is encoded separately and RoPE-shifted. AA-type placements put all gold in the first block, which K0 encodes exactly like B1 (a causal first block never sees later blocks anyway). Only the distractor block differs, so they serve as a reference, not as the control.
-
-The question, N and the distractors stay fixed, so crossings is the only thing that changes. Distractors pad both workers to the same paragraph count (off by one when the total is odd, as on 9 MuSiQue questions). Token counts are not balanced: on MuSiQue, one worker's block can be 900 tokens and the other's 1,300. Every row logs `worker_tokens`, so analyses can control for it.
-
-The synthetic toy gives exact control over 0/1/2 crossings, with unlimited n. Shard A holds people facts, shard B holds city facts, and both include same-relation distractors. The chain is A→B or A→B→A.
-
-## Hypotheses
-
-**Part 0: the data has to need composition.**
-- Per question, run three probes: closed-book; each gold paragraph with the other gold removed (distractors kept); and all paragraphs.
-- A question requires composition if closed-book is wrong and every single-paragraph probe is wrong, under every data seed it ran on.
-- Report every result on the full set and on that subset.
-- Don't filter on B1 being right; that inflates every gap.
-
-**H1 Encoding.** Encoding paragraphs separately costs accuracy only when the chain crosses workers, and the cost grows with crossings, even though the orchestrator holds every paragraph's KV.
-- Test: B1 vs B1-mask vs K0, by crossings.
-  - B1 − B1-mask = missing cross-paragraph attention.
-  - B1-mask − K0 = encoding each block at local positions and shifting the keys afterward.
-- Prediction: B1 − K0 ≈ 0 at 0 crossings (BB-type), then grows with crossings.
-- Mechanism: recompute a fraction of each block with full attention, bridge-entity tokens vs random tokens.
-- Sanity gates before any result:
-  - K0 with N = 1 reproduces B1's logits.
-  - K0 built through the cache path matches a single forward pass with the same mask and positions.
-
-**H2 Worker thinking.** Latent steps help only when one worker holds both hops.
-- Test: K1 at m ∈ {0, 8, 16, 32} × {P-colo, P-split}, plus K3.
-- Prediction: a gain under P-colo only, and equivalence to 0 under P-split.
-- Controls:
-  - T1 under P-colo should come out ≈ B1, which shows pre-composition is possible.
-  - The worker answers from its own cache after m steps, to check the latent steps aren't corrupting it.
-
-**H3 Compression.** With a compressed payload, split questions fail because a worker can't tell which of its facts another worker's hop needs.
-- Example: the question asks for the nationality of Inception's director.
-  - Worker A has "Inception was directed by Christopher Nolan."
-  - Worker B has "Nolan is British," but the question never mentions Nolan, so B has no reason to keep it.
-- Test: T1, T2, K3, K4-as-KV and K4-reprefilled at budget B ∈ {16, 64, 256}, each against K0, by crossings.
-- Retention: measure how many gold facts each payload keeps, split into hop-1 facts (entities in the question) and hop-2+ facts (reachable only through the bridge).
-- Matched pairs:
-  - K4-as-KV vs K4-reprefilled (same spans, only the encoding differs).
-  - K4-reprefilled vs T2.
-  - K3 vs T1 at an equal number of positions.
-
-**H4 Composition.** Orchestrator reasoning makes up for separate encoding at 1 crossing, but not at 2.
-- Test: {B1, K0} × thinking {off, forced, budget 256, budget 1024} × crossings.
-- Thinking is forced by prefilling `<think>` in every arm. Asking for it gets ignored in long prompts, which would make reasoning depend on the channel.
-- Diagnostic: does the trace name the gold bridge entity?
-
-**H5 Rounds.** Re-querying the saved worker caches with the orchestrator's partial findings repairs split failures, and the rounds needed ≈ crossings.
-- Run on a compressed channel, because under K0 the payload is already lossless.
-- Test: rounds ∈ {1, 2, 3} × crossings.
-- Oracle arm: the round-2 query is the gold bridge entity.
-- Matched-budget control: one round at 2B vs two rounds at B.
-- The orchestrator re-reading the K0 caches runs as a separate arm.
-
-**H6 Trained link.** A RecursiveLink trained for dispatch closes the H3 gap.
-- Test at equal B: L1/L2 vs a T2 extractor fine-tuned on the same supporting-fact labels (matched params and steps), T2 prompted, and K4.
-- If L ≈ fine-tuned T2, the gain comes from the labels, not the latent channel.
-- Generalization: train on 2-hop with N = 2, test on 3–4-hop with N = 4.
-
-**H7 Content use.** Answers depend on what the workers sent. When the orchestrator has both text and cache, it follows the text.
-- Use counterfactuals, not deletions. Deleting the payload always craters accuracy in dispatch, because it's the only evidence.
-- Four tests:
-  - Edit the answer entity in the gold paragraph, split by whether closed-book gets the question right.
-  - Swap one worker's payload with its payload from another question.
-  - Swap K1's thought positions while keeping the paragraph KV.
-  - Give the orchestrator conflicting text and KV, and see which one it follows.
-
-## Datasets
-
-Benchmark files are built once, deterministically, and checked against `benchmark/SHA256SUMS` (committed). The files themselves are gitignored; rebuild them with the commands under Running.
-
-| File | Dataset | Questions | Placements | Seeds | Instances |
+| Experiment | Models | Code | Rows | Journal | Role |
 |---|---|---|---|---|---|
-| `toy.jsonl` | `toy_d2`: toy with 2 distractor shards | 500 per hop (hop0–2) | AB, BA, AA, BB | 3 | 18,000 |
-| `toy_d0.jsonl` | `toy_d0`: the pilots' toy, no distractors | 500 per hop | AB, BA | 3 | 9,000 |
-| `musique.jsonl` | MuSiQue-Ans dev, linear chains only | 1,252 2-hop, 568 3-hop, 246 4-hop | 2-hop AA/BB/AB/BA; 3-hop AAA/BBB/AAB/ABA; 4-hop AAAA/BBBB/AABB/ABBA/ABAB | 3 | 25,530 |
-| `hotpotqa.jsonl` | HotpotQA distractor dev, 10-paragraph items | 5,899 bridge, 1,446 comparison | AA, BB, AB | 3 | 66,105 |
+| Fresh-source masks: six conditions, 200 new questions | Qwen3-8B, Llama 3.1 8B | `scripts/run_wmac_gpu.py a100` (guide: `scripts/README_wmac_a100.md`, plan: `experiments/wmac_gpu_v3.json`); tag `run/2026-11-17-fresh-sources` | `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz` | 11-18 | main result |
+| Same, third model | Qwen3-4B | same code plus a memory-saving prefill, tag `run/2026-11-18-fresh-sources-4b` (branch `codex/wmac-l4-v3`) | `archive/wmac_gpu_v3/l4-4b-no-logits-2026-11-18.tar.gz` | 11-18, later | main result |
+| Supporting paragraph first: position run | Qwen3-8B, Llama 3.1 8B | `colab_wmac_checks.ipynb` | `archive/wmac_gpu_v3/a100-checks-2026-11-18.tar.gz`, `<model>/position/` | 11-18 | robustness |
+| Mask checks: swap test, kernel comparison | Qwen3-8B, Llama 3.1 8B | `colab_wmac_checks.ipynb` | same tarball, `<model>/verify/` | 11-18 | implementation check |
+| Endpoint validation on 24 picked layouts | all three | `scripts/run_wmac_gpu.py` (`validation` jobs) | inside the two no-logits tarballs | 11-18 | implementation check |
+| Toy, new layout, thinking off and forced | Qwen3-8B | `scripts/run_wmac_gpu.py a100` (`toy-8b`) | `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz` | 11-18 | toy result |
+| Masks on 79 picked questions and the toy | Qwen3-8B | `notebooks/h1_masking.ipynb` at tag `run/2026-11-15-masking`, launcher `colab_mask_8b.ipynb`; executed notebook inside the tarball | `archive/Qwen3-8B-bfloat16-masking-2026-11-15.tar.gz`; labels in `archive/screening-2026-11-16/` | 11-15 night, 11-16 evening | earlier cohort; same direction, size not reproduced |
+| Same masks, smaller model | Qwen3-4B | same notebook | branch `results/t4-masking-2026-11-15` | 11-15 night, 11-16 evening | earlier cohort |
+| Masked thinking, answer likelihood, endpoint validation | Qwen3-8B | `scripts/run_paper_ablations.py` (guide: `scripts/README_paper_ablations.md`, plan: `experiments/paper_ablations_v1.json`); tag `run/2026-11-16-ablations` | `archive/Qwen3-8B-bfloat16-paper_v1-{thinking,likelihood,validation}-2026-11-16.tar.gz` | 11-16 (three entries) | exploratory; 25 questions |
+| Thinking with joint reading, K0 and text reports | Qwen3-4B | branch `codex/results-t4-thinking-25-2026-11-16` | same branch | 11-16, later still | exploratory |
+| Joint reading against K0 and the block mask, by model size | Qwen3-1.7B, 4B, 8B | `notebooks/part0_ruler.ipynb`, `notebooks/h1_encoding.ipynb` | `archive/Qwen3-4B-bfloat16-2026-11-13.tar.gz`, `Qwen3-1.7B-bfloat16-2026-11-14.tar.gz`, `Qwen3-8B-bfloat16-2026-11-14.tar.gz` | 11-13, 11-14 (two entries) | background: where the loss is and how it scales |
+| Latent steps per worker (K1) | Qwen3-4B | `notebooks/h2_thinking.ipynb` | `archive/Qwen3-4B-bfloat16-2026-11-13.tar.gz` | 11-13 | background |
+| Text reports (T1) and sequential repair | Qwen3-4B, 8B | `notebooks/h5_rounds.ipynb` (repair), `notebooks/h2_thinking.ipynb` (its T1 control) | `archive/Qwen3-4B-bfloat16-2026-11-14.tar.gz`, `Qwen3-8B-bfloat16-2026-11-15.tar.gz` | 11-14, 11-15 | background |
 
-- A seed is a data seed: which distractors go to which worker, and the paragraph order inside each worker. On MuSiQue and HotpotQA the 3 seeds are the same source question in 3 layouts; on the toy they are different generated questions.
-- Within one seed, every placement of a question uses the same random draw, so AB and BB differ only in where the gold sits (and the one distractor it displaces), not in a fresh shuffle.
-- MuSiQue's non-linear types (3hop2, 4hop2, 4hop3) are skipped because their hops branch, so there's no single chain to count crossings on.
-- HotpotQA doesn't mark which gold paragraph is hop 1, so chain order is random, drawn once per question (the same under every seed). Use it only after Part 0 has found the questions that need both paragraphs. Comparison questions are scored against the majority-class rate.
+`notebooks/h3_compression.ipynb`, `notebooks/h4_composition.ipynb` and `notebooks/h7_content_use.ipynb` were built for the original plan and have no reported run.
 
-## Models
+## Reproducing
 
-Every arm needs the worker caches to be stitched (concatenated) and shifted to new positions. That only works when every layer keeps a per-token KV cache with plain RoPE, so the matrix is limited to full-attention models. `model.check_architecture` refuses anything else before downloading weights.
+**The tables, from saved rows (no GPU).** `python scripts/paper_tables.py` prints the main, position, mask-check, validation and toy tables. `pytest tests/test_paper_tables.py` checks them against the summaries the runner saved at run time.
 
-| Role | Models | Notes |
-|---|---|---|
-| Main family | Qwen3-4B, Qwen3-8B, Qwen3-14B | The backbone in LatentMAS and almost every 2026 latent-MAS paper. Milestone runs on 4B. |
-| Second family | Llama-3.1-8B-Instruct (Llama-3.2-3B-Instruct for cheap checks) | The second family in KITE, MaSRead and Cache Merging, so our numbers compare with theirs. Gated: accept the license on huggingface.co. |
-| Optional third | Mistral-Nemo-Instruct-2407 (12B), phi-4 (14B) | Used by Cheng, Das & Ramnath (2608.04893). |
+**A rerun (GPU).**
+- Fresh-source protocol: `scripts/README_wmac_a100.md`. `python scripts/run_wmac_a100.py prepare` rebuilds the frozen question bundle; `python scripts/run_wmac_gpu.py a100` runs every job. `--plan-only` previews a job without loading a model.
+- Position run and mask checks: open `colab_wmac_checks.ipynb` on an A100.
+- Ablations: `scripts/README_paper_ablations.md`.
+- Earlier notebook experiments: `colab.ipynb` clones this repo at a commit, builds the benchmarks, runs the chosen notebooks as a smoke and then in full. `LOAD` starts a run from a tarball in `archive/`.
 
-- **Forced thinking (H4's forced arms) runs on Qwen3 only.** The other families have no thinking mode, and `thinking="forced"` raises on them.
-- **K1 on Mistral is slightly off-template.** Mistral's template moves the system prompt to the last user turn. K1 keeps it in S so that every worker shares the prefix. B1, K0, T1 and scan match the template exactly on every family (`tests/test_formats.py`).
-- **Check K1 on Llama before relying on it.** LatentMAS latent steps made Llama-3.2-3B degenerate in 2608.04893 (hidden states shrink about 83x at the rescaling step). The slow test `test_k1_latent_steps_do_not_wreck_the_output` catches this.
-- **Qwen3.5 and newer Qwen are out.** Qwen3.5-4B has 24 Gated DeltaNet (linear-attention) layers and 8 attention layers. A DeltaNet layer keeps a fixed-size state instead of a per-token cache, so two workers' states can't be concatenated or shifted. HyLaMAS (2610.37779) runs Qwen3.5 only by handing the full state from one agent to the next, which is a chain, not parallel workers. Write this up as a limitation.
-- Memory in bf16: 4B ≈ 8 GB, 8B ≈ 16 GB, 12–14B ≈ 24–28 GB (A100 40 GB; too big for an L4).
-- Adding a model: put it in `model.MODELS` with its chat format (`prompts.FORMATS`), then run `pytest tests/test_formats.py tests/test_architecture.py` and `MODEL=<repo> pytest -m slow tests/test_real_model.py` on a GPU.
-
-## Rules for every run
-
-- Models from the matrix above, bf16, greedy decoding.
-- One scorer for every arm: normalized EM/F1, with number words normalized ("five" = "5").
-- The answer format and thinking mode are forced by prefill, the same way in every arm.
-- Token budgets come in two kinds, and neither is picked at random:
-  - **Caps that must never bind**: the answer (256 tokens), scan scratch notes (1024), the 8192 hard stop. Every row records `cut`, and `analysis.audit` reports per arm how often a cap stopped the output. It should be ~0; if the smoke shows cuts, raise the cap and rerun that arm.
-  - **Budgets that are the variable**: T1's report budget (H3), the thinking budget (H4), latent steps m (H2). These are swept over a grid fixed before the run and reported as a curve, never tuned on the results.
-- B1's paragraph order matches K0's stitched order.
-- Every arm runs on the same questions, with 3 data seeds (`SEEDS` in each notebook's settings cell).
-- Statistics:
-  - The unit is the source question. Its rows (3 seeds; several placements at one crossing level) are averaged first, because they aren't independent. Then: paired bootstrap CIs over source questions, an exact sign-flip test (equal to exact McNemar when each question has one row), Holm correction across the family.
-  - "Grows with crossings" is tested as an interaction.
-  - "No effect" claims use TOST at ±2 EM.
-- The prediction and decision rule go in the first cell of the experiment's notebook and get committed before the run.
-
-## Milestone (Mon Nov 16)
-
-Part 0 + H1 + H2 on Qwen3-4B, with arms B0, B1, B1-mask, K0, K1 and K3.
-
-| Part | Owner |
-|---|---|
-| TBD | TBD |
-
-The course requires every member to own a part.
-
-## Prior pilots (to rerun)
-
-These came from Qwen2.5-3B/7B at n = 50–200 and are pilots only.
-
-- Toy, 7B, forced reasoning:
-  - 1 crossing: B1 99, K0 85, T1 100.
-  - 2 crossings: B1 97, K0 32, T1 49.
-- MuSiQue, 7B, n = 200, F1:
-  - 2-step: B1 .414, K0 .294, T1 .387.
-  - 3-step: B1 .415, K0 .313, T1 .314.
-- The orchestrator re-reading the worker caches once per crossing recovers the toy (2 crossings, reversed order: 1 pass 14, 2 passes 62). It doesn't recover MuSiQue.
-- HotpotQA bridge questions are mostly answerable from one paragraph: P-split accuracy sits flat at 34–38 across every arm. That's why Part 0 exists.
+**The exact code of a run.** Every saved row records the commit that wrote it. Four of those commits are tagged `run/<date>-<what>` (`git tag -l 'run/*'`).
 
 ## Layout
 
 ```
-latent_dispatch/   shared code, plain functions, imported by every notebook
-  arms.py          every arm as one function: b0 b1 b1_mask k0 k1 t1 scan
-  prompts.py       the one prompt layout every arm uses (S / blocks / tail), with each family's chat markup
-  model.py         the model matrix + architecture check; explicit-position forwards, latent steps, greedy decode
-  kv.py            copy / slice / concat / RoPE key shift              (ported from the fork, tested)
-  data.py          build / load / filter benchmark questions; placement; MuSiQue + HotpotQA loaders
-  toy.py           synthetic toy generator
-  results.py       run an arm over questions -> results/<model>/<name>.jsonl; load_results -> scored table
-  analysis.py      accuracy tables, paired gaps with CIs, TOST, crossing trend
-  score.py         answer extraction + normalized EM/F1 (one scorer for every arm)
-  stats.py         sign-flip test, McNemar, paired bootstrap, interaction, TOST, Holm
-notebooks/         one per hypothesis: prediction -> questions + arms -> run -> tables and plots -> findings
-benchmark/         SHA256SUMS (committed); question files (gitignored, rebuilt locally)
-results/           <model>-<dtype>/<arm name>.jsonl, one row per question (gitignored)
-tests/             fast: tiny random models of each family (H1 gates) + each family's real chat template;
-                   slow: real weights end to end (MODEL=...) + the real datasets
-archive/           finished runs, one tarball each (rows + executed notebooks); the Colab runner's LOAD starts from them
-colab.ipynb        the whole pipeline on one Colab GPU (see Running)
-JOURNAL.md         research journal: what is running, decisions, dead ends, open questions
+latent_dispatch/   shared code, plain functions
+  arms.py            every arm as one function: b0 b1 b1_mask k0 k1 t1 scan
+  masking.py         the attention masks: what of A's block B may attend to
+  prompts.py         the one prompt layout every arm uses, with each family's chat markup
+  model.py           the model matrix and architecture check; explicit-position forwards, greedy decode
+  kv.py              copy / slice / concat / RoPE key shift
+  data.py, toy.py    benchmark questions, placements, the synthetic toy
+  results.py         run an arm over questions -> results/<model>/<name>.jsonl; load and re-score
+  analysis.py        accuracy tables, paired gaps with intervals
+  score.py           answer extraction and normalized exact match / F1 (one scorer for everything)
+  stats.py           sign-flip test, McNemar, paired bootstrap, interaction, Holm
+  wmac_*.py          the fresh-source protocol: question selection, the experiments, the runner's summary
+  paper_*.py         the 11-16 ablations: plan, experiments, summary
+scripts/           runners (run_wmac_gpu.py, run_wmac_a100.py, run_paper_ablations.py), their guides, paper_tables.py
+experiments/       frozen plans of the scripted runs (JSON)
+notebooks/         the earlier experiments, one notebook each: prediction -> questions and arms -> run -> tables
+colab*.ipynb       Colab launchers
+archive/           saved rows, one tarball per run (see the index)
+benchmark/         SHA256SUMS (committed); question files are rebuilt locally and checked against it
+tests/             fast: tiny random models of each family and each family's chat template; slow: real weights
+JOURNAL.md         research journal
 ```
 
-Each notebook reads top to bottom as the experiment. The first cell is the prediction and decision rule, frozen before the run. Then the questions and the arms, a run cell, the tables, and a findings cell to fill in. Notebooks never define prompt, KV or scoring code; they import it, so every experiment uses the same arms.
+## Rules for `archive/`
 
-Built so far: Part 0, H1, H2 (K1 only), H3 (T1 only), H4, H5 (orchestrator scan only), H7 (select-one + notes audit). These are the experiments the pilots already ran. Each notebook's first cell lists what is still missing for that hypothesis.
+- **Nothing new at the top level.** The fresh-source planner treats every tarball directly in `archive/` as an earlier run and excludes its questions; the frozen bundle records the nine it saw, and a test holds that set fixed. New runs go in a subfolder.
+- **Rows without logit arrays.** The tarballs here hold rows, summaries and the question bundle. Raw first-token and shared-prefix logit arrays are hundreds of megabytes and stay out of `main`. For Qwen3-4B they are on branch `codex/wmac-l4-v3` as `reports/wmac-l4-v3/raw-results.part-000` to `part-006` (`cat raw-results.part-* > raw-results.tar.gz`, sha256 `244f3e1e…509f85`); the tarball in `archive/wmac_gpu_v3/` is that archive minus its `.npz` files.
+- Each tarball unpacks into its own folder. The older ones unpack at the repo root into `results/` and `notebooks/runs/`, both ignored by git.
 
 ## Setup
 
 ```
 uv venv --python 3.12 .venv
 uv pip install --python .venv/bin/python -e ".[dev]"
+pytest                # fast tests: no GPU, downloads tokenizers
+pytest -m slow        # real Qwen3-0.6B weights end to end, and the real datasets
 ```
 
-transformers is pinned to 4.57.6. Qwen3 needs ≥ 4.51, and the KV code is tested against this exact version. Notebooks use the `.venv` kernel (Jupyter Lab: `.venv/bin/jupyter lab`; VS Code: pick `.venv` as the kernel).
+transformers is pinned to 4.57.6. Qwen3 needs 4.51 or newer, and the cache code is tested against this exact version.
 
-## Running
+Benchmark files are built once and checked against the committed hashes:
 
-**On Colab:** open `colab.ipynb` in Colab (its first cell has the link; uploading the file works too), pick an L4 GPU and run all. The VS Code Colab extension's kernel works too, but ours kept disconnecting on Nov 12. The notebook clones this repo onto the Colab machine at `COMMIT` (`main` by default; give a commit hash to pin a run) and prints the commit it runs. Every results row records it. `LOAD` names finished runs in `archive/` to start from. Each tarball is checked and then unpacked, so only the questions it didn't answer are run. The check covers the row format, and that the rows were made with the same benchmark files and prompts as the code about to run.
+```
+python -m latent_dispatch.data toy toy_d0 musique hotpotqa
+cd benchmark && shasum -a 256 -c SHA256SUMS
+```
 
-The notebook installs the code, builds and checks the benchmarks, and runs the tests, including the real-weights check for `MODEL` (`RUN_TESTS = False` skips them on a rerun of the same code). It then runs every chosen notebook as a smoke, 2 questions per cell. An arm whose smoke answers are broken is left out of the full run, and so is a notebook that fails in its smoke. The run stops there only if B1 is broken. In the full run a notebook that fails doesn't stop the next one, and that model's results are packed into a tarball after every notebook. Results stay on the Colab machine, not Drive, so download the tarball before the runtime ends, and add it to `archive/` to share it. Settings: `MODEL`, `SEEDS`, `N_PER_CELL` (e.g. 100 for a quick preliminary), `NOTEBOOKS`, `SKIP` (arm names to leave out), `COMMIT`, `LOAD`. One model per run; check its audit and tables before the next model.
+Rebuilding the tables needs none of this: the questions, layouts and accepted answers of the fresh-source runs are in `prepared.json` inside each tarball of `archive/wmac_gpu_v3/`.
 
-The same steps by hand:
+## Datasets and models
 
-1. **Tests.** Both must pass before any run:
-   ```
-   pytest                # fast: tiny random models of each family (H1 gates) + chat templates (downloads tokenizers)
-   pytest -m slow        # real Qwen3-0.6B weights (every arm end to end) + the real datasets
-   MODEL=Qwen/Qwen3-4B DTYPE=bfloat16 pytest -m slow tests/test_real_model.py   # each model, before its first run (GPU; DEVICE=cpu by default without CUDA)
-   ```
-2. **Benchmarks.** Built once, then checked against everyone else's:
-   ```
-   python -m latent_dispatch.data toy toy_d0 musique hotpotqa
-   cd benchmark && shasum -a 256 -c SHA256SUMS
-   ```
-3. **Smoke.** Open the notebook and run it with `SMOKE = True`: 2 questions per cell, and the raw outputs get printed. Read them before step 4.
-4. **Full run.** Set `SMOKE = False` and run all. Pick the model with `MODEL` and the data seeds with `SEEDS`. For long runs, run it headless so the results land in a copy of the notebook:
-   ```
-   mkdir -p notebooks/runs
-   papermill notebooks/h1_encoding.ipynb notebooks/runs/h1_encoding.ipynb -p SMOKE False -p MODEL Qwen/Qwen3-8B -y "SEEDS: [0]"
-   ```
-   Lists go through `-y` (YAML); `-p SEEDS "[0]"` would pass a string and select nothing. Three seeds cost 3x one seed: Part 0 and H3–H7 grow from about 4–11k to 13–33k questions each, so for the milestone `SEEDS: [0]` is the cheap option.
-   Runs resume: questions already saved are skipped, so stopping and restarting loses nothing. On Colab, keep the repo (or at least `results/`) on Google Drive: a disconnected runtime wipes its disk, and with it every saved row.
+- **Questions.** MuSiQue-Ans dev, linear 2-hop chains, for every mask experiment. The earlier notebook runs also used 3-hop and 4-hop MuSiQue chains and HotpotQA bridge questions. The toy is generated.
+- **Models run.** Qwen3-1.7B, 4B and 8B, and Llama 3.1 8B Instruct (gated: accept its license on huggingface.co). `model.MODELS` also lists Qwen3-14B, Llama 3.2 3B, Mistral-Nemo and phi-4, which pass the architecture check and were not run.
+- **Models that cannot be used.** Qwen3.5 and newer Qwen: most of their layers are linear-attention layers that keep a fixed-size state instead of a per-token cache, so two workers' states cannot be joined.
 
-How results are shared and kept clean:
-- Each arm name (`k0`, `k1_m8`, `t1_256`, …) is one file in `results/<model>-<dtype>/`. Notebooks that ask for the same name share its rows, so H3 doesn't rerun H1's K0.
-- Each row stores the arm's options and the git commit. Asking for a name with different options stops with an error instead of mixing.
-- If you change code in `latent_dispatch/` that changes what an arm generates, delete that arm's results file, or give the new version a new name.
-- Scoring changes need no rerun: `load_results` re-scores every row from its raw text.
+## Rules for every run
+
+- Models from `model.MODELS` only: full-attention models with plain RoPE, because every arm needs caches that can be joined and shifted. `model.check_architecture` refuses anything else before downloading weights.
+- Greedy decoding. The answer format and the thinking mode are forced by prefill, the same way in every condition.
+- One scorer for everything: normalized exact match and token F1. Report both.
+- Every condition runs on the same questions with the same input tokens; the rows of the scripted runs record a hash of the input and the answer position so this can be checked.
+- The unit of analysis is the source question. Its layouts are averaged first, then paired bootstrap intervals over questions.
+- Every row records its options, whether a token cap cut it off, and the commit that wrote it.
+- Say how each claim was checked, in the journal entry that makes it.
 
 ## Borrowed code
 
-Code ported from [JoshBong/LatentMAS](https://github.com/JoshBong/LatentMAS) (a fork of [Gen-Verse/LatentMAS](https://github.com/Gen-Verse/LatentMAS), Apache-2.0) keeps a link and license note at the top of each file, as the course requires. Code taken from any other source, such as CacheBack or RecursiveMAS, gets the same.
+Code ported from [JoshBong/LatentMAS](https://github.com/JoshBong/LatentMAS) (a fork of [Gen-Verse/LatentMAS](https://github.com/Gen-Verse/LatentMAS), Apache-2.0) keeps a link and license note at the top of each file, as the course requires. Code taken from any other source gets the same.
 
 ## References
 
@@ -273,3 +171,4 @@ Code ported from [JoshBong/LatentMAS](https://github.com/JoshBong/LatentMAS) (a 
 - RecursiveMAS / RecursiveLink, arXiv 2604.25917
 - CacheBack, arXiv 2609.32046 (code: maxr0ssi/cacheback)
 - Min et al. 2019, "Compositional Questions Do Not Necessitate Multi-hop Reasoning"
+- MuSiQue: Trivedi et al. 2022, "MuSiQue: Multihop Questions via Single-hop Question Composition"
