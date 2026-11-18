@@ -1,15 +1,26 @@
 """Small, checksummed control-result backup through the already enabled serial log."""
 import argparse,base64,hashlib,io,json,pathlib,re,subprocess,tarfile
 PREFIX='WMAC_CTRL_ARTIFACT'
-RX=re.compile(PREFIX+r' sha=([0-9a-f]{64}) i=(\d+) n=(\d+) bytes=(\d+) data=([A-Za-z0-9+/=]+)')
+RX=re.compile(PREFIX+r' sha=([0-9a-f]{64}) i=(\d+) n=(\d+) bytes=(\d+) data=')
+CHUNK_BYTES=2304
 def frames(payload):
-    sha=hashlib.sha256(payload).hexdigest();width=2304;n=(len(payload)+width-1)//width
+    sha=hashlib.sha256(payload).hexdigest();width=CHUNK_BYTES;n=(len(payload)+width-1)//width
     for i in range(n):
         data=base64.b64encode(payload[i*width:(i+1)*width]).decode()
         yield f'{PREFIX} sha={sha} i={i} n={n} bytes={len(payload)} data={data}\n'
 def decode(text):
+    # Serial logging fragments a frame into records and escapes CR/LF as text.
+    # Base64 has no backslashes, so transport line breaks can be removed safely.
+    # The shared serial console can also inject complete syslog lines mid-frame.
+    text=re.sub(r'[A-Z][a-z]{2} +\d{1,2} \d{2}:\d{2}:\d{2} [^\r\n\\]*(?:\\r\\n|\r?\n|$)','',text)
+    for sep in ('\\r\\n','\\r','\\n','\r','\n'):text=text.replace(sep,'')
     groups={}
-    for sha,i,n,size,data in RX.findall(text):
+    for match in RX.finditer(text):
+        sha,i,n,size=match.groups()
+        length=min(CHUNK_BYTES,int(size)-int(i)*CHUNK_BYTES)
+        if length<=0:continue
+        encoded=4*((length+2)//3)
+        data=text[match.end():match.end()+encoded]
         g=groups.setdefault(sha,dict(n=int(n),size=int(size),parts={}))
         assert g['n']==int(n) and g['size']==int(size)
         chunk=base64.b64decode(data,validate=True);i=int(i)
@@ -37,6 +48,11 @@ if __name__=='__main__':
     if a.command=='selftest':
         payload=bytes(range(256))*400;parts=list(frames(payload))
         assert decode(''.join(reversed(parts))+parts[0])==payload
+        raw=''.join(parts)
+        fragmented=''.join(raw[i:i+579]+r'\r\n' for i in range(0,len(raw),579))
+        assert decode(fragmented)==payload
+        noisy=fragmented[:1000]+'Nov 18 20:56:41 test systemd[1]: Done.'+r'\r\n'+fragmented[1000:]
+        assert decode(noisy)==payload
         try:decode(''.join(parts[:-1]));raise AssertionError('accepted missing chunk')
         except ValueError:pass
         print('artifact roundtrip, duplicates, and missing-chunk checks passed')

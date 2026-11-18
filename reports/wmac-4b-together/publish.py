@@ -16,8 +16,8 @@ while transport is None:
         transport='ssh'
     except Exception:
         try:
-            query=f'resource.type="gce_instance" AND resource.labels.instance_id="{ID}" AND timestamp>="{START}" AND (textPayload:"WMAC_CTRL_ARTIFACT" OR textPayload:"experiment=wmac-4b-together")'
-            r=run(['gcloud','logging','read',query,'--project='+PROJECT,'--order=asc','--limit=2000','--format=json'])
+            query=f'resource.type="gce_instance" AND resource.labels.instance_id="{ID}" AND timestamp>="{START}" AND log_id("serialconsole.googleapis.com/serial_port_1_output")'
+            r=run(['gcloud','logging','read',query,'--project='+PROJECT,'--order=asc','--limit=5000','--format=json'])
             text=''.join(x.get('textPayload','') for x in json.loads(r.stdout))
             if 'experiment=wmac-4b-together' not in text:raise ValueError('No outcome marker yet')
             payload=artifact.decode(text);out.write_bytes(payload);digest=hashlib.sha256(payload).hexdigest();transport='cloud_serial_log'

@@ -1,0 +1,8 @@
+{
+  "verified": true,
+  "records": 2793,
+  "archive_bytes": 184428,
+  "sha256": "364e67317d101cc3ff652700274c56a2900ecb85536ec7a413cd6b2985682985",
+  "ssh_and_serial_archives_identical": true,
+  "required_query": "All serial-port continuation records since the instance restart, concatenated chronologically. Decoder handles escaped CR/LF and interleaved syslog; full SHA256 mandatory."
+}
