@@ -1,0 +1,10 @@
+{
+  "id": "2427060299435647642",
+  "lastStartTimestamp": "2026-11-18T12:08:04.936-08:00",
+  "scheduling": {
+    "maxRunDuration": {
+      "nanos": 0,
+      "seconds": "14400"
+    }
+  }
+}
