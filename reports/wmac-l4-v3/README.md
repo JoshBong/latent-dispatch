@@ -5,8 +5,12 @@ and rejected chunking parity checks. This run keeps full-context prefill with
 the decoder-only optimization, not chunking or quantization. Questions, aliases,
 model revision, FP16 weights and generation/context budgets remain unchanged.
 
-One g2-standard-4 L4 is held in us-central1-b. VM launch and real-model checks
-are pending; this record is not evidence of GPU success or a completed run.
+VM latent-wmac-l4-v3 is RUNNING in us-central1-b, g2-standard-4, with a
+verified NVIDIA L4 (23034 MiB), driver 580.178.04, torch 2.6.0+cu124 and
+transformers 4.57.6. Runtime source commit is a432bfd. All 102 prescribed
+checks passed on this VM before real-model checks started. Real-model/smoke
+results and full-run completion are still pending. The consumed reservation
+was deleted; the original source VMs remain stopped and unchanged.
 
 The exact shared prepared.json SHA256 is
 8abf29425611b1f3b65f5016fd40651ef0281bdb6de9852e1df2940f33953058.
