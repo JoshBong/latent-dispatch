@@ -42,3 +42,12 @@ GPU gate additionally compares a 1,152-token chunked run with unchunked output
 at relative hidden/KV and next-logit error <=1e-3, with the same next token.
 All 102 CPU checks passed, including cross-boundary cache, masks, positions and
 next-logit comparisons. Real-model GPU results are pending the second check.
+
+The automatic-backend chunking trial was rejected: real-model chunked
+hidden/KV relative error was 0.05969, above the 1e-3 gate. Its log is preserved.
+Tiny-tensor profiling on the real T4 confirmed native GQA selects the math
+kernel while expanded KV selects efficient attention. The next revision keeps
+math attention throughout fresh unmasked T4 prefill, avoiding an implicit
+backend switch between chunks; already-cached/masked inputs keep their original
+automatic backend. Newer CUDA GPUs retain unchunked prefill. All 102 CPU tests
+passed again. The real-model gate now checks cached as well as fresh chunking.

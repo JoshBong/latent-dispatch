@@ -21,9 +21,10 @@ def save(): output.write_text(json.dumps(record,indent=2)+'\n')
 def relative(a,b): return float((a.float()-b.float()).norm()/b.float().norm().clamp_min(1e-12))
 
 short=model.ids('Compare the cache and final hidden state using the same tokens and positions. ' * 4)
-for label,ids in [('short',short),('chunked',(short*100)[:1152])]:
-    reference=model.forward(ids,hidden=True)
-    cache,hidden=model.prefill(ids)
+for label,ids in [('short',short),('chunked',(short*100)[:1152]),('cached_chunked',(short*100)[:1152])]:
+    prefix=model.forward(short).past_key_values if label=='cached_chunked' else None
+    reference=model.forward(ids,kv.copy(prefix) if prefix is not None else None,hidden=True)
+    cache,hidden=model.prefill(ids,kv.copy(prefix) if prefix is not None else None)
     pairs=[(hidden,reference.hidden_states[-1][:,-1,:])]
     pairs.extend((a,e) for actual,expected in zip(kv.layers(cache),kv.layers(reference.past_key_values),strict=True)
                  for a,e in zip(actual,expected,strict=True))
@@ -40,7 +41,7 @@ for label,ids in [('short',short),('chunked',(short*100)[:1152])]:
     record[label]=dict(tokens=len(ids),max_relative_hidden_kv_error=error,
                        relative_next_logits_error=logit_error,next_token_equal=True)
     save()
-    del reference,cache,hidden,pairs,actual,expected
+    del reference,cache,hidden,pairs,actual,expected,prefix
     gc.collect();torch.cuda.empty_cache()
 
 torch.cuda.reset_peak_memory_stats()
