@@ -8,8 +8,12 @@ model revision, FP16 weights and generation/context budgets remain unchanged.
 VM latent-wmac-l4-v3 is RUNNING in us-central1-b, g2-standard-4, with a
 verified NVIDIA L4 (23034 MiB), driver 580.178.04, torch 2.6.0+cu124 and
 transformers 4.57.6. Runtime source commit is a432bfd. All 102 prescribed
-checks passed on this VM before real-model checks started. Real-model/smoke
-results and full-run completion are still pending. The consumed reservation
+checks passed on this VM before real-model checks started. Real-model bitwise hidden/KV comparisons passed at 53 tokens, 1,152 tokens,
+and cached 1,152-token input. Longest joint prefill (4,646 tokens) passed with
+8,740 MiB peak allocated and 8,982 MiB peak reserved GPU memory. All 28 smoke
+rows passed (16 validation + 12 MuSiQue). The wrapper entered its full-run
+phase, beginning validation-4b before musique-4b. Full-run completion remains
+pending; see the eventual final status. The consumed reservation
 was deleted; the original source VMs remain stopped and unchanged.
 
 The exact shared prepared.json SHA256 is
