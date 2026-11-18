@@ -20,11 +20,16 @@ The unchanged script selftest passed on CPU. Qwen3-4B's pinned tokenizer matches
 all 400 layouts fit, zero are dropped, with 1,165–4,646 context tokens (median
 2,406). Before the main control, a separate smoke evaluates the longest AA and BB
 layouts under both conditions. All four must finish with nonempty boxed answers
-and no answer cap. GPU smoke and full run are pending.
+and no answer cap. All four longest-layout GPU smoke checks passed. The full control started
+and saved 39/800 answers at the latest observed checkpoint; its reported pace
+was 2.94 seconds/answer. Full completion remains pending: see FINAL.md after
+publication. Runtime confirms Qwen3-4B, revision 1cfa9a7208912126459214e8b04321603b3df60c,
+float16, NVIDIA L4, torch 2.6.0+cu124, transformers 4.57.6, SDPA.
 
 The requested GPU is one L4, FP16, matching the main run's hardware/precision.
 VM: latent-wmac-l4-v3, us-central1-b. A restart initially hit capacity; a fresh
-hold was then obtained. The VM has a four-hour hard stop. The wrapper emits the
+hold was then obtained and consumed. The temporary reservation and unused
+snapshot were deleted. The VM has a four-hour hard stop. The wrapper emits the
 configured completion/failure email marker and schedules shutdown ten minutes
 after exit. Original main-run results and checkout are preserved.
 
