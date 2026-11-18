@@ -1,0 +1,9 @@
+{
+  "status": "failed",
+  "saved_main_rows": 0,
+  "expected_main_rows": 2400,
+  "saved_probe_rows": 0,
+  "expected_probe_rows": 600,
+  "saved_diagnostic_pairs": 0,
+  "seconds": 229.59890784600003
+}

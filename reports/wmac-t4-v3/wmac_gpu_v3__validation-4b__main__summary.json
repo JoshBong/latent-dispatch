@@ -1,0 +1,25 @@
+{
+  "job": "validation-4b",
+  "expected_rows": 96,
+  "saved_rows": 0,
+  "complete": false,
+  "cells": [],
+  "fully_paired_sources": {
+    "toy_d2": 0,
+    "musique": 0
+  },
+  "statistics": {
+    "unit": "source question; average placements within source",
+    "bootstrap_resamples": 20000,
+    "seed": 20261116,
+    "ci": "percentile, unadjusted",
+    "caution": "A zero-width interval on unanimous samples is not proof of equivalence."
+  },
+  "endpoint_comparisons": [],
+  "interpretation": "Purposively selected diagnostics; not an unbiased accuracy sample or automatic parity approval.",
+  "common_prefix_diagnostics": {
+    "saved": 0,
+    "expected": 48,
+    "file": "../diagnostics/rows.jsonl"
+  }
+}

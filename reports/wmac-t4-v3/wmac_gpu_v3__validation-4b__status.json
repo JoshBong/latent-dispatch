@@ -1,0 +1,9 @@
+{
+  "status": "smoke_passed",
+  "saved_main_rows": 0,
+  "expected_main_rows": 96,
+  "saved_probe_rows": 0,
+  "expected_probe_rows": 0,
+  "saved_diagnostic_pairs": 0,
+  "seconds": 119.50593382800001
+}

@@ -1,0 +1,1077 @@
+{
+  "job": "musique-4b",
+  "saved_rows": 0,
+  "expected_rows": 2400,
+  "main_complete": false,
+  "complete": false,
+  "fully_paired_sources": 0,
+  "cells": [],
+  "contrasts": [
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": true,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "all",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB+BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "AB",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "f1",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-matched_irrelevant",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "full-blocked",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "b1-full",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "blocked-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "contrast": "gold-k0",
+      "metric": "em",
+      "cohort": "strict",
+      "placement": "BA",
+      "primary": false,
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    }
+  ],
+  "statistics": {
+    "unit": "source, averaging orders within source",
+    "seed": 20261116,
+    "bootstrap_resamples": 20000,
+    "ci": "unadjusted paired percentile",
+    "caution": "Exploratory slices; no family-wise significance claim. Cap subsets are not causal."
+  },
+  "paired_absolute_scores": [
+    {
+      "condition": "blocked_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "blocked_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "gold_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "gold_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "full_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "full_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "matched_irrelevant_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "b1_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "b1_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "k0_off",
+      "metric": "f1",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    },
+    {
+      "condition": "k0_off",
+      "metric": "em",
+      "sources": 0,
+      "mean": null,
+      "ci95": null
+    }
+  ],
+  "probes": {
+    "saved_rows": 0,
+    "expected_rows": 600,
+    "complete": false,
+    "strict_paired_sources": 0,
+    "definition": "All three model-specific AB shortcut probes F1 < 0.5, with no answer truncation"
+  },
+  "implementation_comparisons": {
+    "b1-k0": "Actual joint reading minus original local-position, shifted-key separate caches.",
+    "b1-full": "Joint implementation minus full mask; inspect numerical correspondence.",
+    "blocked-k0": "True-position masked computation minus original K0; includes position/stitch and numerical effects."
+  },
+  "cap_subsets_descriptive": []
+}

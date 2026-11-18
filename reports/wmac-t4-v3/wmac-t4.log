@@ -1,0 +1,163 @@
+2.6.0+cu124 4.57.6 Tesla T4
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 8.65s
+[t4] /home/elkalt/latent-dispatch-masking-pr1/.venv/bin/python /home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py validation-4b --prepared /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/prepared.json --output-root /home/elkalt/latent-dispatch-wmac-v3/results --run-name wmac_gpu_v3 --device cuda --smoke-only --max-hours 23.999999977384444
+validation-4b: 96 main generations; /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/validation-4b/manifest.json
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:22<00:44, 22.47s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:45<00:22, 22.57s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:45<00:00, 12.48s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:45<00:00, 15.19s/it]
+validation-4b 1/16 2hop__411091_625230:AB:s0 masked_full
+{"seconds": 3.09330440399998, "gen_tokens": 7, "think_tokens": 0, "answer_tokens": 7, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 2/16 2hop__411091_625230:AB:s0 b1
+{"seconds": 5.578397662000015, "gen_tokens": 7, "think_tokens": 0, "answer_tokens": 7, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 3/16 2hop__411091_625230:AB:s0 b1_mask
+{"seconds": 2.7998859890000176, "gen_tokens": 7, "think_tokens": 0, "answer_tokens": 7, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 4/16 2hop__411091_625230:AB:s0 masked_blocked
+{"seconds": 3.00730317, "gen_tokens": 7, "think_tokens": 0, "answer_tokens": 7, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 5/16 2hop__673655_316668:BA:s0 masked_full
+{"seconds": 8.043044212000012, "gen_tokens": 56, "think_tokens": 0, "answer_tokens": 56, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 6/16 2hop__673655_316668:BA:s0 b1
+{"seconds": 10.792112387999993, "gen_tokens": 56, "think_tokens": 0, "answer_tokens": 56, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 7/16 2hop__673655_316668:BA:s0 masked_blocked
+{"seconds": 3.2829862600000013, "gen_tokens": 8, "think_tokens": 0, "answer_tokens": 8, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 8/16 2hop__673655_316668:BA:s0 b1_mask
+{"seconds": 3.146839411000002, "gen_tokens": 8, "think_tokens": 0, "answer_tokens": 8, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 9/16 toy-d2-h1-s0-i41:AB b1
+{"seconds": 3.8891523679999978, "gen_tokens": 58, "think_tokens": 0, "answer_tokens": 58, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 10/16 toy-d2-h1-s0-i41:AB masked_full
+{"seconds": 3.8404492100000027, "gen_tokens": 58, "think_tokens": 0, "answer_tokens": 58, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 11/16 toy-d2-h1-s0-i41:AB masked_blocked
+{"seconds": 4.217237694000005, "gen_tokens": 65, "think_tokens": 0, "answer_tokens": 65, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 12/16 toy-d2-h1-s0-i41:AB b1_mask
+{"seconds": 4.371993591000006, "gen_tokens": 65, "think_tokens": 0, "answer_tokens": 65, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 13/16 toy-d2-h1-s0-i45:BA b1
+{"seconds": 2.199279132000015, "gen_tokens": 29, "think_tokens": 0, "answer_tokens": 29, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 14/16 toy-d2-h1-s0-i45:BA masked_blocked
+{"seconds": 4.478007295999987, "gen_tokens": 69, "think_tokens": 0, "answer_tokens": 69, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 15/16 toy-d2-h1-s0-i45:BA masked_full
+{"seconds": 2.134032915000006, "gen_tokens": 29, "think_tokens": 0, "answer_tokens": 29, "cut": false, "think_cut": false, "think_eos": false}
+validation-4b 16/16 toy-d2-h1-s0-i45:BA b1_mask
+{"seconds": 4.556835432999975, "gen_tokens": 69, "think_tokens": 0, "answer_tokens": 69, "cut": false, "think_cut": false, "think_eos": false}
+{"smoke_id": "2hop__411091_625230:AB:s0", "condition": "masked_full", "text": "\\boxed{Hancock County}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__411091_625230:AB:s0", "condition": "b1", "text": "\\boxed{Hancock County}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__411091_625230:AB:s0", "condition": "b1_mask", "text": "\\boxed{Hancock County}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__411091_625230:AB:s0", "condition": "masked_blocked", "text": "\\boxed{Hancock County}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__673655_316668:BA:s0", "condition": "masked_full", "text": "The Blackout All-Stars was a supergroup that included Ray Barretto, who is a percussionist and composer known for playing congas. Therefore, the instrument played by the person from The Blackout All-Stars is the conga.\n\n\\boxed{conga}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__673655_316668:BA:s0", "condition": "b1", "text": "The Blackout All-Stars was a supergroup that included Ray Barretto, who is a percussionist and composer known for playing congas. Therefore, the instrument played by the person from The Blackout All-Stars is the conga.\n\n\\boxed{conga}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__673655_316668:BA:s0", "condition": "masked_blocked", "text": "\\boxed{Chapman Stick}", "think_cut": false, "cut": false}
+{"smoke_id": "2hop__673655_316668:BA:s0", "condition": "b1_mask", "text": "\\boxed{Chapman Stick}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i41:AB", "condition": "b1", "text": "The question asks for the mayor of Ada Lindqvist's favorite city. From the material, we know that Ada Lindqvist's favorite city is Sundmark. The mayor of Sundmark is Farah Nasser. Therefore, the answer is:\n\n\\boxed{Farah Nasser}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i41:AB", "condition": "masked_full", "text": "The question asks for the mayor of Ada Lindqvist's favorite city. From the material, we know that Ada Lindqvist's favorite city is Sundmark. The mayor of Sundmark is Farah Nasser. Therefore, the answer is:\n\n\\boxed{Farah Nasser}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i41:AB", "condition": "masked_blocked", "text": "The question asks for the mayor of Ada Lindqvist's favorite city. From the given material, we know that Ada Lindqvist's favorite city is Sundmark. However, there is no information provided about the mayor of Sundmark. Therefore, the answer cannot be determined from the given information.\n\n\\boxed{Unknown}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i41:AB", "condition": "b1_mask", "text": "The question asks for the mayor of Ada Lindqvist's favorite city. From the given material, we know that Ada Lindqvist's favorite city is Sundmark. However, there is no information provided about the mayor of Sundmark. Therefore, the answer cannot be determined from the given information.\n\n\\boxed{Unknown}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i45:BA", "condition": "b1", "text": "The mayor of Tomas Reddy's favorite city (Tarnova) is Farah Nasser.  \n\\boxed{Farah Nasser}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i45:BA", "condition": "masked_blocked", "text": "The question asks for the mayor of Tomas Reddy's favorite city. From the given information, we know that Tomas Reddy's favorite city is Tarnova. The mayor of Tarnova is not explicitly stated in the provided material. Therefore, we cannot determine the mayor of Tarnova from the given information.\n\n\\boxed{Unknown}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i45:BA", "condition": "masked_full", "text": "The mayor of Tomas Reddy's favorite city (Tarnova) is Farah Nasser.  \n\\boxed{Farah Nasser}", "think_cut": false, "cut": false}
+{"smoke_id": "toy-d2-h1-s0-i45:BA", "condition": "b1_mask", "text": "The question asks for the mayor of Tomas Reddy's favorite city. From the given information, we know that Tomas Reddy's favorite city is Tarnova. The mayor of Tarnova is not explicitly stated in the provided material. Therefore, we cannot determine the mayor of Tarnova from the given information.\n\n\\boxed{Unknown}", "think_cut": false, "cut": false}
+smoke_passed: /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/validation-4b.tar.gz
+[t4] /home/elkalt/latent-dispatch-masking-pr1/.venv/bin/python /home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py musique-4b --prepared /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/prepared.json --output-root /home/elkalt/latent-dispatch-wmac-v3/results --run-name wmac_gpu_v3 --device cuda --smoke-only --max-hours 23.96455939511861
+musique-4b: 2400 main generations; /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/musique-4b/manifest.json
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:27, 13.61s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:17<00:07,  7.83s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:17<00:00,  4.47s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:17<00:00,  5.95s/it]
+musique-4b 1/12 2hop__16267_25719:AB:s0 k0_off
+{"seconds": 46.96945144900002, "gen_tokens": 282, "think_tokens": 0, "answer_tokens": 282, "cut": false, "think_cut": false, "think_eos": false}
+musique-4b 2/12 2hop__16267_25719:AB:s0 matched_irrelevant_off
+{"seconds": 44.12114845999997, "gen_tokens": 259, "think_tokens": 0, "answer_tokens": 259, "cut": false, "think_cut": false, "think_eos": false}
+musique-4b 3/12 2hop__16267_25719:AB:s0 blocked_off
+{"seconds": 26.60722203299997, "gen_tokens": 147, "think_tokens": 0, "answer_tokens": 147, "cut": false, "think_cut": false, "think_eos": false}
+musique-4b 4/12 2hop__16267_25719:AB:s0 gold_off
+{"seconds": 52.447084491, "gen_tokens": 312, "think_tokens": 0, "answer_tokens": 312, "cut": false, "think_cut": false, "think_eos": false}
+musique-4b 5/12 2hop__16267_25719:AB:s0 full_off
+{"seconds": 23.999481472000014, "gen_tokens": 130, "think_tokens": 0, "answer_tokens": 130, "cut": false, "think_cut": false, "think_eos": false}
+musique-4b 6/12 2hop__16267_25719:AB:s0 b1_off
+failed: /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3/musique-4b.tar.gz
+Traceback (most recent call last):
+  File "/home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py", line 248, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py", line 119, in main
+    return run(args,bundle,questions,ids,specs,folder)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py", line 215, in run
+    if not execute_phase(args.job,smoke,specs,questions,smoke_store,evaluator(folder/'smoke'),lambda:stopped[0],deadline,commit()):
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/scripts/run_paper_ablations.py", line 118, in execute_phase
+    out=evaluate(questions[id],name,specs[name])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/scripts/run_wmac_a100.py", line 213, in evaluate
+    return wmac_experiments.generate(model,q,options['condition'],options['thinking'],options['think_budget'],options['answer_tokens'])
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/latent_dispatch/wmac_experiments.py", line 49, in generate
+    cache,pos,sizes=arms.b1_context(model,q)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/latent_dispatch/arms.py", line 54, in b1_context
+    cache, _ = model.prefill(ids)
+               ^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/latent_dispatch/model.py", line 191, in prefill
+    out = self.forward(ids, cache, start_pos, hidden=True, attention_mask=attention_mask)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/utils/_contextlib.py", line 116, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-wmac-v3/latent_dispatch/model.py", line 184, in forward
+    return self.hf(input_ids=torch.tensor([ids], device=self.device), **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 918, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 480, in forward
+    outputs: BaseModelOutputWithPast = self.model(
+                                       ^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 1072, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 410, in forward
+    hidden_states = decoder_layer(
+                    ^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/modeling_layers.py", line 94, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/utils/generic.py", line 1031, in wrapped_forward
+    output = orig_forward(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 260, in forward
+    hidden_states, _ = self.self_attn(
+                       ^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1739, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/torch/nn/modules/module.py", line 1750, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/utils/deprecation.py", line 172, in wrapped_func
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/models/qwen3/modeling_qwen3.py", line 216, in forward
+    attn_output, attn_weights = attention_interface(
+                                ^^^^^^^^^^^^^^^^^^^^
+  File "/home/elkalt/latent-dispatch-masking-pr1/.venv/lib/python3.12/site-packages/transformers/integrations/sdpa_attention.py", line 96, in sdpa_attention_forward
+    attn_output = torch.nn.functional.scaled_dot_product_attention(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 660.00 MiB. GPU 0 has a total capacity of 14.56 GiB of which 266.75 MiB is free. Including non-PyTorch memory, this process has 14.30 GiB memory in use. Of the allocated memory 13.44 GiB is allocated by PyTorch, and 751.42 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+[t4] failed: /home/elkalt/latent-dispatch-wmac-v3/results/wmac_gpu_v3-t4.tar.gz
+LATENT_MASKING_JOB_RESULT outcome=FAILED experiment=wmac-v3 gpu=t4 exit_code=1
+Shutdown scheduled for Wed 2026-11-18 01:34:17 UTC, use 'shutdown -c' to cancel.
