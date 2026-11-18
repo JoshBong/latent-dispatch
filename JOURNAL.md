@@ -4,6 +4,52 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-18, evening: what the thinking looked like in every thinking-on run, and a framing for the next paper
+
+Reading only, no new run. Every answer generated with thinking on was counted or read: 1,750 answers in three runs, 468 of which used the whole 1,024-token thinking budget.
+
+| run | rows | thinking-on answers | used the whole budget |
+|---|---|---|---|
+| Qwen3-8B, masks × thinking, 25 toy and 25 MuSiQue sources (11-16) | `archive/Qwen3-8B-bfloat16-paper_v1-thinking-2026-11-16.tar.gz` | 300 | 78 |
+| Qwen3-8B, fresh toy (11-17) | `archive/wmac_gpu_v3/a100-no-logits-2026-11-17.tar.gz`, job `toy-8b` | 400 | 77 |
+| Qwen3-4B, joint reading, K0 and text reports, 50 per cell | branch `codex/t4-thinking-50`, `reports/2026-11-16-t4-thinking-50/` | 1,050 | 313 |
+
+"Counted" means by script over all the rows named. "Read" means read by one reader: all 155 budget-hit traces of the two 8B runs (the first and last 1,500 characters of each, 13 in full), a seeded stratified sample of 69 of the 313 on the 4B, and 53 traces that finished. The categories were fixed after 21 full reads and before the 11-16 entries below were opened.
+
+**Thinking that finishes is real reasoning. Thinking that runs out is going in circles, in new words.**
+- A finished trace finds the bridge fact, looks up the second fact and checks once or twice (read, 53). On the toy it takes about 300 thinking tokens.
+- Budget hits are almost never literal loops: 2 of 468, both on the 4B (counted, then read). They return to the same paragraph or the same doubt in fresh wording.
+- More budget would not have helped. Of the 155 budget-hit traces on the 8B, 2 were still making progress when the budget ended, and none of the 77 on the fresh toy (read).
+
+**How they run out differs by dataset.**
+- *Toy: a look-up that fails.* The model finds the favourite city, then quotes the look-alike Cities paragraph instead of the right one, says the mayor is not listed, checks again, and answers "Unknown". 76 of the 77 budget hits of the fresh toy are of this kind (read). The quoted paragraph is often a splice of the two Cities paragraphs.
+- *MuSiQue: an answer in hand that the model will not commit to.* 47 of the 59 budget hits of the 11-16 run hold an answer and doubt the evidence for it or the form to give it in (read). Where the accepted answer was stated, it came a median 15% of the way into the thinking.
+- *Text reports on the 4B: arguing over the workers.* The orchestrator has both facts early and goes back and forth, because each worker's report says the other's fact is "not mentioned" (read, 15 of the 32 sampled text-report hits).
+
+**On the toy, thinking breaks answers that were right.** Fresh toy, exact match, the same 100 layouts per row with thinking off and on (counted):
+
+| | right both ways | right, then wrong with thinking | wrong, then right with thinking | wrong both ways |
+|---|---|---|---|---|
+| blocked, look-alike paragraph in the other worker | 39 | 50 | 2 | 9 |
+| blocked, look-alike paragraph in the same worker | 94 | 3 | 3 | 0 |
+| gold, other worker | 96 | 4 | 0 | 0 |
+| gold, same worker | 100 | 0 | 0 | 0 |
+
+All 57 answers that went from right to wrong used the whole budget and end by saying the answer is unknown or not given. **Correction to the first 11-18 entry**, which tied the size of the drop from 89 to 41 to the 1,024 budget: the traces do not show thinking cut short. With thinking on, the model goes looking for the mayor's line, reads the look-alike paragraph instead, and gives up on a question it answers correctly without thinking.
+
+**On MuSiQue, running out follows the question, not the mask.** In the 11-16 run the budget was used up in 22, 18 and 19 of 50 answers under blocked, gold and full (counted). The 59 hits come from 15 of the 25 questions; 5 questions hit in all six of their thinking-on answers and hold 30 of the 59. This narrows the 11-16 warning that the cap confounds every forced number: on MuSiQue the cap falls on much the same questions under every mask, so it is unlikely to be why blocked gains more from thinking than gold does.
+
+**Qwen3-4B.** On the toy, joint reading never uses up the budget (0 of 200) and separately encoded caches do in 75 of 200; on MuSiQue it is 41, 52 and 64 of 150 for joint reading, separate caches and text reports (counted). Under separate caches the model often reasons from a sentence that is in no paragraph, such as two Cities paragraphs interleaved line by line: 40 of 200 toy traces against 0 of 200 under joint reading, by a pattern match that was run once.
+
+**Against the 11-16 entries.** This read agrees with them, including the 12 of 17 toy traces that list only the look-alike paragraph and the five MuSiQue questions that always hit the cap. One correction: "no literal loops at the cap" on the 4B has two exceptions in the 50-per-cell data. One trace repeats "Wait." about 460 times and one repeats a short block to the end.
+
+**A framing for the next paper: thinking is a patch, not the solution.**
+- *What the rows support.* Letting B read A's supporting paragraph costs nothing at answer time and is worth +7.6 F1 (fresh sources, three models, thinking off). Thinking after a blocked read buys part of that back on MuSiQue, at about twenty times the generated tokens: in the 11-16 run, blocked goes from 22 to 48 F1 while gold goes from 54 to 57, with 744 generated tokens per answer under blocked with thinking against 38 under gold without. Where the text has look-alike paragraphs, thinking does harm (the table above), and what it does there is re-read a context it encoded badly.
+- *What they do not support yet.* There is no thinking run on the fresh MuSiQue sources, so the MuSiQue half rests on 25 picked questions. Only the Qwen3 models have a thinking mode here. The toy is built to have look-alike paragraphs.
+- *What would make it a claim.* Blocked and gold with forced thinking on the fresh 200 sources, reported with tokens per answer next to accuracy.
+
+Checked: every figure marked "counted" was computed twice with separate scripts, except where said. Seven of the quoted passages behind the categories were found verbatim in the rows. Not checked: the category labels are one reader's judgment; the 4B shares come from a sample of 69 of 313; the middles of most budget-hit traces were not read.
+
 ## 2026-11-18, afternoon: control layout. With both supporting paragraphs in one worker, B's access to A is worth nothing
 
 Results only. This runs the lead that the first 11-18 entry left untested.
