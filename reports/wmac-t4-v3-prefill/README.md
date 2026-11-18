@@ -51,3 +51,13 @@ math attention throughout fresh unmasked T4 prefill, avoiding an implicit
 backend switch between chunks; already-cached/masked inputs keep their original
 automatic backend. Newer CUDA GPUs retain unchunked prefill. All 102 CPU tests
 passed again. The real-model gate now checks cached as well as fresh chunking.
+
+## Final diagnostic outcome
+
+The backend-controlled real-model trial also failed the 1e-3 gate: maximum
+relative hidden/KV error was 0.0592878. No smoke or main run was launched under
+chunking. Chunked prefill was removed from the active code; both rejected
+revisions remain in Git history with their logs. The remaining decoder-only
+prefill optimization preserves the full-context execution shape, but the T4
+longest-context OOM is unresolved. A larger-memory GPU is the proposed next
+step, subject to quota, capacity, a fresh longest-context smoke, and validation.

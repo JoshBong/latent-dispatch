@@ -10,7 +10,6 @@ The latent-step code follows ModelWrapper.generate_latent_batch_hidden_state and
 JoshBong/LatentMAS models.py (fork of Gen-Verse/LatentMAS, Apache-2.0):
 https://github.com/JoshBong/LatentMAS/blob/main/models.py
 """
-from contextlib import nullcontext
 from dataclasses import dataclass, field
 
 import torch
@@ -192,28 +191,6 @@ class Model:
             cache = DynamicCache()
         past = kv.length(cache)
         start = past if start_pos is None else start_pos
-        # Bound attention's temporary query-by-key tensors on smaller GPUs.
-        # Cache positions still span the complete context; no tokens are dropped.
-        chunk_size = 1024
-        newer_cuda = self.device.type == 'cuda' and torch.cuda.get_device_capability(self.device)[0] >= 8
-        if len(ids) > chunk_size and not newer_cuda:
-            from torch.nn.attention import SDPBackend, sdpa_kernel
-            # On the pinned T4 stack, unmasked GQA uses math attention but
-            # cached chunks otherwise switch to efficient attention. Keep
-            # that reference for a fresh unmasked prefill. Already-cached or
-            # explicitly masked input keeps its original automatic backend.
-            fresh_t4 = self.device.type == 'cuda' and past == 0 and attention_mask is None
-            backend = sdpa_kernel(SDPBackend.MATH) if fresh_t4 else nullcontext()
-            with backend:
-                for offset in range(0, len(ids), chunk_size):
-                    end = min(offset + chunk_size, len(ids))
-                    mask = attention_mask
-                    if mask is not None:
-                        mask = mask[..., :past + end]
-                        if mask.ndim == 4 and mask.shape[-2] != 1:
-                            mask = mask[..., offset:end, :]
-                    cache, last = self.prefill(ids[offset:end], cache, start + offset, mask)
-            return cache, last
         kw = dict(
             input_ids=torch.tensor([ids], device=self.device),
             position_ids=torch.arange(start, start + len(ids), device=self.device).unsqueeze(0),
