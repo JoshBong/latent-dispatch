@@ -1,0 +1,9 @@
+# Final wrapper status
+
+```
+exit_code=1
+finished_at=2026-11-18T03:20:10Z
+phase=memory_check
+```
+
+See the archived component summaries/status for complete or partial results.
