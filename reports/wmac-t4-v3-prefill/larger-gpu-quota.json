@@ -1,0 +1,222 @@
+{
+  "project": "deep-learning-514621",
+  "standard_l4_quota": [
+    {
+      "region": "africa-south1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-east1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-east2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-northeast1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-northeast2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-northeast3",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-south1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-south2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-southeast1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-southeast2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "asia-southeast3",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "australia-southeast1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "australia-southeast2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-central2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-north1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-north2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-southwest1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west10",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west12",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west3",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west4",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west6",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west8",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "europe-west9",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "me-central1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "me-central2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "me-west1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "northamerica-northeast1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "northamerica-northeast2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "northamerica-south1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "southamerica-east1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "southamerica-west1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-central1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-east1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-east4",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-east5",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-south1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-west1",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-west2",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-west3",
+      "limit": 1,
+      "usage": 0
+    },
+    {
+      "region": "us-west4",
+      "limit": 1,
+      "usage": 0
+    }
+  ],
+  "standard_a100_positive_quota_regions": [],
+  "capacity_tested": false
+}

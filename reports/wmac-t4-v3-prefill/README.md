@@ -61,3 +61,10 @@ revisions remain in Git history with their logs. The remaining decoder-only
 prefill optimization preserves the full-context execution shape, but the T4
 longest-context OOM is unresolved. A larger-memory GPU is the proposed next
 step, subject to quota, capacity, a fresh longest-context smoke, and validation.
+
+The rejected-trial artifacts were pushed and the T4 is now stopped. Active
+full-context decoder-only code passes all 102 CPU checks. Current quota reads
+show one standard L4 in 43 regions and zero positive standard A100 regional
+quotas. No L4 capacity search or provisioning has been performed. The proposed
+next step is one 24-GB L4 with unchanged 4B FP16 weights and frozen questions,
+starting with the longest-context smoke; actual hardware must be recorded as L4.
