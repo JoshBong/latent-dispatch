@@ -1,0 +1,43 @@
+{
+  "protocol": "wmac_hotpot_v1",
+  "seed": 20261116,
+  "hotpot_sources": 200,
+  "models": {
+    "8b": {
+      "name": "Qwen/Qwen3-8B",
+      "revision": "b968826d9c46dd6066d109eabc6255188de91218",
+      "format": "qwen3",
+      "dtype": "bfloat16",
+      "tokenizer_sha256": "871466a28ca69fc737e5e467f409dc3297222733de577a261748b596c288d2d6"
+    },
+    "llama": {
+      "name": "meta-llama/Llama-3.1-8B-Instruct",
+      "revision": "0e9e39f249a16976918f6564b8830bc894c89659",
+      "format": "llama3",
+      "dtype": "bfloat16",
+      "tokenizer_sha256": "96ccf965b778e3c6dda54cf8cbcce919f27bcf5f100177e78f9078e973481883"
+    },
+    "4b": {
+      "name": "Qwen/Qwen3-4B",
+      "revision": "1cfa9a7208912126459214e8b04321603b3df60c",
+      "format": "qwen3",
+      "dtype": "float16",
+      "tokenizer_sha256": "871466a28ca69fc737e5e467f409dc3297222733de577a261748b596c288d2d6"
+    }
+  },
+  "attention": "sdpa",
+  "decoding": "greedy",
+  "answer_tokens": 1024,
+  "think_budget": 1024,
+  "probe_answer_tokens": 256,
+  "max_context_tokens": 8192,
+  "bootstrap_resamples": 20000,
+  "primary_metric": "f1",
+  "primary_contrasts": [
+    "gold-blocked",
+    "gold-matched_irrelevant",
+    "b1-k0"
+  ],
+  "strict_sensitivity": "All three model-specific AB shortcut probes F1 < 0.5, with no answer truncation",
+  "screening": "Automatic literal-grounding and shared tokenizer-feasibility checks; hop order from the paragraph that holds the answer, bridge from a supporting title; no human review"
+}
