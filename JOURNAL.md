@@ -4,6 +4,55 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-20: HotpotQA run finished; the MuSiQue pattern replicates on a second dataset
+
+The run of the entry below finished on 11-20 at 05:08 (started 11-19 22:57; 6 h 11 min on one A100-SXM4-80GB): Qwen3-8B, Llama 3.1 8B and Qwen3-4B, each 600 probe answers and 2,400 main answers on the 200 frozen HotpotQA bridge questions. Rows: `archive/wmac_hotpot_v1/a100-2026-11-20.tar.gz`. Every number here is printed by `python scripts/hotpot_tables.py`. F1 points with 95% source-bootstrap intervals; "window" is the equal-token control.
+
+**Rows are whole.** Per model 2,400 main rows and 600 probe rows, each (layout, condition) once, every question hash equal to the frozen set, one commit (`632ab82`, tag `run/2026-11-19-hotpot`), one GPU, answer cap 1,024 (probes 256), thinking off. Mean time per main answer: 1.7 s (4B), 3.1 s (8B), 2.3 s (Llama).
+
+**Levels, exact match / F1.**
+
+| | Qwen3-4B | Qwen3-8B | Llama 3.1 8B |
+|---|---|---|---|
+| blocked | 37.0 / 49.8 | 43.5 / 59.3 | 35.2 / 50.0 |
+| window | 36.8 / 49.8 | 43.2 / 60.2 | 34.2 / 48.2 |
+| gold | 44.2 / 58.5 | 48.2 / 65.9 | 41.0 / 54.9 |
+| full mask | 44.0 / 58.0 | 47.5 / 64.5 | 43.0 / 56.8 |
+| joint reading | 43.8 / 57.8 | 47.0 / 64.1 | 41.8 / 55.4 |
+| K0 | 37.8 / 50.9 | 43.8 / 59.5 | 35.2 / 48.4 |
+
+**Paired differences.** MuSiQue's pooled number (11-18 entries) in the last column.
+
+| | Qwen3-4B | Qwen3-8B | Llama 3.1 8B | pooled | MuSiQue pooled |
+|---|---|---|---|---|---|
+| gold − blocked | +8.7 (5.3, 12.3) | +6.6 (3.1, 10.2) | +4.9 (1.1, 8.8) | +6.7 (4.3, 9.2) | +7.6 (5.1, 10.2) |
+| gold − window | +8.7 (5.3, 12.3) | +5.7 (2.1, 9.3) | +6.6 (2.8, 10.5) | +7.0 (4.6, 9.5) | +8.4 (5.7, 11.3) |
+| window − blocked | −0.1 (−2.3, 2.2) | +0.9 (−1.6, 3.3) | −1.7 (−4.8, 1.4) | −0.3 (−1.9, 1.4) | −0.8 (−2.6, 1.0) |
+| full mask − blocked | +8.2 (4.6, 12.0) | +5.2 (1.6, 8.9) | +6.9 (3.2, 10.5) | +6.8 (4.3, 9.2) | +5.6 (2.8, 8.5) |
+| gold − full mask | +0.5 (−1.6, 2.6) | +1.4 (−0.4, 3.3) | −1.9 (−4.7, 0.7) | −0.0 (−1.2, 1.2) | +2.0 (0.1, 3.8) |
+| joint − K0 | +6.9 (3.0, 10.9) | +4.6 (0.9, 8.3) | +6.9 (3.6, 10.5) | +6.1 (3.7, 8.6) | +5.5 (2.9, 8.1) |
+
+- **Blocking costs about 7 points and one supporting paragraph gives it back; an equal number of other tokens gives nothing.** Same finding, about the same size, in all three models.
+- **Gold against full is zero here** (−0.0 pooled; Llama leans to full). On MuSiQue it was +2.0 with the support last. This fits "small and dependent on layout", not "selective access beats full access".
+- **Joint minus K0 again sits in the access step.** Pooled, exact source by source: joint − full mask −0.7 (−1.3, −0.1), full mask − blocked +6.8 (4.3, 9.2), blocked − K0 +0.1 (−1.3, 1.4). The full mask scores 0.7 above joint reading here (Llama −1.4 (−3.0, −0.2)); on MuSiQue that step was +0.5 (−0.5, 1.6).
+- **Stricter levels.** Gold − blocked and gold − window stay clear of zero at 99% in every model (Llama gold − blocked: 0.1 to 10.0). Joint − K0 does on Qwen3-4B and Llama, and at 98.3% but not 99% on Qwen3-8B (−0.3, 9.5).
+
+**Shortcuts are common on HotpotQA, and the effect is not carried by them.**
+- Probes, exact match, AB layouts: closed book 4 / 8 / 10 (4B / 8B / Llama); hop-1 paragraph alone 9 / 12 / 13; answer paragraph alone 36 / 34 / 26; joint reading 43 / 46 / 43.
+- On the sources where all three probes score F1 below 0.5 uncut (86 / 76 / 64): gold − blocked +9.2 (4.3, 14.5), +7.3 (0.2, 14.7), +6.6 (−0.4, 13.8); gold − window +9.7 (4.9, 14.8), +5.3 (−1.6, 12.1), +8.0 (0.8, 15.5). Larger estimates, wider intervals.
+- 21 of 200 questions name the answer paragraph's title. Without them (179), pooled: gold − blocked +7.3 (4.7, 9.9), full mask − blocked +7.6 (5.0, 10.3), window − blocked −0.3 (−2.0, 1.6).
+
+**Hop order.** Pooled full mask − blocked is +4.9 (2.1, 7.7) with hop 1 in A (AB) and +8.6 (5.7, 11.7) with the answer paragraph in A (BA); the difference is +3.8 (0.7, 6.9). Gold − blocked: +5.2 and +8.3, difference +3.0 (−0.3, 6.4). The same direction as on MuSiQue: the loss is larger when the later block holds the first hop and has to read the answer paragraph.
+
+**Checks.**
+- *Answers cut at the cap.* Llama 52 of 2,400 (blocked 10, gold 8, full 7, window 14, joint 7, K0 6), none an exact match; Qwen3-4B 5; Qwen3-8B 0. Llama without sources that have a cut answer in either condition: gold − blocked +4.7 (0.8, 8.6) on 185, gold − window +6.7 (2.8, 10.7) on 186, full mask − blocked +6.1 (2.4, 9.9) on 188.
+- *Window.* It precedes the support in all 400 layouts of each model. Earlier text mentions the answer or the bridge for 26 / 26 / 25 sources; on the 173 clean in all three, pooled gold − window is +7.0 (4.3, 9.8) and window − blocked −0.2 (−2.1, 1.6).
+- *Gold against full, layout by layout.* 60 exact-match disagreements over three models (gold only 28, full only 32); 40 are different answers with F1 = 0.
+
+Not run on HotpotQA: the position run, the control layout, thinking. Levels are not comparable with MuSiQue's (one answer string per question, no aliases, 5 paragraphs per worker); contrasts are.
+
+Checked: the script's output against every line above; rows pulled from Drive with byte sizes equal to Drive's. Not checked: tests for `scripts/hotpot_tables.py` (not written).
+
 ## 2026-11-19, night: the mask protocol on HotpotQA bridge questions is built and frozen; not run yet
 
 Every mask result so far is on MuSiQue. This entry records the second dataset as built. No answer has been generated on the three models.
