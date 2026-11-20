@@ -4,6 +4,38 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-19: robustness checks behind the paper's statements (no new run)
+
+Nothing was generated. Every number comes from the archived rows through `python scripts/paper_checks.py` (the readers, scorer and intervals of `scripts/paper_tables.py`); the name in brackets is the check that prints it. F1 points with 95% source-bootstrap intervals unless a line says otherwise. "Window" is the equal-token control.
+
+**Answers cut at the answer cap do not drive any contrast.** (`caps`)
+- Llama 3.1 8B, main run: 103 of 2,400 answers are cut. Per condition, of 400: blocked 18, window 16, gold 13, full mask 20, joint 23, K0 13. None is an exact match and their mean F1 is 2 to 3 points. Qwen3-4B: 8 (blocked 1, full mask 3, joint 3, K0 1). Qwen3-8B: none.
+- Llama, all 200 sources, then only sources with no cut answer in either condition: gold − blocked +5.6 (1.8, 9.5), then +5.7 (1.9, 9.6) on 177; gold − window +7.0 (3.1, 11.0), then +5.8 (1.9, 9.6) on 179; full mask − blocked +4.3 (−0.1, 8.6), then +5.1 (0.5, 9.8) on 175.
+- Control layout, Llama: 31 of 800 cut, blocked 10 and full mask 21. Without those 24 sources, two models pooled: together −0.8 (−3.3, 1.7) becomes −0.3 (−2.9, 2.3); split minus together +6.2 (2.5, 9.9) becomes +6.5 (2.9, 10.2).
+- Position run: Qwen3-8B 1 of 2,000; Llama 95 (blocked 25, late window 22, joint 18, gold 17, full mask 13). Llama gold − late window +7.9 (3.9, 12.0), then +8.6 (4.5, 12.8) on 175.
+- A cut answer is an outcome of the condition, so dropping those sources is a sensitivity check, not a cleaner estimate.
+
+**Joint reading minus K0 sits in the access step.** (`split`) The difference splits exactly, source by source, into three steps that each change one thing. Three models pooled: joint − K0 +5.5 (2.9, 8.1) = joint − full mask +0.5 (−0.5, 1.6), the mask code; full mask − blocked +5.6 (2.8, 8.5), access; blocked − K0 −0.7 (−2.5, 1.2), how positions and caches are handled. Blocked − K0 per model: Qwen3-4B −2.0 (−4.3, 0.3), Qwen3-8B −0.6 (−3.7, 2.6), Llama +0.6 (−3.1, 4.3). An interval over zero is not equivalence.
+
+**The primary contrasts at stricter levels.** (`levels`) `experiments/wmac_gpu_v3.json`, at the commit the rows carry, marks gold − blocked, gold − window and joint − K0 as primary. Gold − blocked and gold − window stay clear of zero at 99% in every model. Joint − K0 does so on Qwen3-8B (1.1, 12.2) and pooled (2.1, 9.1); on Llama it holds at 98.3% (0.1, 11.0) and not at 99%; on Qwen3-4B it does not hold at 98.3% (−0.4, 9.0).
+
+**The equal-token window never read A's support.** (`prefix`, `position`)
+- In all 400 window layouts of each model the window precedes the support.
+- Earlier text mentions the answer or the bridge in 69, 67 and 69 layouts (Qwen3-8B, Llama, Qwen3-4B). Without those sources, on the 157 clean in all three: gold − window +9.7 (6.6, 13.0) against +8.4 (5.7, 11.3) on all 200; window − blocked −1.0 (−2.9, 1.0) against −0.8 (−2.6, 1.0).
+- Position run, where the window follows the support and sits next to B, two models pooled: window − blocked +0.7 (−1.2, 2.6), gold − window +8.9 (5.6, 12.2).
+
+**Control layout by placement.** (`halves`) Full mask − blocked, two models pooled: both supports in A +1.8 (−1.6, 5.2), both in B −3.4 (−6.8, 0.0). The near-zero average covers two halves of opposite sign; neither is a claim.
+
+**Gold against full, layout by layout.** (`disagreements`, `probes`)
+- 139 exact-match disagreements over three models: gold only 77, full only 62. Different answers with F1 = 0: 55 and 46. Losing answer cut off: 6 and 1. Small overlap: 4 and 2. Borderline forms, where one answer contains the other or F1 is at least 0.5: 12 and 13. The borderline cases were sorted by string rules and not read by a person.
+- On the stricter probe subsets gold − full is +2.0 (−1.8, 5.9) on Qwen3-8B (102 sources), +0.1 (−6.0, 6.1) on Llama (77) and +4.4 (0.7, 8.3) on Qwen3-4B (127). Screening on probe failures does not bring back the 9-point gap of the 79 picked questions (11-15).
+
+**Toy, thinking off against forced, answer by answer.** (`toy`) Blocked with the look-alike paragraph in the other worker: 50 right to wrong, 2 wrong to right, 39 right both ways, 9 wrong both ways. All 59 wrong forced answers used the whole thinking budget and are abstentions ("Unknown" 56, "No information provided" 2, "No information" 1). "Let me check again" appears four or more times in 64 of the 77 budget hits as written and in 71 ignoring case (3 to 9 times, median 5); no answer that finished has it more than 3 times.
+
+**First screen, Qwen3-4B, the 11-13 rows.** (`screen`; needs the benchmark files built) Share of questions the model gets wrong closed book and with each supporting paragraph alone: MuSiQue 2-hop 85%, HotpotQA bridge 50%, HotpotQA comparison 32%. Exact match with one paragraph alone against joint reading: 8 and 9 against 29; 34 and 29 against 55; 57 and 51 against 57. The masks were never run on HotpotQA.
+
+Checked: the script's printed output against every line above. Not checked: tests for the script (not written yet).
+
 ## 2026-11-18, evening: what the thinking looked like in every thinking-on run, and a framing for the next paper
 
 Reading only, no new run. Every answer generated with thinking on was counted or read: 1,750 answers in three runs, 468 of which used the whole 1,024-token thinking budget.

@@ -85,7 +85,7 @@ One row per experiment. "Code" is what ran it. Where the code is not on `main`, 
 
 ## Reproducing
 
-**The tables, from saved rows (no GPU).** `python scripts/paper_tables.py` prints the main, position, control-layout, mask-check, validation and toy tables. `pytest tests/test_paper_tables.py` checks them against the summaries the runner saved at run time.
+**The tables, from saved rows (no GPU).** `python scripts/paper_tables.py` prints the main, position, control-layout, mask-check, validation and toy tables. `pytest tests/test_paper_tables.py` checks them against the summaries the runner saved at run time. `python scripts/paper_checks.py` prints the robustness checks recorded in the 11-19 journal entry (answer-cap hits by condition, the split of joint reading minus K0, stricter interval levels, what the equal-token window could have read, gold against full layout by layout, the toy answer by answer, and the first HotpotQA screen).
 
 **A rerun (GPU).**
 - Fresh-source protocol: `scripts/README_wmac_a100.md`. `python scripts/run_wmac_a100.py prepare` rebuilds the frozen question bundle; `python scripts/run_wmac_gpu.py a100` runs every job. `--plan-only` previews a job without loading a model.
