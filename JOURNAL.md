@@ -4,6 +4,28 @@ For the people and agents working on this repo. `README.md` holds the design: th
 
 Newest entry first. Add a dated entry when something is decided or ruled out. Don't rewrite old entries; correct them in a new one. Say how each claim was checked: a run, a test, a paper read, or only an argument.
 
+## 2026-11-19, night: the mask protocol on HotpotQA bridge questions is built and frozen; not run yet
+
+Every mask result so far is on MuSiQue. This entry records the second dataset as built. No answer has been generated on the three models.
+
+**What exists.** `latent_dispatch/wmac_hotpot.py` (planner), `scripts/run_wmac_hotpot.py` (prepare, preflight, run, summary), `experiments/wmac_hotpot_v1.json` (config), `experiments/wmac_hotpot_v1/prepared.json` (200 sources, 400 layouts, frozen before any answer; sha256 `add519fa…`), `colab_wmac_hotpot.ipynb` (launcher), `tests/test_wmac_hotpot.py`.
+
+**What HotpotQA lacks, and the rule that stands in.**
+- *Hop order.* HotpotQA does not say which supporting paragraph comes first. The supporting paragraph that holds the answer is hop 2; the other is hop 1. A question whose answer appears in both, or in neither, is dropped.
+- *Bridge entity.* HotpotQA names none. The bridge is a supporting paragraph's title (a trailing parenthesis removed) that the other supporting paragraph mentions. A question with no such title is dropped. The equal-token window is never drawn from a paragraph that mentions the answer or the bridge, as on MuSiQue.
+- *Paragraphs.* HotpotQA ships 10 per question, so each worker holds 5 (MuSiQue: 10).
+- Unchanged from the MuSiQue protocol: the grounding flags, one supporting paragraph per worker and last in its block, AB and BA over the same distractors, a fixed order that uses no model output, archived sources left out, feasibility under all three tokenizers, the six main conditions, the three shortcut probes, prompts, decoding, answer caps, scoring. Model revisions are the ones the MuSiQue runs loaded.
+
+**Selection.** 351 bridge questions were walked in the fixed order to keep 200. Dropped: answer in both supporting paragraphs 89; no supporting title mentioned by the other support 40; equal-token window not buildable (too little earlier non-support text in A) 12; archived sources 7 (the 11-13 screen used 200 HotpotQA sources, 100 of them bridge questions; one of the 7 is also counted under "answer in both"); answer in neither 4. As in the MuSiQue planner, an archived source is also flagged against its own text.
+
+**Sizes.** Context of 776 to 2,581 tokens (median 1,475) under the Qwen3 tokenizer, 742 to 2,460 (median 1,428) under Llama's. The window's earlier text mentions the answer or the bridge in 46 of 400 layouts (Qwen3) and 49 (Llama).
+
+**What to expect.** The 11-13 screen on Qwen3-4B: half of HotpotQA bridge questions are answered from one supporting paragraph or closed book, against 15% on MuSiQue 2-hop. The average effect should be smaller than on MuSiQue, and 200 sources may not separate it from zero; the sources that fail all three probes are the place to look. The selection keeps its earlier sources when asked for more, so a larger question set later would contain these 200.
+
+**Running it.** `colab_wmac_hotpot.ipynb` on an A100: per model, 600 probe answers then 2,400 main answers, saved to Drive as produced, resumable. Estimate, not measured: about 2.3 hours for Qwen3-8B and 2.5 for Llama (the MuSiQue per-answer times, scaled by the 0.74 that HotpotQA took relative to MuSiQue in the 11-13 run). `python scripts/run_wmac_hotpot.py summary --out <folder>` prints levels and paired contrasts on the sources that have every answer.
+
+Checked: the fast tests (22 new; the runner on tiny random Qwen3 and Llama models, all six conditions and the probes, resume after a cut row); the three tokenizers match the MuSiQue run's by hash and cut all 400 layouts as at preparation; a smoke run on Qwen3-0.6B on CPU (2 sources, 6 probe answers and 24 main answers, every model check passing; that model answers "Yes" to everything, so it says nothing about accuracy). Not checked: any run on Qwen3-8B, Llama 3.1 8B or Qwen3-4B; timing on HotpotQA with them.
+
 ## 2026-11-18, evening: what the thinking looked like in every thinking-on run, and a framing for the next paper
 
 Reading only, no new run. Every answer generated with thinking on was counted or read: 1,750 answers in three runs, 468 of which used the whole 1,024-token thinking budget.
